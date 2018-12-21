@@ -99,6 +99,7 @@ function draw() {
   var col2 = color(colorPhase,100*(mouseX/windowWidth),100);
   var col3 = color(colorPhase,100,100);
   var col5 = color((colorPhase+240)%360,100,100);
+  var col6 = color((colorPhase+120)%360,100,100);
   stroke(col);
   fill(col2);
   line(mouseX,0,mouseX,windowHeight);
@@ -161,27 +162,33 @@ function draw() {
   if (!artIsSelected) {
       artButton.style('border-color', col3);
       artButton.style('color', col3);
+      artButton.style('border', '2px outset');
       artButton.style('background-color', '#000000');
+      artButton.size(windowWidth*0.1,windowWidth*0.05);
   }
   else {
-    artButton.style('border-color', col5);
     artButton.style('color',col5);
+    artButton.style('border', '5px outset');
+    artButton.style('border-color', col6);
+    artButton.size(windowWidth*0.105,windowWidth*0.0525);
   }
   artButton.style('font-size',windowWidth*0.02 + 'px');
-  artButton.size(windowWidth*0.1,windowWidth*0.05);
+  //artButton.size(windowWidth*0.1,windowWidth*0.05);
   artButton.position(windowWidth*0.1,windowHeight*0.1);
 
   if (!musicIsSelected) {
     musicButton.style('border-color', col3);
     musicButton.style('color', col3);
     musicButton.style('background-color', '#000000');
+    musicButton.size(windowWidth*0.1,windowWidth*0.05);
   }
   else {
     musicButton.style('border-color', col5);
     musicButton.style('color',col5);
+    musicButton.size(windowWidth*0.105,windowWidth*0.0525);
   }
   musicButton.style('font-size',windowWidth*0.02 + 'px');
-  musicButton.size(windowWidth*0.1,windowWidth*0.05);
+  //musicButton.size(windowWidth*0.1,windowWidth*0.05);
   musicButton.position(windowWidth*0.1+(artButton.width*0.25)+artButton.width,windowHeight*0.1);
 
   if (!projIsSelected) {
@@ -249,9 +256,13 @@ function loadMenu() {
 }
 
 function artTrans(){
-  artIsSelected = true;
-  musicIsSelected = false;
-  projIsSelected = false;
+  if (!artIsSelected){
+    artIsSelected = true;
+    musicIsSelected = false;
+    projIsSelected = false;
+  } else {
+    artIsSelected = false;
+  }
 }
 
 function musicTrans(){
