@@ -10,7 +10,6 @@ var artIsSelected = false;
 var musicIsSelected = false;
 var projIsSelected = false;
 var aboutIsSelected = false;
-var mooove = true;
 
 
 function setup() {
@@ -151,6 +150,24 @@ function draw() {
     fill(col4);
     text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.2);
   }
+
+  if (artIsSelected || musicIsSelected || projIsSelected){
+    fill(20,0.5);
+    strokeWeight(5);
+    rect(artButton.x,artButton.y+artButton.height+(windowHeight*0.05),
+      windowWidth-(2*artButton.x),windowHeight-(2*artButton.y+artButton.height),20);
+    fill(col3);
+    textSize(60);
+    strokeWeight(5);
+    if (artIsSelected){
+      text("ART",windowWidth*0.5,windowHeight*0.35);
+    } else if (musicIsSelected) {
+      text("MUSIC",windowWidth*0.5,windowHeight*0.35);
+    } else {
+      text("STUFF",windowWidth*0.5,windowHeight*0.35);
+    }
+  }
+
   splashButton.style('border-color', col3);
   splashButton.style('color', col3);
   splashButton.style('background-color', '#000000');
@@ -179,11 +196,13 @@ function draw() {
   if (!musicIsSelected) {
     musicButton.style('border-color', col3);
     musicButton.style('color', col3);
+    musicButton.style('border', '2px outset');
     musicButton.style('background-color', '#000000');
     musicButton.size(windowWidth*0.1,windowWidth*0.05);
   }
   else {
-    musicButton.style('border-color', col5);
+    musicButton.style('border', '5px outset');
+    musicButton.style('border-color', col6);
     musicButton.style('color',col5);
     musicButton.size(windowWidth*0.105,windowWidth*0.0525);
   }
@@ -194,20 +213,20 @@ function draw() {
   if (!projIsSelected) {
     projButton.style('border-color', col3);
     projButton.style('color', col3);
+    projButton.style('border', '2px outset');
     projButton.style('background-color', '#000000');
+    projButton.size(windowWidth*0.1,windowWidth*0.05);
   }
   else {
-    projButton.style('border-color', col5);
+    projButton.style('border', '5px outset');
+    projButton.size(windowWidth*0.105,windowWidth*0.0525);
+    projButton.style('border-color', col6);
     projButton.style('color',col5);
   }
   projButton.style('font-size',windowWidth*0.02 + 'px');
-  projButton.size(windowWidth*0.1,windowWidth*0.05);
-  if (mooove){
-    projButton.position(windowWidth-(musicButton.x+musicButton.width),windowHeight*0.1);
-  }
-  else {
-    projButton.position(windowWidth-(artButton.x+artButton.width),windowHeight*0.1);
-  }
+//  projButton.size(windowWidth*0.1,windowWidth*0.05);
+  projButton.position(windowWidth-(musicButton.x+musicButton.width),windowHeight*0.1);
+
   var freq = map(mouseX, 0, width, 40, 500);
   var off = map(mouseY, 0, height, 20, .01);
   freq1 = freq*1;
@@ -261,19 +280,29 @@ function artTrans(){
     musicIsSelected = false;
     projIsSelected = false;
   } else {
+    background(0);
     artIsSelected = false;
   }
 }
 
 function musicTrans(){
-  musicIsSelected = true;
-  artIsSelected = false;
-  projIsSelected = false;
+  if (!musicIsSelected){
+    musicIsSelected = true;
+    artIsSelected = false;
+    projIsSelected = false;
+  } else {
+    background(0);
+    musicIsSelected = false;
+  }
 }
 
 function projTrans(){
-  projIsSelected = true;
-  artIsSelected = false;
-  musicIsSelected = false;
-  mooove = !mooove;
+  if (!projIsSelected){
+    projIsSelected = true;
+    artIsSelected = false;
+    musicIsSelected = false;
+  } else {
+    background(0);
+    projIsSelected = false;
+  }
 }
