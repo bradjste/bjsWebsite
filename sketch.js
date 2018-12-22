@@ -202,8 +202,8 @@ function draw() {
       (windowHeight*0.85)-(splashButton.height*0.5)+(sin(count)*windowHeight*0.02));
 
   if (!artIsSelected) {
-      artButton.style('border-color', col3);
       artButton.style('color', col3);
+      artButton.style('border-color', col3);
       artButton.style('border', '2px outset');
       artButton.style('background-color', '#000000');
       artButton.size(windowWidth*0.1,windowWidth*0.05);
