@@ -11,9 +11,13 @@ var musicIsSelected = false;
 var projIsSelected = false;
 var aboutIsSelected = false;
 var shouldDrawWF = false;
-var isHovering = false;
+var isHovering, onTB = false;
 var crayon;
-var songPlaying = true;
+var rectX;
+var rectY;
+var rectWidth;
+var rectHeight;
+var songPlaying = false;
 
 function preload() {
 //  background(0);
@@ -100,7 +104,7 @@ function draw() {
   colorPhase = colorPhase % 360;
   var waveform = fft.waveform();
   var yMin,yMax = 0;
-  if ((mouseIsPressed && !isHovering)|| songPlaying) {
+  if ((mouseIsPressed && !isHovering && !onTB)|| songPlaying) {
     beginShape();
     strokeWeight(3);
     stroke(0);
@@ -119,6 +123,41 @@ function draw() {
   var col3 = color(colorPhase,100,100);
   var col5 = color((colorPhase+240)%360,100,100);
   var col6 = color((colorPhase+120)%360,100,100);
+
+  if (artIsSelected || musicIsSelected || projIsSelected) {
+    fill(20,0.8);
+    strokeWeight(5);
+    rectX = artButton.x;
+    rectWidth = windowWidth-(2*artButton.x);
+    if (artIsSelected){
+      rectY = musicButton.y+musicButton.height+(windowHeight*0.05);
+      rectHeight = windowHeight-(2*musicButton.y+musicButton.height);
+    } else {
+      rectY = artButton.y+artButton.height+(windowHeight*0.05);
+      rectHeight = windowHeight-(2*artButton.y+artButton.height);
+    }
+    rect(rectX,rectY,rectWidth,rectHeight);
+    if (mouseX >= rectX && mouseX < rectX + rectWidth) {
+      if (mouseY >= rectY && mouseY < rectY + rectHeight){
+        onTB = true;
+      } else {
+        onTB = false;
+      }
+    } else {
+      onTB = false;
+    }
+    fill(col3);
+    textSize(60);
+    strokeWeight(5);
+    if (artIsSelected){
+      text("ART",windowWidth*0.5,windowHeight*0.35);
+    } else if (musicIsSelected) {
+      text("MUSIC",windowWidth*0.5,windowHeight*0.35);
+    } else {
+      text("STUFF",windowWidth*0.5,windowHeight*0.35);
+    }
+  }
+
   stroke(col);
   fill(col2);
   line(mouseX,0,mouseX,windowHeight);
@@ -130,7 +169,7 @@ function draw() {
   ellipse(mouseX,mouseY,15,15);
   fill(0);
   ellipse(mouseX,mouseY,5,5);
-  if (mouseIsPressed && !isHovering) {
+  if (mouseIsPressed && !isHovering && !onTB) {
     fill(col3);
     strokeWeight(3);
     ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
@@ -171,27 +210,7 @@ function draw() {
     text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.2);
   }
 
-  if (artIsSelected || musicIsSelected || projIsSelected){
-    fill(20,0.9);
-    strokeWeight(5);
-    if (artIsSelected){
-      rect(artButton.x,musicButton.y+musicButton.height+(windowHeight*0.05),
-        windowWidth-(2*artButton.x),windowHeight-(2*musicButton.y+musicButton.height),20);
-    } else {
-      rect(artButton.x,artButton.y+artButton.height+(windowHeight*0.05),
-        windowWidth-(2*artButton.x),windowHeight-(2*artButton.y+artButton.height),20);
-      }
-    fill(col3);
-    textSize(60);
-    strokeWeight(5);
-    if (artIsSelected){
-      text("ART",windowWidth*0.5,windowHeight*0.35);
-    } else if (musicIsSelected) {
-      text("MUSIC",windowWidth*0.5,windowHeight*0.35);
-    } else {
-      text("STUFF",windowWidth*0.5,windowHeight*0.35);
-    }
-  }
+
 
   splashButton.style('border-color', col3);
   splashButton.style('color', col3);
@@ -285,14 +304,14 @@ function windowResized() {
 
 function menuTrans() {
   isSplash = false;
-  crayon.play();
+  playSong();
   splashButton.style('opacity', '0');
   background(0);
   artButton.show();
   musicButton.show();
   projButton.show();
   milTemp = millis();
-  //playSong();
+
 }
 
 function playSong(){
