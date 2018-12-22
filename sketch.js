@@ -111,7 +111,7 @@ function draw() {
       var x = map(i, 0, waveform.length, 0, windowWidth);
       var y = map(waveform[i], -1, 1, windowHeight, 0);
       fill(colorPhase,100-(100*(mouseX/windowWidth)),100);
-      vertex(x, y);
+      vertex(x, y+windowHeight*0.1);
     }
     endShape();
   }
@@ -175,7 +175,7 @@ function draw() {
   }
 
   if (artIsSelected || musicIsSelected || projIsSelected){
-    fill(20,0.8);
+    fill(20,0.9);
     strokeWeight(5);
     if (artIsSelected){
       rect(artButton.x,musicButton.y+musicButton.height+(windowHeight*0.05),
