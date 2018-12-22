@@ -18,7 +18,7 @@ var songPlaying = true;
 function preload() {
 //  background(0);
   crayon = loadSound('assets/drumgum5.wav');
-  //crayon.setVolume(0.8);
+  crayon.setVolume(0.5);
   crayon.onended(songEnd);
 }
 
@@ -91,10 +91,7 @@ function setup() {
   //splashButton.position(windowWidth*0.5-(splashButton.width*0.5), windowHeight*0.5);
   splashButton.size(windowWidth*0.1,windowWidth*0.05);
   //splashButton.style('background-color', col);
-  while (!(crayon.isLoaded())){
 
-  }
-  crayon.play();
 //splashButton.mousePressed(changeBG);
 }
 
@@ -288,6 +285,7 @@ function windowResized() {
 
 function menuTrans() {
   isSplash = false;
+  crayon.play();
   splashButton.style('opacity', '0');
   background(0);
   artButton.show();
@@ -351,4 +349,10 @@ function isntHov() {
 }
 function songEnd(){
    songPlaying = false;
+}
+
+function mousePressed() {
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
+  }
 }
