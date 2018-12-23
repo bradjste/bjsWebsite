@@ -4,12 +4,12 @@ var colorPhase;
 var freq1,freq2,freq3,freq4,freq5;
 var count;
 var milTemp;
-var splashButton, artButton, musicButton, aboutButton;
+var splashButton, artButton, musicButton, contButton;
 var isSplash = true;
 var artIsSelected = false;
 var musicIsSelected = false;
 var projIsSelected = false;
-var aboutIsSelected = false;
+var contIsSelected = false;
 var shouldDrawWF = false;
 var isHovering, onTB = false;
 var crayon;
@@ -59,6 +59,7 @@ function setup() {
   splashButton.style('-webkit-transition', 'opacity 2s');
   splashButton.style('transition', 'opacity 2s');
   splashButton.mousePressed(menuTrans);
+  splashButton.size(windowWidth*0.1,windowWidth*0.05);
 
   artButton = createButton('ART');
   artButton.mouseOver(isHov);
@@ -82,7 +83,7 @@ function setup() {
   musicButton.style('transition', 'opacity 1s');
   musicButton.mousePressed(musicTrans);
 
-  projButton = createButton('STUFF');
+  projButton = createButton('PROJEX');
   projButton.mouseOver(isHov);
   projButton.mouseOut(isntHov);
   projButton.hide();
@@ -92,11 +93,18 @@ function setup() {
   projButton.style('-webkit-transition', 'opacity 1s');
   projButton.style('transition', 'opacity 1s');
   projButton.mousePressed(projTrans);
-  //splashButton.position(windowWidth*0.5-(splashButton.width*0.5), windowHeight*0.5);
-  splashButton.size(windowWidth*0.1,windowWidth*0.05);
-  //splashButton.style('background-color', col);
 
-//splashButton.mousePressed(changeBG);
+  contButton = createButton('CONTACT');
+  contButton.mouseOver(isHov);
+  contButton.mouseOut(isntHov);
+  contButton.hide();
+  contButton.style('opacity', '0');
+  contButton.style('border-radius', '20%');
+  contButton.style('cursor', 'pointer');
+  contButton.style('-webkit-transition', 'opacity 1s');
+  contButton.style('transition', 'opacity 1s');
+  contButton.mousePressed(contTrans);
+
 }
 
 function draw() {
@@ -124,7 +132,7 @@ function draw() {
   var col5 = color((colorPhase+240)%360,100,100);
   var col6 = color((colorPhase+120)%360,100,100);
 
-  if (artIsSelected || musicIsSelected || projIsSelected) {
+  if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     fill(20,0.8);
     strokeWeight(5);
     rectX = artButton.x;
@@ -153,8 +161,10 @@ function draw() {
       text("ART",windowWidth*0.5,windowHeight*0.35);
     } else if (musicIsSelected) {
       text("MUSIC",windowWidth*0.5,windowHeight*0.35);
+    } else if (projIsSelected){
+      text("PROJEX",windowWidth*0.5,windowHeight*0.35);
     } else {
-      text("STUFF",windowWidth*0.5,windowHeight*0.35);
+      text("CONTACT",windowWidth*0.5,windowHeight*0.35);
     }
   }
 
@@ -216,16 +226,15 @@ function draw() {
   splashButton.style('color', col3);
   splashButton.style('background-color', '#000000');
   splashButton.style('font-size',windowWidth*0.02 + 'px');
-  splashButton.size(windowWidth*0.1,windowWidth*0.05);
   splashButton.position((windowWidth*0.5)-(splashButton.width*0.5),
       (windowHeight*0.85)-(splashButton.height*0.5)+(sin(count)*windowHeight*0.02));
 
   if (!artIsSelected) {
-      artButton.style('color', col3);
-      artButton.style('border-color', col3);
-      artButton.style('border', '2px outset');
-      artButton.style('background-color', '#000000');
-      artButton.size(windowWidth*0.1,windowWidth*0.05);
+    artButton.style('color', col3);
+    artButton.style('border-color', col3);
+    artButton.style('border', '2px outset');
+    artButton.style('background-color', '#000000');
+    artButton.size(windowWidth*0.1,windowWidth*0.05);
   }
   else {
     artButton.style('color',col5);
@@ -234,7 +243,6 @@ function draw() {
     artButton.size(windowWidth*0.105,windowWidth*0.0525);
   }
   artButton.style('font-size',windowWidth*0.02 + 'px');
-  //artButton.size(windowWidth*0.1,windowWidth*0.05);
   artButton.position(windowWidth*0.1,windowHeight*0.1);
 
   if (!musicIsSelected) {
@@ -251,7 +259,6 @@ function draw() {
     musicButton.size(windowWidth*0.105,windowWidth*0.0525);
   }
   musicButton.style('font-size',windowWidth*0.02 + 'px');
-  //musicButton.size(windowWidth*0.1,windowWidth*0.05);
   musicButton.position(windowWidth*0.1+(artButton.width*0.25)+artButton.width,windowHeight*0.1);
 
   if (!projIsSelected) {
@@ -268,8 +275,23 @@ function draw() {
     projButton.style('color',col5);
   }
   projButton.style('font-size',windowWidth*0.02 + 'px');
-//  projButton.size(windowWidth*0.1,windowWidth*0.05);
-  projButton.position(windowWidth-(musicButton.x+musicButton.width),windowHeight*0.1);
+  projButton.position(windowWidth-((musicButton.x)+musicButton.width),windowHeight*0.1);
+
+  if (!contIsSelected) {
+    contButton.style('border-color', col3);
+    contButton.style('color', col3);
+    contButton.style('border', '2px outset');
+    contButton.style('background-color', '#000000');
+    contButton.size(windowWidth*0.1,windowWidth*0.05);
+  }
+  else {
+    contButton.style('border', '5px outset');
+    contButton.size(windowWidth*0.105,windowWidth*0.0525);
+    contButton.style('border-color', col6);
+    contButton.style('color',col5);
+  }
+  contButton.style('font-size',windowWidth*0.02 + 'px');
+  contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight*0.1);
 
   var freq = map(mouseX, 0, width, 40, 500);
   var off = map(mouseY, 0, height, 20, .01);
@@ -310,6 +332,7 @@ function menuTrans() {
   artButton.show();
   musicButton.show();
   projButton.show();
+  contButton.show();
   milTemp = millis();
 
 }
@@ -324,6 +347,7 @@ function loadMenu() {
   artButton.style('opacity','100');
   musicButton.style('opacity','100');
   projButton.style('opacity','100');
+  contButton.style('opacity','100');
 }
 
 function artTrans(){
@@ -331,6 +355,7 @@ function artTrans(){
     artIsSelected = true;
     musicIsSelected = false;
     projIsSelected = false;
+    contIsSelected = false;
   } else {
     background(0);
     artIsSelected = false;
@@ -341,6 +366,7 @@ function musicTrans(){
   if (!musicIsSelected){
     musicIsSelected = true;
     artIsSelected = false;
+    contIsSelected = false;
     projIsSelected = false;
   } else {
     background(0);
@@ -352,10 +378,23 @@ function projTrans(){
   if (!projIsSelected){
     projIsSelected = true;
     artIsSelected = false;
+    contIsSelected = false;
     musicIsSelected = false;
   } else {
     background(0);
     projIsSelected = false;
+  }
+}
+
+function contTrans(){
+  if (!contIsSelected){
+    contIsSelected = true;
+    artIsSelected = false;
+    projIsSelected = false;
+    musicIsSelected = false;
+  } else {
+    background(0);
+    contIsSelected = false;
   }
 }
 
