@@ -29,7 +29,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
   colorMode(HSB, 360,100,100);
-  osc1 = new p5.TriOsc(); // set frequency and type
+  osc1 = new p5.SqrOsc(); // set frequency and type
   osc2 = new p5.TriOsc(); // set frequency and type
   osc3 = new p5.TriOsc(); // set frequency and type
   osc4 = new p5.SqrOsc(); // set frequency and type
@@ -194,8 +194,8 @@ function draw() {
     osc1.amp(.2);
     osc2.amp(.2);
     osc3.amp(.2);
-    osc4.amp(.1);
-    osc5.amp(.4);
+    osc4.amp(.4);
+    osc5.amp(0);
   }
   else {
     osc1.amp(0);
