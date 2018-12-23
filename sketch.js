@@ -27,7 +27,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth-5, windowHeight-5);
+  createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360,100,100);
   osc1 = new p5.TriOsc(); // set frequency and type
   osc2 = new p5.TriOsc(); // set frequency and type
@@ -133,7 +133,7 @@ function draw() {
   var col6 = color((colorPhase+120)%360,100,100);
 
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
-    fill(20,0.8);
+    fill(20,0.9);
     strokeWeight(5);
     rectX = artButton.x;
     rectWidth = windowWidth-(2*artButton.x);
@@ -259,7 +259,7 @@ function draw() {
     musicButton.size(windowWidth*0.105,windowWidth*0.0525);
   }
   musicButton.style('font-size',windowWidth*0.02 + 'px');
-  musicButton.position(windowWidth*0.1+(artButton.width*0.25)+artButton.width,windowHeight*0.1);
+  musicButton.position(windowWidth*0.2+(artButton.width*0.25),windowHeight*0.1);
 
   if (!projIsSelected) {
     projButton.style('border-color', col3);
@@ -320,7 +320,7 @@ function draw() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth-5, windowHeight-5);
+  resizeCanvas(windowWidth, windowHeight);
   background(0);
 }
 
