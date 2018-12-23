@@ -160,7 +160,7 @@ function draw() {
       onTB = false;
     }
     fill(col3);
-    textSize(windowWidth*0.1);
+    textSize(windowWidth*0.035);
     strokeWeight(5);
     if (artIsSelected){
       text("ART",windowWidth*0.5,windowHeight*0.35);
