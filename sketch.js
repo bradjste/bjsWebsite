@@ -27,7 +27,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth+5, windowHeight+5);
   colorMode(HSB, 360,100,100);
   osc1 = new p5.TriOsc(); // set frequency and type
   osc2 = new p5.TriOsc(); // set frequency and type
@@ -58,6 +58,7 @@ function setup() {
   splashButton.style('cursor', 'pointer');
   splashButton.style('-webkit-transition', 'opacity 2s');
   splashButton.style('transition', 'opacity 2s');
+  splashButton.style('outline', 'none');
   splashButton.mousePressed(menuTrans);
   splashButton.size(windowWidth*0.1,windowWidth*0.05);
 
@@ -70,6 +71,7 @@ function setup() {
   artButton.style('cursor', 'pointer');
   artButton.style('-webkit-transition', 'opacity 1s');
   artButton.style('transition', 'opacity 1s');
+  artButton.style('outline', 'none');
   artButton.mousePressed(artTrans);
 
   musicButton = createButton('MUSIC');
@@ -81,6 +83,7 @@ function setup() {
   musicButton.style('cursor', 'pointer');
   musicButton.style('-webkit-transition', 'opacity 1s');
   musicButton.style('transition', 'opacity 1s');
+  musicButton.style('outline', 'none');
   musicButton.mousePressed(musicTrans);
 
   projButton = createButton('PROJEX');
@@ -92,6 +95,7 @@ function setup() {
   projButton.style('cursor', 'pointer');
   projButton.style('-webkit-transition', 'opacity 1s');
   projButton.style('transition', 'opacity 1s');
+  projButton.style('outline', 'none');
   projButton.mousePressed(projTrans);
 
   contButton = createButton('CONTACT');
@@ -103,6 +107,7 @@ function setup() {
   contButton.style('cursor', 'pointer');
   contButton.style('-webkit-transition', 'opacity 1s');
   contButton.style('transition', 'opacity 1s');
+  contButton.style('outline', 'none');
   contButton.mousePressed(contTrans);
 
 }
