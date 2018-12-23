@@ -95,7 +95,7 @@ function setup() {
   projButton.style('cursor', 'pointer');
   projButton.style('-webkit-transition', 'opacity 1s');
   projButton.style('transition', 'opacity 1s');
-  projButton.style('outline', 'none');
+  projButton.style('outline-style', 'none');
   projButton.mousePressed(projTrans);
 
   contButton = createButton('CONTACT');
