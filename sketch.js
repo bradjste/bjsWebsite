@@ -32,7 +32,7 @@ function setup() {
   osc1 = new p5.SqrOsc(); // set frequency and type
   osc2 = new p5.TriOsc(); // set frequency and type
   osc3 = new p5.TriOsc(); // set frequency and type
-  osc4 = new p5.SqrOsc(); // set frequency and type
+  osc4 = new p5.TriOsc(); // set frequency and type
   osc5 = new p5.TriOsc(); // set frequency and type
 
   colorPhase=0;
@@ -194,7 +194,7 @@ function draw() {
     osc1.amp(.2);
     osc2.amp(.2);
     osc3.amp(.2);
-    osc4.amp(.4);
+    osc4.amp(.3);
     osc5.amp(0);
   }
   else {
