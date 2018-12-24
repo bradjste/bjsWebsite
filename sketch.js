@@ -40,7 +40,6 @@ function setup() {
   osc2.start();
   osc3.start();
   osc4.start();
-  osc5.start();
 
   noCursor();
   background(0);
