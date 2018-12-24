@@ -20,6 +20,7 @@ var rectHeight;
 var songPlaying = false;
 var splashButtonBool = true;
 var col1, col2, col3, col4, col5, col6;
+var firstDraw = true;
 
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
@@ -187,17 +188,8 @@ function draw() {
     }
   }
 
-  stroke(col1);
-  fill(col2);
-  line(mouseX,0,mouseX,windowHeight);
-  line(0,mouseY,windowWidth,mouseY);
-  stroke(0);
-  strokeWeight(2);
-  line(mouseX,0,mouseX,windowHeight);
-  line(0,mouseY,windowWidth,mouseY);
-  ellipse(mouseX,mouseY,15,15);
-  fill(0);
-  ellipse(mouseX,mouseY,5,5);
+  axisDraw();
+
   if (mouseIsPressed && !isHovering && !onTB && (millis()>200)) {
     fill(col3);
     strokeWeight(3);
@@ -439,6 +431,22 @@ function isntHov() {
 }
 function songEnd(){
    songPlaying = false;
+}
+
+function axisDraw() {
+  stroke(col1);
+  fill(col2);
+  if (mouseX > 0 && mouseY > 0) {
+    line(mouseX,0,mouseX,windowHeight);
+    line(0,mouseY,windowWidth,mouseY);
+    stroke(0);
+    strokeWeight(2);
+    line(mouseX,0,mouseX,windowHeight);
+    line(0,mouseY,windowWidth,mouseY);
+    ellipse(mouseX,mouseY,15,15);
+    fill(0);
+    ellipse(mouseX,mouseY,5,5);
+  }
 }
 
 function mousePressed() {
