@@ -187,7 +187,7 @@ function draw() {
   ellipse(mouseX,mouseY,15,15);
   fill(0);
   ellipse(mouseX,mouseY,5,5);
-  if (mouseIsPressed && !isHovering && !onTB &&(millis()>20)) {
+  if (mouseIsPressed && !isHovering && !onTB && (millis()>200)) {
     fill(col3);
     strokeWeight(3);
     ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
