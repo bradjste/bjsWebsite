@@ -34,6 +34,11 @@ function setup() {
   osc3 = new p5.TriOsc(); // set frequency and type
   osc4 = new p5.TriOsc(); // set frequency and type
 
+  osc1.amp(0);
+  osc2.amp(0);
+  osc3.amp(0);
+  osc4.amp(0);
+
   colorPhase=0;
   fft = new p5.FFT();
   osc1.start();
@@ -52,12 +57,9 @@ function setup() {
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
   splashButton.mouseOut(isntHov);
-  splashButton.hide();
   splashButton.style('opacity','0');
   splashButton.style('border-radius', '20%');
   splashButton.style('cursor', 'pointer');
-  splashButton.style('-webkit-transition', 'opacity 2s');
-  splashButton.style('transition', 'opacity 2s');
   splashButton.style('outline', 'none');
   splashButton.mousePressed(menuTrans);
   splashButton.size(windowWidth*0.1,windowWidth*0.05);
@@ -115,7 +117,8 @@ function setup() {
 function draw() {
   if (splashButtonBool){
     if (crayon.isLoaded()) {
-    splashButton.show();
+    splashButton.style('-webkit-transition', 'opacity 3s');
+    splashButton.style('transition', 'opacity 3s');
     splashButton.style('opacity','100');
     splashButtonBool = false;
   }
