@@ -19,6 +19,7 @@ var rectWidth;
 var rectHeight;
 var songPlaying = false;
 var splashButtonBool = true;
+var col1, col2, col3, col4, col5, col6;
 
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
@@ -115,12 +116,24 @@ function setup() {
 }
 
 function draw() {
+  col1 = color((colorPhase+120)%360,100*(mouseX/windowWidth),100);
+  col2 = color(colorPhase,100*(mouseX/windowWidth),100);
+  col3 = color(colorPhase,100,100);
+  col4 = color((colorPhase+240)%360,100*(mouseX/windowWidth),100);
+  col5 = color((colorPhase+240)%360,100,100);
+  col6 = color((colorPhase+120)%360,100,100);
+
   if (splashButtonBool){
     if (crayon.isLoaded()) {
     splashButton.style('-webkit-transition', 'opacity 3s');
     splashButton.style('transition', 'opacity 3s');
     splashButton.style('opacity','100');
     splashButtonBool = false;
+  }
+  else {
+      fill(col3);
+      textSize(windowWidth*0.025);
+      text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
   }
 }
   colorPhase++;
@@ -140,12 +153,6 @@ function draw() {
     endShape();
   }
   strokeWeight(9);
-  var col = color((colorPhase+120)%360,100*(mouseX/windowWidth),100);
-  var col4 = color((colorPhase+240)%360,100*(mouseX/windowWidth),100);
-  var col2 = color(colorPhase,100*(mouseX/windowWidth),100);
-  var col3 = color(colorPhase,100,100);
-  var col5 = color((colorPhase+240)%360,100,100);
-  var col6 = color((colorPhase+120)%360,100,100);
 
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     fill(20,0.9);
@@ -178,7 +185,7 @@ function draw() {
     }
   }
 
-  stroke(col);
+  stroke(col1);
   fill(col2);
   line(mouseX,0,mouseX,windowHeight);
   line(0,mouseY,windowWidth,mouseY);
@@ -208,17 +215,17 @@ function draw() {
     osc4.amp(0);
   }
   if (isSplash){
-    fill(col);
+    fill(col1);
     stroke(0);
     strokeWeight(8);
     textSize(windowWidth*0.08);
-    text("BRAD STEVENSON",windowWidth*0.5,windowHeight*0.5-(windowHeight*0.05)+(cos(count)*windowHeight*0.1));
+    text("BRAD STEVENSON",windowWidth*0.5,windowHeight*0.4-(windowHeight*0.05)+(cos(count)*windowHeight*0.1));
     textSize(windowWidth*0.04);
     fill(col4);
-    text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.5+(windowHeight*0.1)+(cos(count)*windowHeight*0.1));
+    text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.4+(windowHeight*0.1)+(cos(count)*windowHeight*0.1));
   }
   else {
-    fill(col);
+    fill(col1);
     stroke(0);
     strokeWeight(8);
     textSize(windowWidth*0.03);
