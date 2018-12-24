@@ -54,6 +54,7 @@ function setup() {
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
   splashButton.mouseOut(isntHov);
+  splashButton.hide();
   splashButton.style('opacity','0');
   splashButton.style('border-radius', '20%');
   splashButton.style('cursor', 'pointer');
@@ -323,7 +324,7 @@ function draw() {
   } else {
     count+= 0.1;
   }
-  if (count >= 6.23) {
+  if (count >= 6.23 || splashButtonBool) {
     count = 0;
   }
 
