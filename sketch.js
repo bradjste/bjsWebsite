@@ -33,7 +33,6 @@ function setup() {
   osc2 = new p5.TriOsc(); // set frequency and type
   osc3 = new p5.TriOsc(); // set frequency and type
   osc4 = new p5.TriOsc(); // set frequency and type
-  osc5 = new p5.TriOsc(); // set frequency and type
 
   colorPhase=0;
   fft = new p5.FFT();
@@ -199,14 +198,12 @@ function draw() {
     osc2.amp(.2);
     osc3.amp(.2);
     osc4.amp(.3);
-    osc5.amp(0);
   }
   else {
     osc1.amp(0);
     osc2.amp(0);
     osc3.amp(0);
     osc4.amp(0);
-    osc5.amp(0);
   }
   if (isSplash){
     fill(col);
@@ -312,12 +309,10 @@ function draw() {
   freq2 = freq*1.25;
   freq3 = freq*1.481;
   freq4 = freq*1.851;
-  freq5 = freq*2.111;
   osc1.freq(freq1);
   osc2.freq(freq2);
   osc3.freq(freq3);
   osc4.freq(freq4);
-  osc5.freq(freq5);
 
   if (isSplash){
     count+= 0.05+((mouseX/windowWidth)*0.08);
