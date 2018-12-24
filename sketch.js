@@ -18,17 +18,17 @@ var rectY;
 var rectWidth;
 var rectHeight;
 var songPlaying = false;
-
-function preload() {
-//  background(0);
-  crayon = loadSound('assets/drumgum5.wav');
-  crayon.setVolume(0.5);
-  crayon.onended(songEnd);
-}
+var splashButtonBool = true;
 
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
   colorMode(HSB, 360,100,100);
+  background(0);
+
+  crayon = loadSound('assets/drumgum5.wav');
+  crayon.setVolume(0.5);
+  crayon.onended(songEnd);
+
   osc1 = new p5.SqrOsc(); // set frequency and type
   osc2 = new p5.TriOsc(); // set frequency and type
   osc3 = new p5.TriOsc(); // set frequency and type
@@ -54,6 +54,7 @@ function setup() {
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
   splashButton.mouseOut(isntHov);
+  splashButton.style('opacity','0');
   splashButton.style('border-radius', '20%');
   splashButton.style('cursor', 'pointer');
   splashButton.style('-webkit-transition', 'opacity 2s');
@@ -113,6 +114,13 @@ function setup() {
 }
 
 function draw() {
+  if (splashButtonBool){
+    if (crayon.isLoaded()) {
+    splashButton.show();
+    splashButton.style('opacity','100');
+    splashButtonBool = false;
+  }
+}
   colorPhase++;
   colorPhase = colorPhase % 360;
   var waveform = fft.waveform();
@@ -140,15 +148,10 @@ function draw() {
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     fill(20,0.9);
     strokeWeight(5);
-    rectX = artButton.x;
-    rectWidth = windowWidth-(2*artButton.x);
-    if (artIsSelected){
-      rectY = musicButton.y+musicButton.height+(windowHeight*0.05);
-      rectHeight = windowHeight-(2*musicButton.y+musicButton.height);
-    } else {
-      rectY = artButton.y+artButton.height+(windowHeight*0.05);
-      rectHeight = windowHeight-(2*artButton.y+artButton.height);
-    }
+    rectX = windowWidth*0.05;
+    rectWidth = windowWidth-(rectX*2);
+    rectY = windowHeight * 0.25;
+    rectHeight = windowHeight * 0.72;
     rect(rectX,rectY,rectWidth,rectHeight);
     if (mouseX >= rectX && mouseX < rectX + rectWidth) {
       if (mouseY >= rectY && mouseY < rectY + rectHeight){
@@ -231,93 +234,101 @@ function draw() {
   splashButton.style('color', col3);
   splashButton.style('background-color', '#000000');
   splashButton.style('font-size',windowWidth*0.02 + 'px');
-  splashButton.position((windowWidth*0.5)-(splashButton.width*0.5),
+  splashButton.position((windowWidth*0.45),
       (windowHeight*0.85)-(splashButton.height*0.5)+(sin(count)*windowHeight*0.02));
 
   if (!artIsSelected) {
     artButton.style('color', col3);
-    artButton.style('border-color', col3);
     artButton.style('border', '2px outset');
     artButton.style('background-color', '#000000');
     artButton.size(windowWidth*0.1,windowWidth*0.05);
+    artButton.style('border-color', col3);
+    artButton.position(windowWidth*0.1,windowHeight*0.1);
   }
   else {
     artButton.style('color',col5);
     artButton.style('border', '5px outset');
     artButton.style('border-color', col6);
     artButton.size(windowWidth*0.105,windowWidth*0.0525);
+    artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.02));
   }
   artButton.style('font-size',windowWidth*0.02 + 'px');
-  artButton.position(windowWidth*0.1,windowHeight*0.1);
 
   if (!musicIsSelected) {
-    musicButton.style('border-color', col3);
     musicButton.style('color', col3);
     musicButton.style('border', '2px outset');
     musicButton.style('background-color', '#000000');
     musicButton.size(windowWidth*0.1,windowWidth*0.05);
+    musicButton.style('border-color', col3);
+    musicButton.position(windowWidth*0.2+(windowWidth*0.025),windowHeight*0.1);
   }
   else {
     musicButton.style('border', '5px outset');
     musicButton.style('border-color', col6);
     musicButton.style('color',col5);
     musicButton.size(windowWidth*0.105,windowWidth*0.0525);
+    musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.02));
   }
   musicButton.style('font-size',windowWidth*0.02 + 'px');
-  musicButton.position(windowWidth*0.2+(artButton.width*0.25),windowHeight*0.1);
 
   if (!projIsSelected) {
-    projButton.style('border-color', col3);
     projButton.style('color', col3);
     projButton.style('border', '2px outset');
     projButton.style('background-color', '#000000');
     projButton.size(windowWidth*0.1,windowWidth*0.05);
+    projButton.style('border-color', col3);
+    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1);
   }
   else {
     projButton.style('border', '5px outset');
     projButton.size(windowWidth*0.105,windowWidth*0.0525);
     projButton.style('border-color', col6);
     projButton.style('color',col5);
+    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.02));
   }
   projButton.style('font-size',windowWidth*0.02 + 'px');
-  projButton.position(windowWidth-((musicButton.x)+musicButton.width),windowHeight*0.1);
 
   if (!contIsSelected) {
-    contButton.style('border-color', col3);
     contButton.style('color', col3);
     contButton.style('border', '2px outset');
     contButton.style('background-color', '#000000');
     contButton.size(windowWidth*0.1,windowWidth*0.05);
+    contButton.style('border-color', col3);
+    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1);
   }
   else {
     contButton.style('border', '5px outset');
     contButton.size(windowWidth*0.105,windowWidth*0.0525);
     contButton.style('border-color', col6);
     contButton.style('color',col5);
+    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.02));
   }
-  contButton.style('font-size',windowWidth*0.02 + 'px');
-  contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight*0.1);
+  contButton.style('font-size',windowWidth*0.018 + 'px');
 
   var freq = map(mouseX, 0, width, 40, 500);
-  var off = map(mouseY, 0, height, 20, .01);
+  var off = map(mouseY, 0, height, 0.5, .01);
   freq1 = freq*1;
   freq2 = freq*1.25;
   freq3 = freq*1.481;
   freq4 = freq*1.851;
   freq5 = freq*2.111;
-  osc1.freq(freq1+off);
-  osc2.freq(freq2+off);
-  osc3.freq(freq3+off);
-  osc4.freq(freq4+off);
-  osc5.freq(freq5+off);
+  osc1.freq(freq1);
+  osc2.freq(freq2);
+  osc3.freq(freq3);
+  osc4.freq(freq4);
+  osc5.freq(freq5);
 
-  if(isSplash) {
+  if (isSplash){
     count+= 0.05+((mouseX/windowWidth)*0.08);
-    count = count%6.23;
+  } else {
+    count+= 0.1;
   }
-  else {
-    count = PI*0.5;
+  if (count >= 6.23) {
+    count = 0;
   }
+
+
+
 
   if (milTemp+800 < millis()){
     loadMenu();
@@ -333,7 +344,7 @@ function menuTrans() {
   isSplash = false;
   playSong();
   splashButton.style('opacity', '0');
-  background(0);
+  //background(0);
   artButton.show();
   musicButton.show();
   projButton.show();
@@ -361,6 +372,7 @@ function artTrans(){
     musicIsSelected = false;
     projIsSelected = false;
     contIsSelected = false;
+    count = 0;
   } else {
     background(0);
     artIsSelected = false;
@@ -373,6 +385,7 @@ function musicTrans(){
     artIsSelected = false;
     contIsSelected = false;
     projIsSelected = false;
+    count = 0;
   } else {
     background(0);
     musicIsSelected = false;
@@ -385,6 +398,7 @@ function projTrans(){
     artIsSelected = false;
     contIsSelected = false;
     musicIsSelected = false;
+    count = 0;
   } else {
     background(0);
     projIsSelected = false;
@@ -397,10 +411,16 @@ function contTrans(){
     artIsSelected = false;
     projIsSelected = false;
     musicIsSelected = false;
+    count = 0;
   } else {
     background(0);
     contIsSelected = false;
   }
+}
+
+function loadingScreen(){
+   fill(random(360),100,100);
+   ellipse(windowWidth*0.5,windowHeight*0.5,30,30);
 }
 
 function isHov() {
