@@ -58,10 +58,11 @@ function setup() {
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
   splashButton.mouseOut(isntHov);
-  splashButton.style('opacity','0');
   splashButton.style('border-radius', '20%');
-  splashButton.style('cursor', 'crosshair');
+  splashButton.style('cursor', 'cell');
   splashButton.style('outline', 'none');
+  splashButton.style('opacity','0');
+  splashButton.style('visibility','hidden');
   splashButton.mousePressed(menuTrans);
   splashButton.size(windowWidth*0.1,windowWidth*0.05);
 
@@ -128,6 +129,7 @@ function draw() {
     splashButton.style('-webkit-transition', 'opacity 2s');
     splashButton.style('transition', 'opacity 2s');
     splashButton.style('opacity','100');
+    splashButton.style('visibility', 'visible');
     splashButtonBool = false;
   }
   else {
