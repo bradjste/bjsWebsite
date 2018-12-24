@@ -60,7 +60,7 @@ function setup() {
   splashButton.mouseOut(isntHov);
   splashButton.style('opacity','0');
   splashButton.style('border-radius', '20%');
-  splashButton.style('cursor', 'pointer');
+  splashButton.style('cursor', 'crosshair');
   splashButton.style('outline', 'none');
   splashButton.mousePressed(menuTrans);
   splashButton.size(windowWidth*0.1,windowWidth*0.05);
@@ -71,7 +71,7 @@ function setup() {
   artButton.hide();
   artButton.style('opacity', '0');
   artButton.style('border-radius', '20%');
-  artButton.style('cursor', 'pointer');
+  artButton.style('cursor', 'cell');
   artButton.style('-webkit-transition', 'opacity 1s');
   artButton.style('transition', 'opacity 1s');
   artButton.style('outline', 'none');
@@ -83,7 +83,7 @@ function setup() {
   musicButton.hide();
   musicButton.style('opacity', '0');
   musicButton.style('border-radius', '20%');
-  musicButton.style('cursor', 'pointer');
+  musicButton.style('cursor', 'cell');
   musicButton.style('-webkit-transition', 'opacity 1s');
   musicButton.style('transition', 'opacity 1s');
   musicButton.style('outline', 'none');
@@ -95,7 +95,7 @@ function setup() {
   projButton.hide();
   projButton.style('opacity', '0');
   projButton.style('border-radius', '20%');
-  projButton.style('cursor', 'pointer');
+  projButton.style('cursor', 'cell');
   projButton.style('-webkit-transition', 'opacity 1s');
   projButton.style('transition', 'opacity 1s');
   projButton.style('outline-style', 'none');
@@ -107,7 +107,7 @@ function setup() {
   contButton.hide();
   contButton.style('opacity', '0');
   contButton.style('border-radius', '20%');
-  contButton.style('cursor', 'pointer');
+  contButton.style('cursor', 'cell');
   contButton.style('-webkit-transition', 'opacity 1s');
   contButton.style('transition', 'opacity 1s');
   contButton.style('outline', 'none');
@@ -125,8 +125,8 @@ function draw() {
 
   if (splashButtonBool){
     if (crayon.isLoaded()) {
-    splashButton.style('-webkit-transition', 'opacity 3s');
-    splashButton.style('transition', 'opacity 3s');
+    splashButton.style('-webkit-transition', 'opacity 2s');
+    splashButton.style('transition', 'opacity 2s');
     splashButton.style('opacity','100');
     splashButtonBool = false;
   }
