@@ -188,6 +188,7 @@ function draw() {
     }
   }
 
+  contentDraw();
   axisDraw();
 
   if (mouseIsPressed && !isHovering && !onTB && (millis()>200)) {
@@ -340,6 +341,7 @@ function windowResized() {
 }
 
 function menuTrans() {
+  enterAni();
   isSplash = false;
   playSong();
   splashButton.style('opacity', '0');
@@ -404,6 +406,22 @@ function projTrans(){
   }
 }
 
+function contentDraw() {
+  fill(col4);
+  if (artIsSelected) {
+    text("stuff stuff stuff art stuff",windowWidth*0.5,windowWidth*0.5);
+  }
+  if (musicIsSelected) {
+    text("stuff stuff stuff music stuff",windowWidth*0.5,windowWidth*0.5);
+  }
+  if (projIsSelected) {
+    text("stuff stuff stuff project stuff",windowWidth*0.5,windowWidth*0.5);
+  }
+  if (contIsSelected) {
+    text("stuff stuff stuff contact stuff",windowWidth*0.5,windowWidth*0.5);
+  }
+}
+
 function contTrans(){
   if (!contIsSelected){
     contIsSelected = true;
@@ -431,6 +449,12 @@ function isntHov() {
 }
 function songEnd(){
    songPlaying = false;
+}
+
+function enterAni() {
+  for (int i = 0; i < 30; i+=) {
+    rect(0,0windowWidth,windowHeight);
+  }
 }
 
 function axisDraw() {
