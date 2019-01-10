@@ -453,7 +453,7 @@ function songEnd(){
 
 function enterAni() {
   for (int i = 0; i < 30; i+=) {
-    rect(0,0windowWidth,windowHeight);
+    rect(0,0,windowWidth,windowHeight);
   }
 }
 
