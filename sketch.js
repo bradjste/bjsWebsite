@@ -4,6 +4,7 @@ var colorPhase;
 var freq1,freq2,freq3,freq4,freq5;
 var count;
 var milTemp;
+var mPressed = false;
 var splashButton, artButton, musicButton, contButton;
 var isSplash = true;
 var artIsSelected = false;
@@ -20,7 +21,12 @@ var rectHeight;
 var songPlaying = false;
 var splashButtonBool = true;
 var col1, col2, col3, col4, col5, col6;
+var colBorderOff;
 var firstDraw = true;
+var wipeTime =0;
+var wipeCount= 0;
+var wipeBool = false;
+var wipeNum = 50;
 
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
@@ -124,6 +130,7 @@ function draw() {
   col4 = color((colorPhase+240)%360,100*(mouseX/windowWidth),100);
   col5 = color((colorPhase+240)%360,100,100);
   col6 = color((colorPhase+120)%360,100,100);
+  colBorderOff = color(colorPhase,40,100);
 
   if (splashButtonBool){
     if (crayon.isLoaded()) {
@@ -139,6 +146,17 @@ function draw() {
       text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
   }
 }
+
+  if (wipeBool) {
+     wipe();
+     if (wipeCount == wipeNum){
+       wipeBool = false;
+     }
+  }
+
+  wipeTime = millis();
+
+
   colorPhase++;
   colorPhase = colorPhase % 360;
   var waveform = fft.waveform();
@@ -159,6 +177,7 @@ function draw() {
 
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     fill(20,0.9);
+    stroke(0);
     strokeWeight(5);
     rectX = windowWidth*0.05;
     rectWidth = windowWidth-(rectX*2);
@@ -176,6 +195,7 @@ function draw() {
     }
     fill(col3);
     textSize(windowWidth*0.035);
+    stroke(0);
     strokeWeight(5);
     if (artIsSelected){
       text("ART",windowWidth*0.5,windowHeight*0.35);
@@ -240,11 +260,11 @@ function draw() {
       (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
 
   if (!artIsSelected) {
-    artButton.style('color', col3);
+    artButton.style('color', colBorderOff);
     artButton.style('border', '2px outset');
     artButton.style('background-color', '#000000');
     artButton.size(windowWidth*0.1,windowWidth*0.05);
-    artButton.style('border-color', col3);
+    artButton.style('border-color', colBorderOff);
     artButton.position(windowWidth*0.1,windowHeight*0.1);
   }
   else {
@@ -252,16 +272,16 @@ function draw() {
     artButton.style('border', '5px outset');
     artButton.style('border-color', col6);
     artButton.size(windowWidth*0.105,windowWidth*0.0525);
-    artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.02));
+    artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
   artButton.style('font-size',windowWidth*0.02 + 'px');
 
   if (!musicIsSelected) {
-    musicButton.style('color', col3);
+    musicButton.style('color', colBorderOff);
     musicButton.style('border', '2px outset');
     musicButton.style('background-color', '#000000');
     musicButton.size(windowWidth*0.1,windowWidth*0.05);
-    musicButton.style('border-color', col3);
+    musicButton.style('border-color', colBorderOff);
     musicButton.position(windowWidth*0.2+(windowWidth*0.025),windowHeight*0.1);
   }
   else {
@@ -269,16 +289,16 @@ function draw() {
     musicButton.style('border-color', col6);
     musicButton.style('color',col5);
     musicButton.size(windowWidth*0.105,windowWidth*0.0525);
-    musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.02));
+    musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
   musicButton.style('font-size',windowWidth*0.02 + 'px');
 
   if (!projIsSelected) {
-    projButton.style('color', col3);
+    projButton.style('color', colBorderOff);
     projButton.style('border', '2px outset');
     projButton.style('background-color', '#000000');
     projButton.size(windowWidth*0.1,windowWidth*0.05);
-    projButton.style('border-color', col3);
+    projButton.style('border-color', colBorderOff);
     projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1);
   }
   else {
@@ -286,16 +306,16 @@ function draw() {
     projButton.size(windowWidth*0.105,windowWidth*0.0525);
     projButton.style('border-color', col6);
     projButton.style('color',col5);
-    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.02));
+    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
   projButton.style('font-size',windowWidth*0.02 + 'px');
 
   if (!contIsSelected) {
-    contButton.style('color', col3);
+    contButton.style('color', colBorderOff);
     contButton.style('border', '2px outset');
     contButton.style('background-color', '#000000');
     contButton.size(windowWidth*0.1,windowWidth*0.05);
-    contButton.style('border-color', col3);
+    contButton.style('border-color', colBorderOff);
     contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1);
   }
   else {
@@ -303,7 +323,7 @@ function draw() {
     contButton.size(windowWidth*0.105,windowWidth*0.0525);
     contButton.style('border-color', col6);
     contButton.style('color',col5);
-    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.02));
+    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
   contButton.style('font-size',windowWidth*0.018 + 'px');
 
@@ -321,7 +341,7 @@ function draw() {
   if (isSplash){
     count+= 0.05+((mouseX/windowWidth)*0.08);
   } else {
-    count+= 0.1;
+    count+= 0.04;
   }
   if (count >= 6.23 || splashButtonBool) {
     count = 0;
@@ -341,11 +361,10 @@ function windowResized() {
 }
 
 function menuTrans() {
-  enterAni();
   isSplash = false;
+  wipeBool = true;
   playSong();
   splashButton.style('opacity', '0');
-  //background(0);
   artButton.show();
   musicButton.show();
   projButton.show();
@@ -451,16 +470,20 @@ function songEnd(){
    songPlaying = false;
 }
 
-function enterAni() {
-  for (int i = 0; i < 30; i++) {
-    rect(0,0,windowWidth,windowHeight);
-  }
+
+function wipe() {
+    noStroke();
+    fill(100*((wipeNum-wipeCount)*.01));
+    ellipse((windowWidth*0.5),
+        (windowHeight*0.80)+(sin(count)*windowHeight*0.02),(wipeCount/wipeNum)*windowWidth*Math.sqrt(2),(wipeCount/wipeNum)*windowWidth*Math.sqrt(2));
+    wipeCount++;
 }
+
 
 function axisDraw() {
   stroke(col1);
   fill(col2);
-  if (mouseX > 0 && mouseY > 0) {
+  if (mPressed) {
     line(mouseX,0,mouseX,windowHeight);
     line(0,mouseY,windowWidth,mouseY);
     stroke(0);
@@ -477,4 +500,9 @@ function mousePressed() {
   if (getAudioContext().state !== 'running') {
     getAudioContext().resume();
   }
+}
+
+function mouseMoved() {
+  mPressed = true;
+
 }
