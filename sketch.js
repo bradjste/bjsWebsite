@@ -20,13 +20,13 @@ var rectWidth;
 var rectHeight;
 var songPlaying = false;
 var splashButtonBool = true;
-var col1, col2, col3, col4, col5, col6;
+var col1, col2, col3, col4, col5, col6, colText;
 var colBorderOff;
 var firstDraw = true;
 var wipeTime =0;
 var wipeCount= 0;
 var wipeBool = false;
-var wipeNum = 50;
+var wipeNum = 18;
 
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
@@ -130,6 +130,7 @@ function draw() {
   col4 = color((colorPhase+240)%360,100*(mouseX/windowWidth),100);
   col5 = color((colorPhase+240)%360,100,100);
   col6 = color((colorPhase+120)%360,100,100);
+  colText = color((colorPhase+240)%360,100,20);
   colBorderOff = color(colorPhase,40,100);
 
   if (splashButtonBool){
@@ -175,6 +176,8 @@ function draw() {
   }
   strokeWeight(9);
 
+
+
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     fill(20,0.9);
     stroke(0);
@@ -193,6 +196,7 @@ function draw() {
     } else {
       onTB = false;
     }
+    axisDraw();
     fill(col3);
     textSize(windowWidth*0.035);
     stroke(0);
@@ -206,10 +210,11 @@ function draw() {
     } else {
       text("CONTACT",windowWidth*0.5,windowHeight*0.35);
     }
+    contentDraw();
+  } else {
+    axisDraw();
   }
 
-  contentDraw();
-  axisDraw();
 
   if (mouseIsPressed && !isHovering && !onTB && (millis()>200)) {
     fill(col3);
@@ -348,7 +353,10 @@ function draw() {
   }
 
 
-
+  if(!isSplash) {
+    fill(0,0.1);
+    rect(0,0,windowWidth,windowHeight);
+  }
 
   if (milTemp+800 < millis()){
     loadMenu();
@@ -363,14 +371,13 @@ function windowResized() {
 function menuTrans() {
   isSplash = false;
   wipeBool = true;
-  playSong();
   splashButton.style('opacity', '0');
   artButton.show();
   musicButton.show();
   projButton.show();
   contButton.show();
   milTemp = millis();
-
+  playSong();
 }
 
 function playSong(){
@@ -426,18 +433,20 @@ function projTrans(){
 }
 
 function contentDraw() {
-  fill(col4);
+  fill(100);
+  strokeWeight(2);
+  textSize(40);
   if (artIsSelected) {
-    text("stuff stuff stuff art stuff",windowWidth*0.5,windowWidth*0.5);
+    text("stuff stuff stuff art stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
   }
   if (musicIsSelected) {
-    text("stuff stuff stuff music stuff",windowWidth*0.5,windowWidth*0.5);
+    text("stuff stuff stuff music stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
   }
   if (projIsSelected) {
-    text("stuff stuff stuff project stuff",windowWidth*0.5,windowWidth*0.5);
+    text("stuff stuff stuff project stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
   }
   if (contIsSelected) {
-    text("stuff stuff stuff contact stuff",windowWidth*0.5,windowWidth*0.5);
+    text("stuff stuff stuff contact stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
   }
 }
 
