@@ -5,7 +5,7 @@ var freq1,freq2,freq3,freq4,freq5;
 var count;
 var milTemp;
 var mPressed = false;
-var splashButton, artButton, musicButton, contButton;
+var splashButton, artButton, musicButton, contButton, lButton, rButton;
 var isSplash = true;
 var artIsSelected = false;
 var musicIsSelected = false;
@@ -27,13 +27,23 @@ var wipeTime =0;
 var wipeCount= 0;
 var wipeBool = false;
 var wipeNum = 18;
+var currImg = 0;
+var artImgArray= [];
+var projImgArray = [];
+var contImgArray =[];
+var currImgArray;
+var canDrawFrame = false;
+var artString = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
+var musicString = "stuff stuff stuff music stuff stuff stuff stuff music stuff stuff stuff stuff music stuff stuff stuff stuff music stuff";
+var projString = "stuff stuff stuff proj stuff stuff stuff stuff proj stuff stuff stuff stuff proj stuff stuff stuff stuff proj stuff";
+var contString = "stuff stuff stuff cont stuff stuff stuff stuff cont stuff stuff stuff stuff cont stuff stuff stuff stuff cont stuff";
 
 function setup() {
   createCanvas(windowWidth+5, windowHeight+5);
   colorMode(HSB, 360,100,100);
   background(0);
 
-  crayon = loadSound('assets/drumgum5.wav');
+  crayon = loadSound('assets/music/drumgum5.wav');
   crayon.setVolume(0.5);
   crayon.onended(songEnd);
 
@@ -61,6 +71,18 @@ function setup() {
   stroke(0);
   strokeWeight(60);
   count = 0.0;
+
+  currImgArray = artImgArray;
+
+  artImgArray[0] = loadImage('assets/artImg/art0.jpg');
+  artImgArray[1] = loadImage('assets/artImg/art1.jpg');
+  artImgArray[2] = loadImage('assets/artImg/art2.jpg');
+  artImgArray[3] = loadImage('assets/artImg/art3.jpg');
+  artImgArray[4] = loadImage('assets/artImg/art4.jpg');
+  artImgArray[5] = loadImage('assets/artImg/art5.jpg');
+  artImgArray[6] = loadImage('assets/artImg/art6.jpg');
+  artImgArray[7] = loadImage('assets/artImg/art7.jpg');
+  artImgArray[8] = loadImage('assets/artImg/art8.jpg');
 
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
@@ -121,6 +143,20 @@ function setup() {
   contButton.style('outline', 'none');
   contButton.mousePressed(contTrans);
 
+  lButton = createButton('<');
+  lButton.mouseOver(isHov);
+  lButton.mouseOut(isntHov);
+  lButton.hide();
+  lButton.style('cursor', 'cell');
+  lButton.mousePressed(lPressed);
+
+  rButton = createButton('>');
+  rButton.mouseOver(isHov);
+  rButton.mouseOut(isntHov);
+  rButton.hide();
+  rButton.style('cursor', 'cell');
+  rButton.mousePressed(rPressed);
+
 }
 
 function draw() {
@@ -177,7 +213,6 @@ function draw() {
   strokeWeight(9);
 
 
-
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     fill(20,0.9);
     stroke(0);
@@ -197,19 +232,10 @@ function draw() {
       onTB = false;
     }
     axisDraw();
-    fill(col3);
-    textSize(windowWidth*0.035);
-    stroke(0);
-    strokeWeight(5);
-    if (artIsSelected){
-      text("ART",windowWidth*0.5,windowHeight*0.35);
-    } else if (musicIsSelected) {
-      text("MUSIC",windowWidth*0.5,windowHeight*0.35);
-    } else if (projIsSelected){
-      text("PROJEX",windowWidth*0.5,windowHeight*0.35);
-    } else {
-      text("CONTACT",windowWidth*0.5,windowHeight*0.35);
+    if (canDrawFrame) {
+      drawFrame();
     }
+    catagoryDraw();
     contentDraw();
   } else {
     axisDraw();
@@ -219,6 +245,7 @@ function draw() {
   if (mouseIsPressed && !isHovering && !onTB && (millis()>200)) {
     fill(col3);
     strokeWeight(3);
+    stroke(0);
     ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
     textSize(windowWidth*0.02);
     fill(0);
@@ -255,14 +282,22 @@ function draw() {
     text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.2);
   }
 
-
-
   splashButton.style('border-color', col3);
   splashButton.style('color', col3);
   splashButton.style('background-color', '#000000');
   splashButton.style('font-size',windowWidth*0.02 + 'px');
   splashButton.position((windowWidth*0.45),
       (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
+
+  // lButton.position(rectX+20,rectY+20);
+  // lButton.size(rectHeight*0.05,rectHeight*0.05);
+  // lButton.style('color', '#FFFFFF');
+  // lButton.style('background-color', '#000000');
+  //
+  // rButton.position(rectHeight,rectY+20);
+  // rButton.size(rectHeight*0.05,rectHeight*0.05);
+  // rButton.style('color', '#FFFFFF');
+  // rButton.style('background-color', '#000000');
 
   if (!artIsSelected) {
     artButton.style('color', colBorderOff);
@@ -377,7 +412,7 @@ function menuTrans() {
   projButton.show();
   contButton.show();
   milTemp = millis();
-  playSong();
+  setTimeout(playSong,1000);
 }
 
 function playSong(){
@@ -403,6 +438,7 @@ function artTrans(){
   } else {
     background(0);
     artIsSelected = false;
+    canDrawFrame = false;
   }
 }
 
@@ -429,24 +465,7 @@ function projTrans(){
   } else {
     background(0);
     projIsSelected = false;
-  }
-}
-
-function contentDraw() {
-  fill(100);
-  strokeWeight(2);
-  textSize(40);
-  if (artIsSelected) {
-    text("stuff stuff stuff art stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
-  }
-  if (musicIsSelected) {
-    text("stuff stuff stuff music stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
-  }
-  if (projIsSelected) {
-    text("stuff stuff stuff project stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
-  }
-  if (contIsSelected) {
-    text("stuff stuff stuff contact stuff",rectX+rectWidth*0.5,rectY+rectHeight*0.4);
+    canDrawFrame = false;
   }
 }
 
@@ -463,10 +482,36 @@ function contTrans(){
   }
 }
 
-function loadingScreen(){
-   fill(random(360),100,100);
-   ellipse(windowWidth*0.5,windowHeight*0.5,30,30);
+function contentDraw() {
+  fill(100);
+  strokeWeight(1);
+  textSize(40);
+  stroke(100);
+  if (artIsSelected) {
+      canDrawFrame = true;
+      text(artString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
+         rectWidth*0.5,rectHeight*0.5);
+      currImgArray = artImgArray;
+  }  else if (musicIsSelected) {
+      lButton.hide();
+      rButton.hide();
+      canDrawFrame = false;
+      text(musicString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
+         rectWidth*0.5,rectHeight*0.5);
+  }  else if (projIsSelected) {
+      canDrawFrame = true;
+      text(projString,rectX+rectWidth*0.5,rectY+rectHeight*0.4,
+         rectWidth*0.5,rectHeight*0.5);
+  }  else if (contIsSelected) {
+      lButton.hide();
+      rButton.hide();
+      canDrawFrame = false;
+      text(contString,rectX+rectWidth*0.5,rectY+rectHeight*0.4,
+         rectWidth*0.5,rectHeight*0.5);
+  }
 }
+
+
 
 function isHov() {
    isHovering = true;
@@ -475,19 +520,37 @@ function isHov() {
 function isntHov() {
    isHovering = false;
 }
+
 function songEnd(){
    songPlaying = false;
 }
-
 
 function wipe() {
     noStroke();
     fill(100*((wipeNum-wipeCount)*.01));
     ellipse((windowWidth*0.5),
-        (windowHeight*0.80)+(sin(count)*windowHeight*0.02),(wipeCount/wipeNum)*windowWidth*Math.sqrt(2),(wipeCount/wipeNum)*windowWidth*Math.sqrt(2));
+        (windowHeight*0.80)+(sin(count)*windowHeight*0.02),
+        (wipeCount/wipeNum)*windowWidth*Math.sqrt(2),
+        (wipeCount/wipeNum)*windowWidth*Math.sqrt(2));
     wipeCount++;
 }
 
+function catagoryDraw() {
+  fill(col3);
+  textSize(windowWidth*0.035);
+  stroke(0);
+  strokeWeight(5);
+
+  if (artIsSelected){
+    text("ART",windowWidth*0.5,windowHeight*0.35);
+  } else if (musicIsSelected) {
+    text("MUSIC",windowWidth*0.5,windowHeight*0.35);
+  } else if (projIsSelected){
+    text("PROJEX",windowWidth*0.5,windowHeight*0.35);
+  } else {
+    text("CONTACT",windowWidth*0.5,windowHeight*0.35);
+  }
+}
 
 function axisDraw() {
   stroke(col1);
@@ -513,5 +576,39 @@ function mousePressed() {
 
 function mouseMoved() {
   mPressed = true;
+}
 
+function drawFrame() {
+  currImg = int((mouseX/windowWidth)*currImgArray.length) % currImgArray.length;
+  noStroke();
+  if (currImg < currImgArray.length - 2) {
+    image(currImgArray[currImg + 2],rectX+100, rectY+20, rectHeight-40, rectHeight-40,
+          0,0,1200,1200);
+    fill(0,0.8);
+    rect(rectX+100, rectY+20, rectHeight-40, rectHeight-40);
+  }
+  if (currImg < currImgArray.length - 1) {
+    image(currImgArray[currImg + 1],rectX+60, rectY+20, rectHeight-40, rectHeight-40,
+          0,0,1200,1200);
+    fill(0,0.5);
+    rect(rectX+60, rectY+20, rectHeight-40, rectHeight-40);
+  }
+  image(currImgArray[currImg],rectX+20, rectY+20, rectHeight-40, rectHeight-40,
+          0,0,1200,1200);
+  fill(0,0);
+  stroke(0);
+  strokeWeight(4);
+  rect(rectX+20, rectY+20, rectHeight-40, rectHeight-40);
+}
+
+function lPressed() {
+   if (currImg > 0){
+     currImg--;
+   }
+}
+
+function rPressed() {
+   if (currImg < (currImgArray.length-1)){
+     currImg++;
+   }
 }
