@@ -582,16 +582,16 @@ function drawFrame() {
   currImg = int((mouseX/windowWidth)*currImgArray.length) % currImgArray.length;
   noStroke();
   if (currImg < currImgArray.length - 2) {
-    image(currImgArray[currImg + 2],rectX+100, rectY+20, rectHeight-40, rectHeight-40,
+    image(currImgArray[currImg + 2],rectX+100, rectY+30, rectHeight-40, rectHeight-40,
           0,0,1200,1200);
-    fill(0,0.8);
-    rect(rectX+100, rectY+20, rectHeight-40, rectHeight-40);
+    fill(20,0.8);
+    rect(rectX+100, rectY+30, rectHeight-40, rectHeight-40);
   }
   if (currImg < currImgArray.length - 1) {
-    image(currImgArray[currImg + 1],rectX+60, rectY+20, rectHeight-40, rectHeight-40,
+    image(currImgArray[currImg + 1],rectX+60, rectY+25, rectHeight-40, rectHeight-40,
           0,0,1200,1200);
-    fill(0,0.5);
-    rect(rectX+60, rectY+20, rectHeight-40, rectHeight-40);
+    fill(20,0.5);
+    rect(rectX+60, rectY+25, rectHeight-40, rectHeight-40);
   }
   image(currImgArray[currImg],rectX+20, rectY+20, rectHeight-40, rectHeight-40,
           0,0,1200,1200);
