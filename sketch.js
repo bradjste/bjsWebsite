@@ -203,10 +203,12 @@ function draw() {
     strokeWeight(3);
     stroke(0);
     for (var i = 0; i < waveform.length; i++){
+      if (i % 2 == 0) {
       var x = map(i, 0, waveform.length, 0, windowWidth);
       var y = map(waveform[i], -1, 1, windowHeight, 0);
       fill(colorPhase,100-(100*(mouseX/windowWidth)),100);
-      vertex(x, y+windowHeight*0.1);
+      curveVertex(x, y+windowHeight*0.1);
+    }
     }
     endShape();
   }
@@ -214,7 +216,7 @@ function draw() {
 
 
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
-    fill(20,0.9);
+    fill(100,0.6);
     stroke(0);
     strokeWeight(5);
     rectX = windowWidth*0.05;
@@ -288,16 +290,6 @@ function draw() {
   splashButton.style('font-size',windowWidth*0.02 + 'px');
   splashButton.position((windowWidth*0.45),
       (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
-
-  // lButton.position(rectX+20,rectY+20);
-  // lButton.size(rectHeight*0.05,rectHeight*0.05);
-  // lButton.style('color', '#FFFFFF');
-  // lButton.style('background-color', '#000000');
-  //
-  // rButton.position(rectHeight,rectY+20);
-  // rButton.size(rectHeight*0.05,rectHeight*0.05);
-  // rButton.style('color', '#FFFFFF');
-  // rButton.style('background-color', '#000000');
 
   if (!artIsSelected) {
     artButton.style('color', colBorderOff);
@@ -483,7 +475,7 @@ function contTrans(){
 }
 
 function contentDraw() {
-  fill(100);
+  fill(0);
   strokeWeight(1);
   textSize(40);
   stroke(100);
@@ -584,20 +576,20 @@ function drawFrame() {
   if (currImg < currImgArray.length - 2) {
     image(currImgArray[currImg + 2],rectX+100, rectY+30, rectHeight-40, rectHeight-40,
           0,0,1200,1200);
-    fill(20,0.8);
+    fill(100,0.6);
     rect(rectX+100, rectY+30, rectHeight-40, rectHeight-40);
   }
   if (currImg < currImgArray.length - 1) {
     image(currImgArray[currImg + 1],rectX+60, rectY+25, rectHeight-40, rectHeight-40,
           0,0,1200,1200);
-    fill(20,0.5);
+    fill(100,0.3);
     rect(rectX+60, rectY+25, rectHeight-40, rectHeight-40);
   }
   image(currImgArray[currImg],rectX+20, rectY+20, rectHeight-40, rectHeight-40,
           0,0,1200,1200);
   fill(0,0);
   stroke(0);
-  strokeWeight(4);
+  strokeWeight(6);
   rect(rectX+20, rectY+20, rectHeight-40, rectHeight-40);
 }
 
