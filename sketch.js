@@ -18,7 +18,7 @@ var isMuted = false;
 var currSong;
 var titleNum = 0;
 var lineGrowth = 0;
-var lineGrowthSpeed = 10;
+var lineGrowthSpeed = 5;
 var rectX;
 var rectY;
 var rectWidth;
@@ -41,8 +41,8 @@ var currImgArray;
 var canDrawFrame = false;
 var artString = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
 var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
-var projString = "stuff stuff stuff proj stuff stuff stuff stuff proj stuff stuff stuff stuff proj stuff stuff stuff stuff proj stuff";
-var contString = "stuff stuff stuff cont stuff stuff stuff stuff cont stuff stuff stuff stuff cont stuff stuff stuff stuff cont stuff";
+var projString = "";
+var contString = "email: bradjste@gmail.com"+"\n"+"instagram: bradjste"+"\n"+"bandcamp: Hexer Quiz"+"\n"+"twitter: @hexerquiz";
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -54,9 +54,9 @@ function setup() {
   currSong.onended(songEnd);
 
   osc1 = new p5.SqrOsc(); // set frequency and type
-  osc2 = new p5.TriOsc(); // set frequency and type
-  osc3 = new p5.TriOsc(); // set frequency and type
-  osc4 = new p5.TriOsc(); // set frequency and type
+  osc2 = new p5.SqrOsc(); // set frequency and type
+  osc3 = new p5.SqrOsc(); // set frequency and type
+  osc4 = new p5.SqrOsc(); // set frequency and type
 
   osc1.amp(0);
   osc2.amp(0);
@@ -95,7 +95,7 @@ function setup() {
   titleArray[2] = "creative coder";
   titleArray[3] = "generative artist";
   titleArray[4] = "interactive designer";
-  titleArray[5] = "web designer";
+  titleArray[5] = "recording engineer";
   titleArray[6] = "UI designer";
   titleArray[7] = "music producer";
   titleArray[8] = "event manager";
@@ -106,7 +106,7 @@ function setup() {
   titleArray[13] = "new friend";
   titleArray[14] = "puredata specialist";
 
-    setInterval(titleNumInc,1000);
+ setInterval(titleNumInc,1000);
 
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
@@ -271,11 +271,12 @@ function draw() {
     ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
     textSize(windowWidth*0.02);
     fill(0);
+    textAlign(CENTER);
     text(int(freq1)+' Hz',mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20);
-    osc1.amp(.2);
-    osc2.amp(.2);
-    osc3.amp(.2);
-    osc4.amp(.3);
+    osc1.amp(.1);
+    osc2.amp(.1);
+    osc3.amp(.1);
+    osc4.amp(.15);
   }
   else {
     osc1.amp(0);
@@ -322,7 +323,7 @@ function draw() {
     shhButton.style('border-color', col3);
     shhButton.style('color', col3);
     shhButton.style('background-color', '#000000');
-    shhButton.value('shound');
+    shhButton.value ='shound';
   }
   shhButton.style('font-size',windowWidth*0.01 + 'px');
   shhButton.size(windowWidth*0.05,windowWidth*0.02);
@@ -516,7 +517,7 @@ function contTrans(){
 function contentDraw() {
   fill(0);
   strokeWeight(1);
-  textSize(40);
+  textSize(windowWidth*(40/1536));
   stroke(100);
   if (artIsSelected) {
       canDrawFrame = true;
@@ -529,12 +530,17 @@ function contentDraw() {
          rectWidth*0.5,rectHeight*0.5);
   }  else if (projIsSelected) {
       canDrawFrame = true;
-      text(projString,rectX+rectWidth*0.5,rectY+rectHeight*0.4,
+      text(projString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
          rectWidth*0.5,rectHeight*0.5);
   }  else if (contIsSelected) {
       canDrawFrame = false;
       lookingFor();
-      text(contString,rectX+rectWidth*0.5,rectY+rectHeight*0.4,
+      fill(0);
+      strokeWeight(1);
+      textSize(windowWidth*(40/1536));
+      stroke(100);
+      textAlign(RIGHT);
+      text(contString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
          rectWidth*0.5,rectHeight*0.5);
   }
 }
@@ -651,10 +657,18 @@ function lookingFor(){
   textAlign(LEFT);
   textSize(rectHeight*0.1);
   text("Looking for a(n)",rectX+(rectWidth*0.05),rectY+(rectWidth*0.05));
-  stroke(col3);
+  fill(col3);
+  stroke(0);
+  strokeWeight(3);
   text(titleArray[titleNum]+"?",rectX+(rectWidth*0.05),rectY+(rectHeight*0.35));
 }
 
 function titleNumInc() {
-   titleNum = int(random(15));
+  let numTemp = int(random(15));
+  if (numTemp == titleNum) {
+    titleNum = (titleNum + 1) % 15
+  } else {
+    titleNum = numTemp;
+  }
+
  }
