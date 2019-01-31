@@ -5,7 +5,8 @@ var freq1,freq2,freq3,freq4,freq5;
 var count;
 var milTemp;
 var mPressed = false;
-var splashButton, artButton, musicButton, contButton, lButton, rButton;
+var splashButton, artButton, musicButton, contButton;
+var shhButton;
 var isSplash = true;
 var artIsSelected = false;
 var musicIsSelected = false;
@@ -13,11 +14,16 @@ var projIsSelected = false;
 var contIsSelected = false;
 var shouldDrawWF = false;
 var isHovering, onTB = false;
-var crayon;
+var isMuted = false;
+var currSong;
+var titleNum = 0;
+var lineGrowth = 0;
+var lineGrowthSpeed = 10;
 var rectX;
 var rectY;
 var rectWidth;
 var rectHeight;
+var titleArray = [];
 var songPlaying = false;
 var splashButtonBool = true;
 var col1, col2, col3, col4, col5, col6, colText;
@@ -34,18 +40,18 @@ var contImgArray =[];
 var currImgArray;
 var canDrawFrame = false;
 var artString = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
-var musicString = "stuff stuff stuff music stuff stuff stuff stuff music stuff stuff stuff stuff music stuff stuff stuff stuff music stuff";
+var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
 var projString = "stuff stuff stuff proj stuff stuff stuff stuff proj stuff stuff stuff stuff proj stuff stuff stuff stuff proj stuff";
 var contString = "stuff stuff stuff cont stuff stuff stuff stuff cont stuff stuff stuff stuff cont stuff stuff stuff stuff cont stuff";
 
 function setup() {
-  createCanvas(windowWidth+5, windowHeight+5);
+  createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360,100,100);
   background(0);
 
-  crayon = loadSound('assets/music/drumgum5.wav');
-  crayon.setVolume(0.5);
-  crayon.onended(songEnd);
+  currSong = loadSound('assets/music/drumgum5.wav');
+  currSong.setVolume(0.5);
+  currSong.onended(songEnd);
 
   osc1 = new p5.SqrOsc(); // set frequency and type
   osc2 = new p5.TriOsc(); // set frequency and type
@@ -84,6 +90,24 @@ function setup() {
   artImgArray[7] = loadImage('assets/artImg/art7.jpg');
   artImgArray[8] = loadImage('assets/artImg/art8.jpg');
 
+  titleArray[0] = "audio engineer";
+  titleArray[1] = "composer";
+  titleArray[2] = "creative coder";
+  titleArray[3] = "generative artist";
+  titleArray[4] = "interactive designer";
+  titleArray[5] = "web designer";
+  titleArray[6] = "UI designer";
+  titleArray[7] = "music producer";
+  titleArray[8] = "event manager";
+  titleArray[9] = "musical instrument prototyper";
+  titleArray[10] = "digital instrument designer";
+  titleArray[11] = "sound designer";
+  titleArray[12] = "image processor";
+  titleArray[13] = "new friend";
+  titleArray[14] = "puredata specialist";
+
+    setInterval(titleNumInc,1000);
+
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
   splashButton.mouseOut(isntHov);
@@ -92,8 +116,17 @@ function setup() {
   splashButton.style('outline', 'none');
   splashButton.style('opacity','0');
   splashButton.style('visibility','hidden');
+  splashButton.style('-webkit-transition', 'opacity 2s');
+  splashButton.style('transition', 'opacity 2s');
   splashButton.mousePressed(menuTrans);
   splashButton.size(windowWidth*0.1,windowWidth*0.05);
+
+  shhButton = createButton('sound');
+  shhButton.mouseOver(isHov);
+  shhButton.mouseOut(isntHov);
+  shhButton.style('cursor', 'cell');
+  shhButton.style('outline', 'none');
+  shhButton.mousePressed(mute);
 
   artButton = createButton('ART');
   artButton.mouseOver(isHov);
@@ -142,21 +175,6 @@ function setup() {
   contButton.style('transition', 'opacity 1s');
   contButton.style('outline', 'none');
   contButton.mousePressed(contTrans);
-
-  lButton = createButton('<');
-  lButton.mouseOver(isHov);
-  lButton.mouseOut(isntHov);
-  lButton.hide();
-  lButton.style('cursor', 'cell');
-  lButton.mousePressed(lPressed);
-
-  rButton = createButton('>');
-  rButton.mouseOver(isHov);
-  rButton.mouseOut(isntHov);
-  rButton.hide();
-  rButton.style('cursor', 'cell');
-  rButton.mousePressed(rPressed);
-
 }
 
 function draw() {
@@ -169,20 +187,7 @@ function draw() {
   colText = color((colorPhase+240)%360,100,20);
   colBorderOff = color(colorPhase,40,100);
 
-  if (splashButtonBool){
-    if (crayon.isLoaded()) {
-    splashButton.style('-webkit-transition', 'opacity 2s');
-    splashButton.style('transition', 'opacity 2s');
-    splashButton.style('opacity','100');
-    splashButton.style('visibility', 'visible');
-    splashButtonBool = false;
-  }
-  else {
-      fill(col3);
-      textSize(windowWidth*0.025);
-      text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
-  }
-}
+
 
   if (wipeBool) {
      wipe();
@@ -198,7 +203,7 @@ function draw() {
   colorPhase = colorPhase % 360;
   var waveform = fft.waveform();
   var yMin,yMax = 0;
-  if ((mouseIsPressed && !isHovering && !onTB)|| songPlaying) {
+  if ((mouseIsPressed && !isHovering && !onTB && !isMuted)|| songPlaying) {
     beginShape();
     strokeWeight(3);
     stroke(0);
@@ -239,12 +244,27 @@ function draw() {
     }
     catagoryDraw();
     contentDraw();
+    sweepLineDraw();
   } else {
     axisDraw();
   }
 
+  if (splashButtonBool){
+    if (currSong.isLoaded()) {
+      splashButton.style('opacity','100');
+      splashButton.style('visibility', 'visible');
+      splashButtonBool = false;
+    } else {
+        fill(col3);
+        stroke(0);
+        strokeWeight(8);
+        textSize(windowWidth*0.025);
+        text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
+     }
+ }
 
-  if (mouseIsPressed && !isHovering && !onTB && (millis()>200)) {
+
+  if (mouseIsPressed && !isHovering && !onTB && (millis()>200) && !isMuted) {
     fill(col3);
     strokeWeight(3);
     stroke(0);
@@ -267,6 +287,7 @@ function draw() {
     fill(col1);
     stroke(0);
     strokeWeight(8);
+    textAlign(CENTER);
     textSize(windowWidth*0.08);
     text("BRAD STEVENSON",windowWidth*0.5,windowHeight*0.4-(windowHeight*0.05)+(cos(count)*windowHeight*0.1));
     textSize(windowWidth*0.04);
@@ -277,6 +298,7 @@ function draw() {
     fill(col1);
     stroke(0);
     strokeWeight(8);
+    textAlign(CENTER);
     textSize(windowWidth*0.03);
     text("BRAD STEVENSON",windowWidth*0.5,windowHeight*0.15);
     textSize(windowWidth*0.015);
@@ -290,6 +312,21 @@ function draw() {
   splashButton.style('font-size',windowWidth*0.02 + 'px');
   splashButton.position((windowWidth*0.45),
       (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
+  splashButton.style('font-size',windowWidth*0.02 + 'px');
+
+  if (isMuted) {
+    shhButton.style('border-color', col3);
+    shhButton.style('color', '#000');
+    shhButton.style('background-color', '#FFF');
+  } else {
+    shhButton.style('border-color', col3);
+    shhButton.style('color', col3);
+    shhButton.style('background-color', '#000000');
+    shhButton.value('shound');
+  }
+  shhButton.style('font-size',windowWidth*0.01 + 'px');
+  shhButton.size(windowWidth*0.05,windowWidth*0.02);
+  shhButton.position(windowWidth*0.95+2,(windowHeight-(windowWidth*0.02))+2);
 
   if (!artIsSelected) {
     artButton.style('color', colBorderOff);
@@ -360,7 +397,6 @@ function draw() {
   contButton.style('font-size',windowWidth*0.018 + 'px');
 
   var freq = map(mouseX, 0, width, 40, 500);
-  var off = map(mouseY, 0, height, 0.5, .01);
   freq1 = freq*1;
   freq2 = freq*1.25;
   freq3 = freq*1.481;
@@ -384,10 +420,6 @@ function draw() {
     fill(0,0.1);
     rect(0,0,windowWidth,windowHeight);
   }
-
-  if (milTemp+800 < millis()){
-    loadMenu();
-  }
 }
 
 function windowResized() {
@@ -404,12 +436,15 @@ function menuTrans() {
   projButton.show();
   contButton.show();
   milTemp = millis();
+  setTimeout(loadMenu,800);
   setTimeout(playSong,1000);
 }
 
 function playSong(){
-  crayon.play();
-  songPlaying = true;
+  if (!isMuted) {
+    currSong.play();
+    songPlaying = true;
+  }
 }
 
 function loadMenu() {
@@ -427,6 +462,7 @@ function artTrans(){
     projIsSelected = false;
     contIsSelected = false;
     count = 0;
+    lineGrowth = 0;
   } else {
     background(0);
     artIsSelected = false;
@@ -441,6 +477,7 @@ function musicTrans(){
     contIsSelected = false;
     projIsSelected = false;
     count = 0;
+    lineGrowth = 0;
   } else {
     background(0);
     musicIsSelected = false;
@@ -454,6 +491,7 @@ function projTrans(){
     contIsSelected = false;
     musicIsSelected = false;
     count = 0;
+    lineGrowth = 0;
   } else {
     background(0);
     projIsSelected = false;
@@ -468,6 +506,7 @@ function contTrans(){
     projIsSelected = false;
     musicIsSelected = false;
     count = 0;
+    lineGrowth = 0;
   } else {
     background(0);
     contIsSelected = false;
@@ -485,8 +524,6 @@ function contentDraw() {
          rectWidth*0.5,rectHeight*0.5);
       currImgArray = artImgArray;
   }  else if (musicIsSelected) {
-      lButton.hide();
-      rButton.hide();
       canDrawFrame = false;
       text(musicString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
          rectWidth*0.5,rectHeight*0.5);
@@ -495,9 +532,8 @@ function contentDraw() {
       text(projString,rectX+rectWidth*0.5,rectY+rectHeight*0.4,
          rectWidth*0.5,rectHeight*0.5);
   }  else if (contIsSelected) {
-      lButton.hide();
-      rButton.hide();
       canDrawFrame = false;
+      lookingFor();
       text(contString,rectX+rectWidth*0.5,rectY+rectHeight*0.4,
          rectWidth*0.5,rectHeight*0.5);
   }
@@ -528,19 +564,20 @@ function wipe() {
 }
 
 function catagoryDraw() {
+  let textEdge = rectX+(rectWidth*0.98);
   fill(col3);
   textSize(windowWidth*0.035);
+  textAlign(RIGHT);
   stroke(0);
   strokeWeight(5);
-
   if (artIsSelected){
-    text("ART",windowWidth*0.5,windowHeight*0.35);
+    text("ART",textEdge,windowHeight*0.35);
   } else if (musicIsSelected) {
-    text("MUSIC",windowWidth*0.5,windowHeight*0.35);
+    text("MUSIC",textEdge,windowHeight*0.35);
   } else if (projIsSelected){
-    text("PROJEX",windowWidth*0.5,windowHeight*0.35);
+    text("PROJEX",textEdge,windowHeight*0.35);
   } else {
-    text("CONTACT",windowWidth*0.5,windowHeight*0.35);
+    text("CONTACT",textEdge,windowHeight*0.35);
   }
 }
 
@@ -593,14 +630,31 @@ function drawFrame() {
   rect(rectX+20, rectY+20, rectHeight-40, rectHeight-40);
 }
 
-function lPressed() {
-   if (currImg > 0){
-     currImg--;
-   }
+function mute(){
+  currSong.stop();
+  isMuted = !isMuted;
+  songPlaying = false;
 }
 
-function rPressed() {
-   if (currImg < (currImgArray.length-1)){
-     currImg++;
-   }
+function sweepLineDraw() {
+  stroke(0);
+  strokeWeight(2);
+  if (lineGrowth<=lineGrowthSpeed) {
+    line(rectX+rectWidth-10,windowHeight*0.37,(rectX+rectWidth-10)-((windowWidth*0.35)*(lineGrowth/lineGrowthSpeed)),windowHeight*0.37);
+    lineGrowth++;
+  } else {
+    line(rectX+rectWidth-10,windowHeight*0.37,(rectX+rectWidth-10)-(windowWidth*0.35),windowHeight*0.37);
+  }
 }
+
+function lookingFor(){
+  textAlign(LEFT);
+  textSize(rectHeight*0.1);
+  text("Looking for a(n)",rectX+(rectWidth*0.05),rectY+(rectWidth*0.05));
+  stroke(col3);
+  text(titleArray[titleNum]+"?",rectX+(rectWidth*0.05),rectY+(rectHeight*0.35));
+}
+
+function titleNumInc() {
+   titleNum = int(random(15));
+ }
