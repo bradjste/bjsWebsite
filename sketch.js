@@ -90,6 +90,16 @@ function setup() {
   artImgArray[7] = loadImage('assets/artImg/art7.jpg');
   artImgArray[8] = loadImage('assets/artImg/art8.jpg');
 
+  projImgArray[0] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[1] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[2] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[3] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[4] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[5] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[6] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[7] = loadImage('assets/artImg/art0.jpg');
+  projImgArray[8] = loadImage('assets/artImg/art0.jpg');
+
   titleArray[0] = "audio engineer";
   titleArray[1] = "composer";
   titleArray[2] = "creative coder";
@@ -421,6 +431,14 @@ function draw() {
     fill(0,0.1);
     rect(0,0,windowWidth,windowHeight);
   }
+
+  if (windowWidth < windowHeight) {
+    background(0);
+    textSize(windowHeight*0.07);
+    textAlign(CENTER);
+    fill(col3);
+    text("ROTATE"+ "\n" +"SCREEN", windowWidth*0.5,windowHeight*0.5)
+  }
 }
 
 function windowResized() {
@@ -458,6 +476,7 @@ function loadMenu() {
 
 function artTrans(){
   if (!artIsSelected){
+    currImgArray = artImgArray;
     artIsSelected = true;
     musicIsSelected = false;
     projIsSelected = false;
@@ -487,6 +506,7 @@ function musicTrans(){
 
 function projTrans(){
   if (!projIsSelected){
+    currImgArray= projImgArray;
     projIsSelected = true;
     artIsSelected = false;
     contIsSelected = false;
