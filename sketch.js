@@ -656,11 +656,11 @@ function sweepLineDraw() {
 function lookingFor(){
   textAlign(LEFT);
   textSize(rectHeight*0.1);
-  text("Looking for a(n)",rectX+(rectWidth*0.05),rectY+(rectWidth*0.05));
+  text("Looking for a(n)",rectX+(rectWidth*0.025),rectY+(rectWidth*0.05));
   fill(col3);
   stroke(0);
   strokeWeight(3);
-  text(titleArray[titleNum]+"?",rectX+(rectWidth*0.05),rectY+(rectHeight*0.35));
+  text(titleArray[titleNum]+"?",rectX+(rectWidth*0.05),rectY+(rectHeight*0.25));
 }
 
 function titleNumInc() {
