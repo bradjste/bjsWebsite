@@ -18,7 +18,7 @@ var isMuted = false;
 var currSong;
 var titleNum = 0;
 var lineGrowth = 0;
-var lineGrowthSpeed = 5;
+var lineGrowthSpeed = 7;
 var rectX;
 var rectY;
 var rectWidth;
