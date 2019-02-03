@@ -218,12 +218,10 @@ function draw() {
     strokeWeight(3);
     stroke(0);
     for (var i = 0; i < waveform.length; i++){
-      if (i % 2 == 0) {
       var x = map(i, 0, waveform.length, 0, windowWidth);
       var y = map(waveform[i], -1, 1, windowHeight, 0);
       fill(colorPhase,100-(100*(mouseX/windowWidth)),100);
       curveVertex(x, y+windowHeight*0.1);
-    }
     }
     endShape();
   }
