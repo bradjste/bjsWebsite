@@ -231,6 +231,7 @@ function draw() {
 
 
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
+    sing();
     fill(100,0.6);
     stroke(0);
     strokeWeight(5);
@@ -257,6 +258,7 @@ function draw() {
     sweepLineDraw();
   } else {
     axisDraw();
+    sing();
   }
 
   if (splashButtonBool){
@@ -274,26 +276,7 @@ function draw() {
  }
 
 
-  if (mouseIsPressed && !isHovering && !onTB && (millis()>200) && !isMuted) {
-    fill(col3);
-    strokeWeight(3);
-    stroke(0);
-    ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
-    textSize(windowWidth*0.02);
-    fill(0);
-    textAlign(CENTER);
-    text(int(freq1)+' Hz',mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20);
-    osc1.amp(.1);
-    osc2.amp(.1);
-    osc3.amp(.1);
-    osc4.amp(.15);
-  }
-  else {
-    osc1.amp(0);
-    osc2.amp(0);
-    osc3.amp(0);
-    osc4.amp(0);
-  }
+
   if (isSplash){
     fill(col1);
     stroke(0);
@@ -321,6 +304,7 @@ function draw() {
   splashButton.style('color', col3);
   splashButton.style('background-color', '#000000');
   splashButton.style('font-size',windowWidth*0.02 + 'px');
+  splashButton.size(windowWidth*0.1,windowWidth*0.05);
   splashButton.position((windowWidth*0.45),
       (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
   splashButton.style('font-size',windowWidth*0.02 + 'px');
@@ -348,9 +332,9 @@ function draw() {
     artButton.position(windowWidth*0.1,windowHeight*0.1);
   }
   else {
-    artButton.style('color',col5);
+    artButton.style('color',col3);
     artButton.style('border', '5px outset');
-    artButton.style('border-color', col6);
+    artButton.style('border-color', col3);
     artButton.size(windowWidth*0.105,windowWidth*0.0525);
     artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
@@ -366,8 +350,8 @@ function draw() {
   }
   else {
     musicButton.style('border', '5px outset');
-    musicButton.style('border-color', col6);
-    musicButton.style('color',col5);
+    musicButton.style('border-color', col3);
+    musicButton.style('color',col3);
     musicButton.size(windowWidth*0.105,windowWidth*0.0525);
     musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
@@ -384,8 +368,8 @@ function draw() {
   else {
     projButton.style('border', '5px outset');
     projButton.size(windowWidth*0.105,windowWidth*0.0525);
-    projButton.style('border-color', col6);
-    projButton.style('color',col5);
+    projButton.style('border-color', col3);
+    projButton.style('color',col3);
     projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
   projButton.style('font-size',windowWidth*0.02 + 'px');
@@ -401,8 +385,8 @@ function draw() {
   else {
     contButton.style('border', '5px outset');
     contButton.size(windowWidth*0.105,windowWidth*0.0525);
-    contButton.style('border-color', col6);
-    contButton.style('color',col5);
+    contButton.style('border-color', col3);
+    contButton.style('color',col3);
     contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
   }
   contButton.style('font-size',windowWidth*0.018 + 'px');
@@ -691,4 +675,27 @@ function titleNumInc() {
     titleNum = numTemp;
   }
 
+ }
+
+ function sing() {
+   if (mouseIsPressed && !isHovering && !onTB && (millis()>200) && !isMuted) {
+     fill(col3);
+     strokeWeight(3);
+     stroke(0);
+     ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
+     textSize(windowWidth*0.02);
+     fill(0);
+     textAlign(CENTER);
+     text(int(freq1)+' Hz',mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20);
+     osc1.amp(.1);
+     osc2.amp(.1);
+     osc3.amp(.1);
+     osc4.amp(.15);
+   }
+   else {
+     osc1.amp(0);
+     osc2.amp(0);
+     osc3.amp(0);
+     osc4.amp(0);
+   }
  }
