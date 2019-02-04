@@ -18,7 +18,7 @@ var isMuted = false;
 var currSong;
 var titleNum = 0;
 var lineGrowth = 0;
-var lineGrowthSpeed = 11;
+var lineGrowthSpeed = 8;
 var rectX;
 var rectY;
 var rectWidth;
@@ -316,7 +316,7 @@ function draw() {
   }
   shhButton.style('font-size',windowWidth*0.01 + 'px');
   shhButton.size(windowWidth*0.05,windowWidth*0.02);
-  shhButton.position(windowWidth*0.95+2,(windowHeight-(windowWidth*0.02))+2);
+  shhButton.position(windowWidth*0.95+2,(windowHeight-(windowWidth*0.02*(mouseY/windowHeight)*(mouseX/windowWidth)))+2);
 
   if (!artIsSelected) {
     artButton.style('color', colBorderOff);
