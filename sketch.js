@@ -708,7 +708,7 @@ function titleNumInc() {
      stroke(0);
      ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
      fill(0);
-     textSize(windowHeight*0.05)
+     textSize(windowHeight*0.035)
      strokeWeight(2);
      textAlign(CENTER);
      text(int(freq1)+' Hz',mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20);
