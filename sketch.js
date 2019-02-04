@@ -42,7 +42,7 @@ var stretchFlip = true;
 var canDrawFrame = false;
 var artString = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
 var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
-var projString = "For my senior project at UCSD, I designed a virtual guitar-inspired pd instrument with the capability to connect to an Arduino via serial communication. I loaded the patch onto a Rasperry Pi, and enabled button input. The patch includes a color-mapping algorithm based on the circular nature of the HSV color system and the octaval properties of sound.";
+var projString = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability. The patch works as a sound -> color-mapping algorithm utilizing the  HSV color space.";
 var contString = "email: bradjste@gmail.com"+"\n"+"instagram: bradjste"+"\n"+"bandcamp: Hexer Quiz"+"\n"+"twitter: @hexerquiz";
 
 function setup() {
@@ -688,7 +688,7 @@ function lookingFor(){
   fill(col3);
   stroke(0);
   strokeWeight(3);
-  text(titleArray[titleNum]+",",rectX+(rectWidth*0.05),rectY+(rectHeight*0.25));
+  text(titleArray[titleNum]+",",rectX+(rectWidth*0.025),rectY+(rectHeight*0.25));
 }
 
 function titleNumInc() {
