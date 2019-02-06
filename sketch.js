@@ -26,6 +26,8 @@ var rectY, rect2Y;
 var rectWidth, rect2Width;
 var rectHeight, rect2Height;
 var titleArray = [];
+var artCatArray = [];
+var projCatArray = [];
 var songPlaying = false;
 var splashButtonBool = true;
 var col1, col2, col3, col4, col5, col6, colText;
@@ -56,7 +58,9 @@ var projString1 = "For my senior project at UC San Diego, I designed and prototy
 var projString2 = "cutmod";
 var projString3 = "pd patches";
 var projString4 = "music videos";
-var contString = "email: bradjste@gmail.com"+"\n"+"instagram: bradjste"+"\n"+"bandcamp: Hexer Quiz"+"\n"+"twitter: @hexerquiz";
+var contString = "email:"+"\n"+"instagram:"+"\n"+"bandcamp:"+"\n"+"twitter:";
+var contString2 = "bradjste@gmail.com"+"\n"+"bradjste"+"\n"+"Hexer Quiz"+"\n"+"@hexerquiz";
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -91,6 +95,16 @@ function setup() {
   stroke(0);
   strokeWeight(60);
   count = 0.0;
+
+  artCatArray[0] = "GENERATIVE ART";
+  artCatArray[1] = "LACDA";
+  artCatArray[2] = "UC SAN DIEGO";
+  artCatArray[3] = "ANIMATIONS";
+
+  projCatArray[0] = "SYNTEGER";
+  projCatArray[1] = "PROJECTIONS";
+  projCatArray[2] = "ENGN_WAVE";
+  projCatArray[3] = "MUSIC VIDEOS";
 
   currImgArray = artImgArray;
 
@@ -279,7 +293,7 @@ function updateSizePosLandscape() {
   artButton.style('font-size',windowWidth*0.02 + 'px');
   musicButton.style('font-size',windowWidth*0.02 + 'px');
   projButton.style('font-size',windowWidth*0.02 + 'px');
-  contButton.style('font-size',windowWidth*0.02 + 'px');
+  contButton.style('font-size',windowWidth*0.018 + 'px');
 
 
 }
@@ -657,8 +671,11 @@ function contentDraw() {
       strokeWeight(1);
       textSize(windowWidth*(40/1536));
       stroke(100);
+      textAlign(LEFT);
+      text(contString,rectX+rectWidth*0.62,rectY+rectHeight*0.2,
+         rectWidth*0.7,rectHeight*0.5);
       textAlign(RIGHT);
-      text(contString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
+      text(contString2,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
          rectWidth*0.5,rectHeight*0.5);
   }
 }
@@ -700,13 +717,13 @@ function catagoryDraw() {
   stroke(0);
   strokeWeight(5);
   if (artIsSelected){
-    text("GENERATIVE ART",textEdge,windowHeight*0.35);
+    text(artCatArray[artOp-1],textEdge,windowHeight*0.35);
   } else if (musicIsSelected) {
-    text("MUSIC",textEdge,windowHeight*0.35);
+    text("HEXER QUIZ",textEdge,windowHeight*0.35);
   } else if (projIsSelected){
-    text("PROJEX",textEdge,windowHeight*0.35);
+    text(projCatArray[projOp-1],textEdge,windowHeight*0.35);
   } else {
-    text("CONTACT",textEdge,windowHeight*0.35);
+    text("LET'S TALK",textEdge,windowHeight*0.35);
   }
 }
 
@@ -796,7 +813,7 @@ function lookingFor(){
   fill(col3);
   stroke(0);
   strokeWeight(3);
-  text(titleArray[titleNum]+",",rectX+(rectWidth*0.025),rectY+(rectHeight*0.25));
+  text(titleArray[titleNum]+",",rectX+(rectWidth*0.025),rectY+(rectHeight*0.18),rectWidth*0.5,rectHeight);
 }
 
 function titleNumInc() {
@@ -1101,8 +1118,8 @@ function buttonUpdate() {
     artButton.style('border', '2px outset');
     artButton.style('border-color', colBorderOff);
     if (isMobile) {
-      artButton.position(windowWidth*0.1,windowHeight*0.1);
-      artButton.size(windowWidth*0.1,windowWidth*0.05);
+      artButton.position(windowWidth*0.5,windowHeight*0.1);
+      artButton.size(windowHeight*0.1,windowHeight*0.05);
     } else {
       artButton.position(windowWidth*0.1,windowHeight*0.1);
       artButton.size(windowWidth*0.1,windowWidth*0.05);
