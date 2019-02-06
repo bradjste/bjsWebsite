@@ -8,6 +8,7 @@ var mPressed = false;
 var splashButton, artButton, musicButton, contButton;
 var op1Button,op2Button,op3Button,op4Button;
 var shhButton;
+var mark1,mark2,mark3;
 var isSplash = true;
 var artIsSelected = false;
 var musicIsSelected = false;
@@ -20,10 +21,10 @@ var currSong;
 var titleNum = 0;
 var lineGrowth = 0;
 var lineGrowthSpeed = 8;
-var rectX;
-var rectY;
-var rectWidth;
-var rectHeight;
+var rectX, rect2X;
+var rectY, rect2Y;
+var rectWidth, rect2Width;
+var rectHeight, rect2Height;
 var titleArray = [];
 var songPlaying = false;
 var splashButtonBool = true;
@@ -44,6 +45,8 @@ var contImgArray =[];
 var currImgArray;
 var stretchFlip = true;
 var canDrawFrame = false;
+var isMobile = false;
+var isShort = false;
 var artString1 = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
 var artString2 = "LACDA";
 var artString3 = "UCSD";
@@ -59,7 +62,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360,100,100);
   background(0);
-
+  aspectCheck();
   currSong = loadSound('assets/music/drumgum5.wav');
   currSong.setVolume(0.5);
   currSong.onended(songEnd);
@@ -124,13 +127,14 @@ function setup() {
   titleArray[13] = "new friend";
   titleArray[14] = "puredata specialist";
 
- setInterval(titleNumInc,1000);
- setInterval(stretchFlipFunc,2500);
+  setInterval(titleNumInc,1000);
+  setInterval(stretchFlipFunc,2500);
 
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
   splashButton.mouseOut(isntHov);
   splashButton.style('border-radius', '20%');
+  splashButton.style('background-color', '#000000');
   splashButton.style('cursor', 'cell');
   splashButton.style('outline', 'none');
   splashButton.style('opacity','0');
@@ -138,12 +142,12 @@ function setup() {
   splashButton.style('-webkit-transition', 'opacity 2s');
   splashButton.style('transition', 'opacity 2s');
   splashButton.mousePressed(menuTrans);
-  splashButton.size(windowWidth*0.1,windowWidth*0.05);
 
-  shhButton = createButton('sound');
+  shhButton = createButton('SOUND');
   shhButton.mouseOver(isHov);
   shhButton.mouseOut(isntHov);
   shhButton.style('cursor', 'cell');
+  shhButton.style('background-color', '#000000');
   shhButton.style('outline', 'none');
   shhButton.mousePressed(mute);
 
@@ -151,47 +155,48 @@ function setup() {
   op1Button.mouseOver(isHov);
   op1Button.mouseOut(isntHov);
   op1Button.hide();
+  op1Button.style('outline', 'none');
   op1Button.style('cursor', 'cell');
   op1Button.style('outline', 'none');
   op1Button.style('transform', 'skewX(160deg)');
   op1Button.mousePressed(op1Select);
-  op1Button.size(windowWidth*0.1,windowWidth*0.05);
 
   op2Button = createButton('||');
   op2Button.mouseOver(isHov);
   op2Button.mouseOut(isntHov);
   op2Button.hide();
+  op2Button.style('outline', 'none');
   op2Button.style('cursor', 'cell');
   op2Button.style('outline', 'none');
   op2Button.style('transform', 'skewX(160deg)');
   op2Button.mousePressed(op2Select);
-  op2Button.size(windowWidth*0.1,windowWidth*0.05);
 
   op3Button = createButton('|||');
   op3Button.mouseOver(isHov);
   op3Button.mouseOut(isntHov);
   op3Button.hide();
+  op3Button.style('outline', 'none');
   op3Button.style('cursor', 'cell');
   op3Button.style('outline', 'none');
   op3Button.style('transform', 'skewX(160deg)');
   op3Button.mousePressed(op3Select);
-  op3Button.size(windowWidth*0.1,windowWidth*0.05);
 
   op4Button = createButton('||||');
   op4Button.mouseOver(isHov);
   op4Button.mouseOut(isntHov);
   op4Button.hide();
+  op4Button.style('outline', 'none');
   op4Button.style('cursor', 'cell');
   op4Button.style('outline', 'none');
   op4Button.style('transform', 'skewX(160deg)');
   op4Button.mousePressed(op4Select);
-  op4Button.size(windowWidth*0.1,windowWidth*0.05);
 
   artButton = createButton('ART');
   artButton.mouseOver(isHov);
   artButton.mouseOut(isntHov);
   artButton.hide();
   artButton.style('opacity', '0');
+  artButton.style('background-color', '#000000');
   artButton.style('border-radius', '20%');
   artButton.style('cursor', 'cell');
   artButton.style('-webkit-transition', 'opacity 1s');
@@ -204,6 +209,7 @@ function setup() {
   musicButton.mouseOut(isntHov);
   musicButton.hide();
   musicButton.style('opacity', '0');
+  musicButton.style('background-color', '#000000');
   musicButton.style('border-radius', '20%');
   musicButton.style('cursor', 'cell');
   musicButton.style('-webkit-transition', 'opacity 1s');
@@ -215,6 +221,7 @@ function setup() {
   projButton.mouseOver(isHov);
   projButton.mouseOut(isntHov);
   projButton.hide();
+  projButton.style('background-color', '#000000');
   projButton.style('opacity', '0');
   projButton.style('border-radius', '20%');
   projButton.style('cursor', 'cell');
@@ -228,12 +235,106 @@ function setup() {
   contButton.mouseOut(isntHov);
   contButton.hide();
   contButton.style('opacity', '0');
+  contButton.style('background-color', '#000000');
   contButton.style('border-radius', '20%');
   contButton.style('cursor', 'cell');
   contButton.style('-webkit-transition', 'opacity 1s');
   contButton.style('transition', 'opacity 1s');
   contButton.style('outline', 'none');
   contButton.mousePressed(contTrans);
+
+  updateSizePos();
+
+}
+
+
+
+function updateSizePosLandscape() {
+  rectX = windowWidth*0.05;
+  rectWidth = windowWidth-(rectX*2);
+  rectY = windowHeight * 0.25;
+  rectHeight = windowHeight * 0.72;
+
+  rect2X = 0;
+  rect2Width = 0;
+  rect2Y = 0;
+  rect2Height = 0;
+
+  splashButton.size(windowWidth*0.1,windowWidth*0.05);
+  splashButton.style('font-size',windowWidth*0.02 + 'px');
+
+
+  op1Button.size(windowWidth*0.1,windowWidth*0.04);
+  op2Button.size(windowWidth*0.1,windowWidth*0.04);
+  op3Button.size(windowWidth*0.1,windowWidth*0.04);
+  op4Button.size(windowWidth*0.1,windowWidth*0.04);
+  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
+  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
+  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
+  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
+
+  shhButton.size(windowWidth*0.05,windowWidth*0.02);
+  shhButton.style('font-size',windowWidth*0.01 + 'px');
+
+  artButton.style('font-size',windowWidth*0.02 + 'px');
+  musicButton.style('font-size',windowWidth*0.02 + 'px');
+  projButton.style('font-size',windowWidth*0.02 + 'px');
+  contButton.style('font-size',windowWidth*0.02 + 'px');
+
+
+}
+
+function updateSizePosMobile() {
+  rectX = windowWidth*0.05;
+  rectWidth = windowWidth-(rectX*2);
+  rectY = windowHeight * 0.25;
+  rectHeight = windowHeight * 0.72;
+
+  rect2X = 0;
+  rect2Width = 0;
+  rect2Y = 0;
+  rect2Height = 0;
+
+  splashButton.size(windowWidth*0.1,windowWidth*0.05);
+  splashButton.style('font-size',windowWidth*0.02 + 'px');
+
+
+  op1Button.size(windowWidth*0.1,windowWidth*0.04);
+  op2Button.size(windowWidth*0.1,windowWidth*0.04);
+  op3Button.size(windowWidth*0.1,windowWidth*0.04);
+  op4Button.size(windowWidth*0.1,windowWidth*0.04);
+  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
+  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
+  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
+  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
+
+  artButton.size(windowHeight*0.1,windowHeight*0.04);
+  musicButton.size(windowHeight*0.1,windowHeight*0.04);
+  projButton.size(windowHeight*0.1,windowHeight*0.04);
+  contButton.size(windowHeight*0.1,windowHeight*0.04);
+  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
+  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
+  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
+  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
+
+  shhButton.size(windowWidth*0.05,windowWidth*0.02);
+  shhButton.style('font-size',windowWidth*0.01 + 'px');
+
+  artButton.style('font-size',windowWidth*0.02 + 'px');
+  musicButton.style('font-size',windowWidth*0.02 + 'px');
+  projButton.style('font-size',windowWidth*0.02 + 'px');
+  contButton.style('font-size',windowWidth*0.02 + 'px');
+
+}
+
+function updateSizePosShort() {
+    splashButton.size(windowWidth*0.1,windowWidth*0.05);
+    op1Button.size(windowWidth*0.1,windowWidth*0.05);
+    op2Button.size(windowWidth*0.1,windowWidth*0.05);
+    op3Button.size(windowWidth*0.1,windowWidth*0.05);
+    op4Button.size(windowWidth*0.1,windowWidth*0.05);
+
+
 }
 
 function draw() {
@@ -284,22 +385,27 @@ function draw() {
     axisDraw();
     sing();
     rectDraw();
-    if (mouseX >= rectX && mouseX < rectX + rectWidth) {
-      if (mouseY >= rectY && mouseY < rectY + rectHeight){
-        onTB = true;
-        axisDraw();
-      } else {
-        onTB = false;
+    touchRectCheck();
+    if (isMobile) {
+      rect2Draw();
+      touchRect2Check();
+      drawFrameMobile();
+      contentDrawMobile();
+      drawPicIndicationMobile(currImgArray.length);
+    } else if (isShort) {
+
+    } else if (!isMobile && !isShort) {
+      if (canDrawFrame) {
+        drawFrame();
       }
-    } else {
-      onTB = false;
+      if (artIsSelected || projIsSelected) {
+        drawPicIndication(currImgArray.length);
+      }
+      catagoryDraw();
+      contentDraw();
+      sweepLineDraw(rectX+rectWidth-10,windowHeight*0.37,(rectX+rectWidth-10)
+                  -(windowWidth*0.35),windowHeight*0.37);
     }
-    if (canDrawFrame) {
-      drawFrame();
-    }
-    catagoryDraw();
-    contentDraw();
-    sweepLineDraw();
   } else {
     axisDraw();
     sing();
@@ -317,11 +423,11 @@ function draw() {
         textSize(windowWidth*0.025);
         text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
      }
- }
+  }
 
 
 
-  if (isSplash){
+  if (isSplash) {
     fill(col1);
     stroke(0);
     strokeWeight(8);
@@ -331,8 +437,7 @@ function draw() {
     textSize(windowWidth*0.04);
     fill(col4);
     text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.4+(windowHeight*0.1)+(cos(count)*windowHeight*0.1));
-  }
-  else {
+  } else if (!isSplash && !isMobile) {
     fill(col1);
     stroke(0);
     strokeWeight(8);
@@ -342,142 +447,11 @@ function draw() {
     textSize(windowWidth*0.015);
     fill(col4);
     text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.2);
+  } else if (isMobile) {
+    mobileName();
   }
 
-  splashButton.style('border-color', col3);
-  splashButton.style('color', col3);
-  splashButton.style('background-color', '#000000');
-  splashButton.style('font-size',windowWidth*0.02 + 'px');
-  splashButton.size(windowWidth*0.1,windowWidth*0.05);
-  splashButton.position((windowWidth*0.45),
-      (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
-  splashButton.style('font-size',windowWidth*0.02 + 'px');
-
-  if (isMuted) {
-    shhButton.style('border-color', col3);
-    shhButton.style('color', '#000');
-    shhButton.style('background-color', '#FFF');
-  } else {
-    shhButton.style('border-color', col3);
-    shhButton.style('color', col3);
-    shhButton.style('background-color', '#000000');
-    shhButton.value ='shound';
-  }
-  shhButton.style('font-size',windowWidth*0.01 + 'px');
-  shhButton.size(windowWidth*0.05,windowWidth*0.02);
-  shhButton.position(windowWidth*0.95+2,(windowHeight-(windowWidth*0.02*(mouseY/windowHeight)*(mouseX/windowWidth)))+2);
-
-
-  op1Button.size(windowWidth*0.1,windowWidth*0.04);
-  op2Button.size(windowWidth*0.1,windowWidth*0.04);
-  op3Button.size(windowWidth*0.1,windowWidth*0.04);
-  op4Button.size(windowWidth*0.1,windowWidth*0.04);
-  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.06);
-  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.06);
-  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.06);
-  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.06);
-  if(artIsSelected){
-    currOp = artOp;
-  } else if (projIsSelected){
-    currOp = projOp;
-  }
-  switch (currOp) {
-    case 1:
-      op1Button.style('background-color',color(colorPhase,100,100,0.7));
-      op2Button.style('background-color',color(colorPhase,100,100,0.4));
-      op3Button.style('background-color',color(colorPhase,100,100,0.4));
-      op4Button.style('background-color',color(colorPhase,100,100,0.4));
-      break;
-    case 2:
-      op2Button.style('background-color',color(colorPhase,100,100,0.7));
-      op1Button.style('background-color',color(colorPhase,100,100,0.4));
-      op3Button.style('background-color',color(colorPhase,100,100,0.4));
-      op4Button.style('background-color',color(colorPhase,100,100,0.4));
-      break;
-    case 3:
-      op3Button.style('background-color',color(colorPhase,100,100,0.7));
-      op2Button.style('background-color',color(colorPhase,100,100,0.4));
-      op1Button.style('background-color',color(colorPhase,100,100,0.4));
-      op4Button.style('background-color',color(colorPhase,100,100,0.4));
-      break;
-    case 4:
-      op4Button.style('background-color',color(colorPhase,100,100,0.7));
-      op2Button.style('background-color',color(colorPhase,100,100,0.4));
-      op3Button.style('background-color',color(colorPhase,100,100,0.4));
-      op1Button.style('background-color',color(colorPhase,100,100,0.4));
-      break;
-    default:
-
-  }
-
-
-  if (!artIsSelected) {
-    artButton.style('color', colBorderOff);
-    artButton.style('border', '2px outset');
-    artButton.style('background-color', '#000000');
-    artButton.size(windowWidth*0.1,windowWidth*0.05);
-    artButton.style('border-color', colBorderOff);
-    artButton.position(windowWidth*0.1,windowHeight*0.1);
-  }
-  else {
-    artButton.style('color',col3);
-    artButton.style('border', '5px outset');
-    artButton.style('border-color', col3);
-    artButton.size(windowWidth*0.105,windowWidth*0.0525);
-    artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.01));
-  }
-  artButton.style('font-size',windowWidth*0.02 + 'px');
-
-  if (!musicIsSelected) {
-    musicButton.style('color', colBorderOff);
-    musicButton.style('border', '2px outset');
-    musicButton.style('background-color', '#000000');
-    musicButton.size(windowWidth*0.1,windowWidth*0.05);
-    musicButton.style('border-color', colBorderOff);
-    musicButton.position(windowWidth*0.2+(windowWidth*0.025),windowHeight*0.1);
-  }
-  else {
-    musicButton.style('border', '5px outset');
-    musicButton.style('border-color', col3);
-    musicButton.style('color',col3);
-    musicButton.size(windowWidth*0.105,windowWidth*0.0525);
-    musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.01));
-  }
-  musicButton.style('font-size',windowWidth*0.02 + 'px');
-
-  if (!projIsSelected) {
-    projButton.style('color', colBorderOff);
-    projButton.style('border', '2px outset');
-    projButton.style('background-color', '#000000');
-    projButton.size(windowWidth*0.1,windowWidth*0.05);
-    projButton.style('border-color', colBorderOff);
-    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1);
-  }
-  else {
-    projButton.style('border', '5px outset');
-    projButton.size(windowWidth*0.105,windowWidth*0.0525);
-    projButton.style('border-color', col3);
-    projButton.style('color',col3);
-    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
-  }
-  projButton.style('font-size',windowWidth*0.02 + 'px');
-
-  if (!contIsSelected) {
-    contButton.style('color', colBorderOff);
-    contButton.style('border', '2px outset');
-    contButton.style('background-color', '#000000');
-    contButton.size(windowWidth*0.1,windowWidth*0.05);
-    contButton.style('border-color', colBorderOff);
-    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1);
-  }
-  else {
-    contButton.style('border', '5px outset');
-    contButton.size(windowWidth*0.105,windowWidth*0.0525);
-    contButton.style('border-color', col3);
-    contButton.style('color',col3);
-    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
-  }
-  contButton.style('font-size',windowWidth*0.018 + 'px');
+  buttonUpdate();
 
   var freq = map(mouseX, 0, windowWidth, 40, 500);
   freq1 = freq*1;
@@ -498,32 +472,42 @@ function draw() {
     count = 0;
   }
 
-
   if(!isSplash) {
     fill(0,0.1);
     rect(0,0,windowWidth,windowHeight);
   }
 
-if (windowWidth/windowHeight < 1.6876) {
-    background(0,0.5);
-    textSize(windowHeight*0.07);
-    textAlign(CENTER);
-    fill(col3);
-    if (stretchFlip){
-      text("STRETCH", windowWidth*0.5,windowHeight*0.3);
-      text("YOUR", windowWidth*0.5,windowHeight*0.5);
-      text("WINDOW", windowWidth*0.5,windowHeight*0.7);
-    } else {
-      text("ROTATE", windowWidth*0.5,windowHeight*0.3);
-      text("YOUR", windowWidth*0.5,windowHeight*0.5);
-      text("SCREEN", windowWidth*0.5,windowHeight*0.7);
-    }
+  // if (windowWidth/windowHeight < 1.6876) {
+  //   background(0,0.5);
+  //   textSize(windowHeight*0.07);
+  //   textAlign(CENTER);
+  //   fill(col3);
+  //   if (stretchFlip){
+  //     text("STRETCH", windowWidth*0.5,windowHeight*0.3);
+  //     text("YOUR", windowWidth*0.5,windowHeight*0.5);
+  //     text("WINDOW", windowWidth*0.5,windowHeight*0.7);
+  //   } else {
+  //     text("ROTATE", windowWidth*0.5,windowHeight*0.3);
+  //     text("YOUR", windowWidth*0.5,windowHeight*0.5);
+  //     text("SCREEN", windowWidth*0.5,windowHeight*0.7);
+  //   }
+  //  }
+}
+
+function updateSizePos() {
+  if (isMobile && !isShort){
+    updateSizePosMobile();
+  } else if (isShort && !isMobile) {
+    updateSizePosShort();
+  } else {
+    updateSizePosLandscape();
   }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   background(0);
+  updateSizePos();
 }
 
 function menuTrans() {
@@ -679,8 +663,6 @@ function contentDraw() {
   }
 }
 
-
-
 function isHov() {
    isHovering = true;
 }
@@ -697,10 +679,6 @@ function rectDraw() {
   fill(100,0.6);
   stroke(0);
   strokeWeight(5);
-  rectX = windowWidth*0.05;
-  rectWidth = windowWidth-(rectX*2);
-  rectY = windowHeight * 0.25;
-  rectHeight = windowHeight * 0.72;
   rect(rectX,rectY,rectWidth,rectHeight);
 }
 
@@ -716,13 +694,13 @@ function wipe() {
 
 function catagoryDraw() {
   let textEdge = rectX+(rectWidth*0.98);
-  fill(col3);
+  fill(color((colorPhase+240)%360,100,100));
   textSize(windowWidth*0.035);
   textAlign(RIGHT);
   stroke(0);
   strokeWeight(5);
   if (artIsSelected){
-    text("ART",textEdge,windowHeight*0.35);
+    text("GENERATIVE ART",textEdge,windowHeight*0.35);
   } else if (musicIsSelected) {
     text("MUSIC",textEdge,windowHeight*0.35);
   } else if (projIsSelected){
@@ -766,7 +744,7 @@ function drawFrame() {
   } else if (currImg > currImgArray.length - 1){
     currImg = currImgArray.length - 1;
   }
-  if (windowWidth <= windowHeight){
+  if (windowWidth/ windowHeight <= 0.8){
     imgSize = rectWidth-40;
   } else {
   noStroke();
@@ -793,19 +771,22 @@ function drawFrame() {
 
 function mute(){
   currSong.stop();
+  if (isMuted) {
+    shhButton.style('color', col3);
+  }
   isMuted = !isMuted;
   songPlaying = false;
 }
 
-function sweepLineDraw() {
+function sweepLineDraw(startX,startY,endX,endY) {
   stroke(0);
   strokeWeight(2);
-  if (lineGrowth<=lineGrowthSpeed) {
-    line(rectX+rectWidth-10,windowHeight*0.37,(rectX+rectWidth-10)-((windowWidth*0.35)*(lineGrowth/lineGrowthSpeed)),windowHeight*0.37);
-    lineGrowth++;
-  } else {
-    line(rectX+rectWidth-10,windowHeight*0.37,(rectX+rectWidth-10)-(windowWidth*0.35),windowHeight*0.37);
-  }
+    if (lineGrowth<=lineGrowthSpeed) {
+      line(startX,startY,endX+ (endX-startX)*(lineGrowth/lineGrowthSpeed)-(endX-startX),endY);
+      lineGrowth++;
+    } else {
+      line(startX,startY,endX,endY);
+    }
 }
 
 function lookingFor(){
@@ -824,9 +805,9 @@ function titleNumInc() {
 
  function sing() {
    if (mouseIsPressed && !isHovering && !onTB && (millis()>200) && !isMuted) {
-     fill(col3);
+     fill(color(colorPhase,100*(mouseY/windowHeight),100*(mouseX/windowHeight)));
      strokeWeight(3);
-     stroke(0);
+     stroke(0,((mouseX/windowWidth)*100),100-(100*(mouseX/windowWidth)));
      ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
      fill(0);
      textSize(windowHeight*0.035)
@@ -857,6 +838,7 @@ function op1Select() {
     projOp = 1;
   }
 }
+
 function op2Select() {
   if(artIsSelected){
     artOp = 2;
@@ -864,6 +846,7 @@ function op2Select() {
     projOp = 2;
   }
 }
+
 function op3Select() {
   if(artIsSelected){
     artOp = 3;
@@ -871,6 +854,7 @@ function op3Select() {
     projOp = 3;
   }
 }
+
 function op4Select() {
   if(artIsSelected){
     artOp = 4;
@@ -891,4 +875,294 @@ function hideOptions() {
   op2Button.hide();
   op3Button.hide();
   op4Button.hide();
+}
+
+function drawPicIndication(arraySize) {
+    let span = windowWidth*0.4;
+    let freqDomain = [];
+    let octBands = [];
+    let phaseOffset = 120;
+    let sqPadding = 4;
+    let squareStart = (windowWidth*0.04/(2*tan((7*PI/18))));
+    noStroke();
+    for (var i = 0; i < arraySize; i++) {
+      push();
+      fft.smooth();
+      fft.analyze();
+      octBands = fft.getOctaveBands();
+      freqDomain = fft.logAverages(octBands);
+      translate( windowWidth*0.53+(i*span/arraySize)+(((mouseX/windowWidth)*-2*squareStart)+squareStart)
+                -2*squareStart+((mouseX/windowWidth)*4*squareStart)+((sqPadding*i)/arraySize),
+                rectY+rectHeight-windowWidth*0.053-2);
+      shearX(((mouseX/windowWidth)*2*PI/9)-(PI/9));
+      if (i == currImg){
+        fill((colorPhase+240)%360,100,100,0.7);
+        rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.065*0.5);
+        fill((colorPhase+120)%360,100,100,0.4);
+        rect(0,0,(span/arraySize)-sqPadding,windowWidth*0.065*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.065*0.5);
+      } else if (i == (currImg+1) || i == (currImg-1)){
+        fill((colorPhase+240)%360,100,100,0.6);
+        rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.052*0.5);
+        fill((colorPhase+120)%360,100,100,0.4);
+        rect(0,0,(span/arraySize)-sqPadding,windowWidth*0.052*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.052*0.5);
+      } else if (i == (currImg+2) || i == (currImg-2)) {
+        fill((colorPhase+240)%360,100,100,0.5);
+        rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.045*0.5);
+        fill((colorPhase+120)%360,100,100,0.4);
+        rect(0,0,(span/arraySize)-sqPadding,windowWidth*0.045*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.045*0.5);
+      } else {
+        fill((colorPhase+240)%360,100,100,0.4);
+        rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.04*0.5);
+        fill((colorPhase+120)%360,100,100,0.4);
+        rect(0,0,(span/arraySize)-sqPadding,windowWidth*0.045*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.04*0.5);
+      }
+      pop();
+    }
+}
+
+function aspectCheck(){
+  let ratio = windowWidth/windowHeight
+  if(ratio <= 1.4677 && ratio >= 0.7626) {
+     isShort = true;
+     isMobile = false;
+  } else if (ratio < 0.7626) {
+    isMobile = true;
+    isShort = false;
+  } else {
+    isShort = false;
+    isMobile = false;
+  }
+}
+
+function touchRectCheck() {
+  if (mouseX >= rectX && mouseX < rectX + rectWidth) {
+    if (mouseY >= rectY && mouseY < rectY + rectHeight){
+      onTB = true;
+      axisDraw();
+    } else {
+      onTB = false;
+    }
+  } else {
+    onTB = false;
+  }
+}
+
+function touchRect2Check() {
+  if (mouseX >= rect2X && mouseX < rect2X + rect2Width) {
+    if (mouseY >= rect2Y && mouseY < rect2Y + rect2Height){
+      onTB = true;
+      axisDraw();
+    } else {
+      onTB = false;
+    }
+  } else {
+    onTB = false;
+  }
+}
+
+function rect2Draw() {
+  fill(100,0.6);
+  stroke(0);
+  strokeWeight(5);
+  rect(rect2X,rect2Y,rect2Width,rect2Height);
+}
+
+function drawFrameMobile() {
+  let imgSize =  rectHeight-40;
+  currImg = int((mouseX/windowWidth)*currImgArray.length);
+  if (currImg < 0){
+    currImg = 0;
+  } else if (currImg > currImgArray.length - 1){
+    currImg = currImgArray.length - 1;
+  }
+  if (windowWidth <= windowHeight){
+    imgSize = rectWidth-40;
+  } else {
+  noStroke();
+  if (currImg < currImgArray.length - 2) {
+    image(currImgArray[currImg + 2],rectX+100, rectY+30, imgSize, imgSize,
+          0,0,1200,1200);
+    fill(100,0.6);
+    rect(rectX+100, rectY+30, imgSize, imgSize);
+  }
+  if (currImg < currImgArray.length - 1) {
+    image(currImgArray[currImg + 1],rectX+60, rectY+25, imgSize, imgSize,
+          0,0,1200,1200);
+    fill(100,0.3);
+    rect(rectX+60, rectY+25, imgSize, imgSize);
+  }
+  }
+  image(currImgArray[currImg],rectX+20, rectY+20, imgSize, imgSize,
+          0,0,1200,1200);
+  fill(0,0);
+  stroke(0);
+  strokeWeight(6);
+  rect(rectX+20, rectY+20, imgSize, imgSize);
+}
+
+function contentDrawMobile() {
+
+}
+
+function drawPicIndicationMobile(arraySize) {
+    let span = windowWidth*0.4;
+    let sqPadding = 4;
+    let squareStart = windowWidth*0.53 + (windowWidth*0.04/(2*tan(7*PI/18)));
+    noStroke();
+    for (var i = 0; i < arraySize; i++) {
+      if (i == currImg){
+        fill((colorPhase+120)%360,100,100,0.7);
+      } else {
+        fill((colorPhase+120)%360,100,100,0.4);
+      }
+      push();
+      translate((i*span/arraySize)+squareStart+((sqPadding*i)/arraySize),rectY+rectHeight-windowWidth*0.053-2);
+      shearY(PI/9);
+      rect((span/arraySize)-sqPadding,-windowWidth*0.04*0.5,0,0);
+      pop();
+    }
+}
+
+function mobileName() {
+  fill(col1);
+  stroke(0);
+  strokeWeight(8);
+  textAlign(CENTER);
+  textSize(windowWidth*0.03);
+  text("BRAD STEVENSON",windowWidth*0.5,windowHeight*0.15);
+  textSize(windowWidth*0.015);
+  fill(col4);
+  text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.2);
+}
+
+function buttonUpdate() {
+  if (artIsSelected) {
+    currOp = artOp;
+  } else if (projIsSelected){
+    currOp = projOp;
+  }
+
+  op1Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+  op2Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+  op3Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+  op4Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+
+  switch (currOp) {
+    case 1:
+      op1Button.style('background-color',color(colorPhase,100,100,0.7));
+      op2Button.style('background-color',color(colorPhase,100,100,0.4));
+      op3Button.style('background-color',color(colorPhase,100,100,0.4));
+      op4Button.style('background-color',color(colorPhase,100,100,0.4));
+      break;
+    case 2:
+      op2Button.style('background-color',color(colorPhase,100,100,0.7));
+      op1Button.style('background-color',color(colorPhase,100,100,0.4));
+      op3Button.style('background-color',color(colorPhase,100,100,0.4));
+      op4Button.style('background-color',color(colorPhase,100,100,0.4));
+      break;
+    case 3:
+      op3Button.style('background-color',color(colorPhase,100,100,0.7));
+      op2Button.style('background-color',color(colorPhase,100,100,0.4));
+      op1Button.style('background-color',color(colorPhase,100,100,0.4));
+      op4Button.style('background-color',color(colorPhase,100,100,0.4));
+      break;
+    case 4:
+      op4Button.style('background-color',color(colorPhase,100,100,0.7));
+      op2Button.style('background-color',color(colorPhase,100,100,0.4));
+      op3Button.style('background-color',color(colorPhase,100,100,0.4));
+      op1Button.style('background-color',color(colorPhase,100,100,0.4));
+      break;
+    default:
+  }
+
+  if (isSplash) {
+    splashButton.position((windowWidth*0.45),
+        (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
+    splashButton.style('border-color', col3);
+    splashButton.style('color', col3);
+  }
+
+  shhButton.style('border-color', col3);
+  if (!isMuted) {
+    shhButton.style('color', col3);
+  } else {
+    shhButton.style('color', '#000');
+  }
+  if (isMobile){
+    shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(windowHeight*0.035*
+          (mouseY/windowHeight)))+2);
+  } else {
+    shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(windowWidth*0.02*
+          (mouseY/windowHeight)))+2);
+  }
+
+  if (!artIsSelected) {
+    artButton.style('color', colBorderOff);
+    artButton.style('border', '2px outset');
+    artButton.style('border-color', colBorderOff);
+    if (isMobile) {
+      artButton.position(windowWidth*0.1,windowHeight*0.1);
+      artButton.size(windowWidth*0.1,windowWidth*0.05);
+    } else {
+      artButton.position(windowWidth*0.1,windowHeight*0.1);
+      artButton.size(windowWidth*0.1,windowWidth*0.05);
+    }
+  }
+  else {
+    artButton.style('color',col3);
+    artButton.style('border', '5px outset');
+    artButton.style('border-color', col3);
+    if (isMobile) {
+      artButton.position(windowWidth*0.1,windowHeight*0.1);
+      artButton.size(windowWidth*0.1,windowWidth*0.05);
+    } else {
+      artButton.size(windowWidth*0.105,windowWidth*0.0525);
+      artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    }
+  }
+
+  if (!musicIsSelected) {
+    musicButton.style('color', colBorderOff);
+    musicButton.style('border', '2px outset');
+    musicButton.size(windowWidth*0.1,windowWidth*0.05);
+    musicButton.style('border-color', colBorderOff);
+    musicButton.position(windowWidth*0.2+(windowWidth*0.025),windowHeight*0.1);
+  }
+  else {
+    musicButton.style('border', '5px outset');
+    musicButton.style('border-color', col3);
+    musicButton.style('color',col3);
+    musicButton.size(windowWidth*0.105,windowWidth*0.0525);
+    musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+  }
+
+  if (!projIsSelected) {
+    projButton.style('color', colBorderOff);
+    projButton.style('border', '2px outset');
+    projButton.size(windowWidth*0.1,windowWidth*0.05);
+    projButton.style('border-color', colBorderOff);
+    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1);
+  }
+  else {
+    projButton.style('border', '5px outset');
+    projButton.size(windowWidth*0.105,windowWidth*0.0525);
+    projButton.style('border-color', col3);
+    projButton.style('color',col3);
+    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
+  }
+
+  if (!contIsSelected) {
+    contButton.style('color', colBorderOff);
+    contButton.style('border', '2px outset');
+    contButton.size(windowWidth*0.1,windowWidth*0.05);
+    contButton.style('border-color', colBorderOff);
+    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1);
+  }
+  else {
+    contButton.style('border', '5px outset');
+    contButton.size(windowWidth*0.105,windowWidth*0.0525);
+    contButton.style('border-color', col3);
+    contButton.style('color',col3);
+    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
+  }
 }
