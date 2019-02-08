@@ -15,7 +15,7 @@ var musicIsSelected = false;
 var projIsSelected = false;
 var contIsSelected = false;
 var shouldDrawWF = false;
-var isHovering, onTB = false;
+var isHovering, onTB, onTB2 = false;
 var isMuted = false;
 var currSong;
 var titleNum = 0;
@@ -37,7 +37,8 @@ var wipeTime =0;
 var wipeCount= 0;
 var wipeBool = false;
 var wipeNum = 18;
-var currImg = 0;
+var currImgX = 0;
+var currImgY = 0;
 var currOp = 1;
 var artOp = 1;
 var projOp = 1;
@@ -258,97 +259,6 @@ function setup() {
   contButton.mousePressed(contTrans);
 
   updateSizePos();
-
-}
-
-
-
-function updateSizePosLandscape() {
-  rectX = windowWidth*0.05;
-  rectWidth = windowWidth-(rectX*2);
-  rectY = windowHeight * 0.25;
-  rectHeight = windowHeight * 0.72;
-
-  rect2X = 0;
-  rect2Width = 0;
-  rect2Y = 0;
-  rect2Height = 0;
-
-  splashButton.size(windowWidth*0.1,windowWidth*0.05);
-  splashButton.style('font-size',windowWidth*0.02 + 'px');
-
-
-  op1Button.size(windowWidth*0.1,windowWidth*0.04);
-  op2Button.size(windowWidth*0.1,windowWidth*0.04);
-  op3Button.size(windowWidth*0.1,windowWidth*0.04);
-  op4Button.size(windowWidth*0.1,windowWidth*0.04);
-  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
-  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
-  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
-  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
-
-  shhButton.size(windowWidth*0.05,windowWidth*0.02);
-  shhButton.style('font-size',windowWidth*0.01 + 'px');
-
-  artButton.style('font-size',windowWidth*0.02 + 'px');
-  musicButton.style('font-size',windowWidth*0.02 + 'px');
-  projButton.style('font-size',windowWidth*0.02 + 'px');
-  contButton.style('font-size',windowWidth*0.018 + 'px');
-
-
-}
-
-function updateSizePosMobile() {
-  rectX = windowWidth*0.05;
-  rectWidth = windowWidth-(rectX*2);
-  rectY = windowHeight * 0.25;
-  rectHeight = windowHeight * 0.72;
-
-  rect2X = 0;
-  rect2Width = 0;
-  rect2Y = 0;
-  rect2Height = 0;
-
-  splashButton.size(windowWidth*0.1,windowWidth*0.05);
-  splashButton.style('font-size',windowWidth*0.02 + 'px');
-
-
-  op1Button.size(windowWidth*0.1,windowWidth*0.04);
-  op2Button.size(windowWidth*0.1,windowWidth*0.04);
-  op3Button.size(windowWidth*0.1,windowWidth*0.04);
-  op4Button.size(windowWidth*0.1,windowWidth*0.04);
-  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
-  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
-  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
-  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
-
-  artButton.size(windowHeight*0.1,windowHeight*0.04);
-  musicButton.size(windowHeight*0.1,windowHeight*0.04);
-  projButton.size(windowHeight*0.1,windowHeight*0.04);
-  contButton.size(windowHeight*0.1,windowHeight*0.04);
-  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
-  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
-  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
-  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
-
-  shhButton.size(windowWidth*0.05,windowWidth*0.02);
-  shhButton.style('font-size',windowWidth*0.01 + 'px');
-
-  artButton.style('font-size',windowWidth*0.02 + 'px');
-  musicButton.style('font-size',windowWidth*0.02 + 'px');
-  projButton.style('font-size',windowWidth*0.02 + 'px');
-  contButton.style('font-size',windowWidth*0.02 + 'px');
-
-}
-
-function updateSizePosShort() {
-    splashButton.size(windowWidth*0.1,windowWidth*0.05);
-    op1Button.size(windowWidth*0.1,windowWidth*0.05);
-    op2Button.size(windowWidth*0.1,windowWidth*0.05);
-    op3Button.size(windowWidth*0.1,windowWidth*0.05);
-    op4Button.size(windowWidth*0.1,windowWidth*0.05);
-
-
 }
 
 function draw() {
@@ -373,12 +283,11 @@ function draw() {
 
   wipeTime = millis();
 
-
   colorPhase++;
   colorPhase = colorPhase % 360;
   var waveform = fft.waveform();
   var yMin,yMax = 0;
-  if ((mouseIsPressed && !isHovering && !onTB && !isMuted)|| songPlaying) {
+  if ((mouseIsPressed && !isHovering && !onTB && !onTB2 && !isMuted)|| songPlaying) {
     beginShape();
     strokeWeight(3);
     fill(colorPhase,100-(100*(mouseX/windowWidth)),100-(100*(mouseX/windowWidth)));
@@ -406,9 +315,9 @@ function draw() {
       drawFrameMobile();
       contentDrawMobile();
       drawPicIndicationMobile(currImgArray.length);
-    } else if (isShort) {
-
-    } else if (!isMobile && !isShort) {
+    // } else if (isShort) {
+    // }
+  } else {
       if (canDrawFrame) {
         drawFrame();
       }
@@ -441,7 +350,7 @@ function draw() {
 
 
 
-  if (isSplash) {
+  if (isSplash && !isMobile) {
     fill(col1);
     stroke(0);
     strokeWeight(8);
@@ -509,6 +418,7 @@ function draw() {
 }
 
 function updateSizePos() {
+  aspectCheck();
   if (isMobile && !isShort){
     updateSizePosMobile();
   } else if (isShort && !isMobile) {
@@ -522,6 +432,8 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   background(0);
   updateSizePos();
+  currImgX = 0;
+  currImgY = 0;
 }
 
 function menuTrans() {
@@ -645,7 +557,7 @@ function contentDraw() {
       text(musicString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
          rectWidth*0.5,rectHeight*0.5);
   }  else if (projIsSelected) {
-    showOptions();
+      showOptions();
       canDrawFrame = true;
        if (projOp == 1) {
           currImgArray= projImgArray;
@@ -755,30 +667,30 @@ function mouseMoved() {
 
 function drawFrame() {
   let imgSize =  rectHeight-40;
-  currImg = int((mouseX/windowWidth)*currImgArray.length);
-  if (currImg < 0){
-    currImg = 0;
-  } else if (currImg > currImgArray.length - 1){
-    currImg = currImgArray.length - 1;
+  currImgX = int((mouseX/windowWidth)*currImgArray.length);
+  if (currImgX < 0){
+    currImgX = 0;
+  } else if (currImgX > currImgArray.length - 1){
+    currImgX = currImgArray.length - 1;
   }
   if (windowWidth/ windowHeight <= 0.8){
     imgSize = rectWidth-40;
   } else {
   noStroke();
-  if (currImg < currImgArray.length - 2) {
-    image(currImgArray[currImg + 2],rectX+100, rectY+30, imgSize, imgSize,
+  if (currImgX < currImgArray.length - 2) {
+    image(currImgArray[currImgX + 2],rectX+100, rectY+30, imgSize, imgSize,
           0,0,1200,1200);
     fill(100,0.6);
     rect(rectX+100, rectY+30, imgSize, imgSize);
   }
-  if (currImg < currImgArray.length - 1) {
-    image(currImgArray[currImg + 1],rectX+60, rectY+25, imgSize, imgSize,
+  if (currImgX < currImgArray.length - 1) {
+    image(currImgArray[currImgX + 1],rectX+60, rectY+25, imgSize, imgSize,
           0,0,1200,1200);
     fill(100,0.3);
     rect(rectX+60, rectY+25, imgSize, imgSize);
   }
   }
-  image(currImgArray[currImg],rectX+20, rectY+20, imgSize, imgSize,
+  image(currImgArray[currImgX],rectX+20, rectY+20, imgSize, imgSize,
           0,0,1200,1200);
   fill(0,0);
   stroke(0);
@@ -820,8 +732,8 @@ function titleNumInc() {
     titleNum = (titleNum + 1) % titleArray.length;
  }
 
- function sing() {
-   if (mouseIsPressed && !isHovering && !onTB && (millis()>200) && !isMuted) {
+function sing() {
+   if (mouseIsPressed && !isHovering && !onTB && !onTB2 && (millis()>200) && !isMuted) {
      fill(color(colorPhase,100*(mouseY/windowHeight),100*(mouseX/windowHeight)));
      strokeWeight(3);
      stroke(0,((mouseX/windowWidth)*100),100-(100*(mouseX/windowWidth)));
@@ -912,17 +824,17 @@ function drawPicIndication(arraySize) {
                 -2*squareStart+((mouseX/windowWidth)*4*squareStart)+((sqPadding*i)/arraySize),
                 rectY+rectHeight-windowWidth*0.053-2);
       shearX(((mouseX/windowWidth)*2*PI/9)-(PI/9));
-      if (i == currImg){
+      if (i == currImgX){
         fill((colorPhase+240)%360,100,100,0.7);
         rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.065*0.5);
         fill((colorPhase+120)%360,100,100,0.4);
         rect(0,0,(span/arraySize)-sqPadding,windowWidth*0.065*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.065*0.5);
-      } else if (i == (currImg+1) || i == (currImg-1)){
+      } else if (i == (currImgX+1) || i == (currImgX-1)){
         fill((colorPhase+240)%360,100,100,0.6);
         rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.052*0.5);
         fill((colorPhase+120)%360,100,100,0.4);
         rect(0,0,(span/arraySize)-sqPadding,windowWidth*0.052*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.052*0.5);
-      } else if (i == (currImg+2) || i == (currImg-2)) {
+      } else if (i == (currImgX+2) || i == (currImgX-2)) {
         fill((colorPhase+240)%360,100,100,0.5);
         rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.045*0.5);
         fill((colorPhase+120)%360,100,100,0.4);
@@ -939,14 +851,19 @@ function drawPicIndication(arraySize) {
 
 function aspectCheck(){
   let ratio = windowWidth/windowHeight
-  if(ratio <= 1.4677 && ratio >= 0.7626) {
-     isShort = true;
-     isMobile = false;
-  } else if (ratio < 0.7626) {
-    isMobile = true;
-    isShort = false;
+  // if(ratio <= 1.4677 && ratio >= 0.7626) {
+  //    isShort = true;
+  //    isMobile = false;
+  // } else if (ratio < 0.7626) {
+  //   isMobile = true;
+  //   isShort = false;
+  // } else {
+  //   isShort = false;
+  //   isMobile = false;
+  // }
+  if(ratio <= 0.7626) {
+     isMobile = true;
   } else {
-    isShort = false;
     isMobile = false;
   }
 }
@@ -967,13 +884,13 @@ function touchRectCheck() {
 function touchRect2Check() {
   if (mouseX >= rect2X && mouseX < rect2X + rect2Width) {
     if (mouseY >= rect2Y && mouseY < rect2Y + rect2Height){
-      onTB = true;
+      onTB2 = true;
       axisDraw();
     } else {
-      onTB = false;
+      onTB2 = false;
     }
   } else {
-    onTB = false;
+    onTB2 = false;
   }
 }
 
@@ -986,30 +903,30 @@ function rect2Draw() {
 
 function drawFrameMobile() {
   let imgSize =  rectHeight-40;
-  currImg = int((mouseX/windowWidth)*currImgArray.length);
-  if (currImg < 0){
-    currImg = 0;
-  } else if (currImg > currImgArray.length - 1){
-    currImg = currImgArray.length - 1;
+  currImgY = int(currImgArray.length-((mouseY/windowHeight)*currImgArray.length));
+  if (currImgY < 0){
+    currImgY = 0;
+  } else if (currImgY > currImgArray.length - 1){
+    currImgY = currImgArray.length - 1;
   }
   if (windowWidth <= windowHeight){
     imgSize = rectWidth-40;
   } else {
   noStroke();
-  if (currImg < currImgArray.length - 2) {
-    image(currImgArray[currImg + 2],rectX+100, rectY+30, imgSize, imgSize,
+  if (currImgY < currImgArray.length - 2) {
+    image(currImgArray[currImgY + 2],rectX+100, rectY+30, imgSize, imgSize,
           0,0,1200,1200);
     fill(100,0.6);
     rect(rectX+100, rectY+30, imgSize, imgSize);
   }
-  if (currImg < currImgArray.length - 1) {
-    image(currImgArray[currImg + 1],rectX+60, rectY+25, imgSize, imgSize,
+  if (currImgY < currImgArray.length - 1) {
+    image(currImgArray[currImgY + 1],rectX+60, rectY+25, imgSize, imgSize,
           0,0,1200,1200);
     fill(100,0.3);
     rect(rectX+60, rectY+25, imgSize, imgSize);
   }
   }
-  image(currImgArray[currImg],rectX+20, rectY+20, imgSize, imgSize,
+  image(currImgArray[currImgY],rectX+20, rectY+20, imgSize, imgSize,
           0,0,1200,1200);
   fill(0,0);
   stroke(0);
@@ -1018,38 +935,119 @@ function drawFrameMobile() {
 }
 
 function contentDrawMobile() {
-
+  fill(0);
+  strokeWeight(1);
+  textSize(windowWidth*(30/1536));
+  stroke(100);
+  if (artIsSelected) {
+    showOptions();
+      canDrawFrame = true;
+     if (artOp == 1) {
+         currImgArray = artImgArray;
+         text(artString1,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+            rect2Width*0.5,rect2Height*0.5);
+     } else if (artOp == 2) {
+       currImgArray = artImgArray;
+       text(artString2,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+          rect2Width*0.5,rect2Height*0.5);
+     } else if (artOp == 3) {
+       currImgArray = artImgArray;
+       text(artString3,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+          rect2Width*0.5,rect2Height*0.5);
+     } else if (artOp == 4) {
+       currImgArray = artImgArray;
+       text(artString4,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+          rect2Width*0.5,rect2Height*0.5);
+     }
+  }  else if (musicIsSelected) {
+      canDrawFrame = false;
+      text(musicString,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+         rect2Width*0.5,rect2Height*0.5);
+  }  else if (projIsSelected) {
+      showOptions();
+      canDrawFrame = true;
+       if (projOp == 1) {
+          currImgArray= projImgArray;
+          text(projString1,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+              rect2Width*0.5,rect2Height*0.5);
+       } else if (projOp == 2) {
+         currImgArray= projImgArray;
+         text(projString2,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+             rect2Width*0.5,rect2Height*0.5);
+       } else if (projOp == 3) {
+         currImgArray= projImgArray;
+         text(projString3,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+             rect2Width*0.5,rect2Height*0.5);
+       } else if (projOp == 4) {
+         currImgArray= projImgArray;
+         text(projString4,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
+             rect2Width*0.5,rect2Height*0.5);
+       }
+  }  else if (contIsSelected) {
+      canDrawFrame = false;
+      lookingFor();
+      fill(0);
+      strokeWeight(1);
+      textSize(windowWidth*(40/1536));
+      stroke(100);
+      textAlign(LEFT);
+      text(contString,rect2X + rect2Width*0.5,rect2Y+rect2Height*0.05,
+         rect2Width*0.7,rect2Height*0.5);
+      textAlign(RIGHT);
+      text(contString2,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.05,
+         rect2Width*0.5,rect2Height*0.5);
+  }
 }
 
 function drawPicIndicationMobile(arraySize) {
-    let span = windowWidth*0.4;
-    let sqPadding = 4;
-    let squareStart = windowWidth*0.53 + (windowWidth*0.04/(2*tan(7*PI/18)));
-    noStroke();
-    for (var i = 0; i < arraySize; i++) {
-      if (i == currImg){
-        fill((colorPhase+120)%360,100,100,0.7);
-      } else {
-        fill((colorPhase+120)%360,100,100,0.4);
-      }
-      push();
-      translate((i*span/arraySize)+squareStart+((sqPadding*i)/arraySize),rectY+rectHeight-windowWidth*0.053-2);
-      shearY(PI/9);
-      rect((span/arraySize)-sqPadding,-windowWidth*0.04*0.5,0,0);
-      pop();
+  let span = windowHeight*0.28;
+  let freqDomain = [];
+  let octBands = [];
+  let sqPadding = 4;
+  let squareStart = (windowHeight*0.02/(2*tan((7*PI/18))));
+  noStroke();
+  for (var i = 0; i < arraySize; i++) {
+    push();
+    fft.smooth();
+    fft.analyze();
+    octBands = fft.getOctaveBands();
+    freqDomain = fft.logAverages(octBands);
+    translate(windowWidth*0.98,windowHeight*0.96+(-i*span/arraySize)-(((mouseY/windowHeight)*-2*squareStart)+squareStart)
+              -2*squareStart-((mouseY/windowHeight)*4*squareStart)-((sqPadding*i)/arraySize));
+    shearY(((mouseY/windowHeight)*2*PI/9)-(PI/9));
+    if (i == currImgY){
+      fill((colorPhase+240)%360,100,100,0.7);
+      rect(0,0,-windowWidth*0.095*0.5,(span/arraySize)-sqPadding);
+      fill((colorPhase+120)%360,100,100,0.4);
+      rect(0,0,windowWidth*0.095*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.065*0.5,(span/arraySize)-sqPadding);
+    } else {
+      fill((colorPhase+240)%360,100,100,0.4);
+      rect(0,0,-windowWidth*0.04*0.5,(span/arraySize)-sqPadding,);
+      fill((colorPhase+120)%360,100,100,0.4);
+      rect(0,0,windowWidth*0.04*0.5*(freqDomain[int(freqDomain.length*i/arraySize)]*(1/255))-windowWidth*0.04*0.5,(span/arraySize)-sqPadding);
     }
+    pop();
+  }
 }
 
 function mobileName() {
+  let splitName = split("BRAD STEVENSON", '');
+  let splitTitle = split("interdisciplinary creative", '');
   fill(col1);
   stroke(0);
   strokeWeight(8);
-  textAlign(CENTER);
-  textSize(windowWidth*0.03);
-  text("BRAD STEVENSON",windowWidth*0.5,windowHeight*0.15);
-  textSize(windowWidth*0.015);
+  textAlign(LEFT);
+  textSize(windowHeight*0.03);
+  for (var i = 1; i < splitName.length+1; i++) {
+    text(splitName[i-1],windowWidth*0.04,(i/splitName.length)*((mark3)-(mark3/splitName.length)));
+  }
   fill(col4);
-  text("interdisciplinary creative",windowWidth*0.5,windowHeight*0.2);
+  strokeWeight(5);
+  textSize(windowHeight*0.015);
+  for (var j = 1; j < splitTitle.length+1; j++) {
+    text(splitTitle[j-1],windowWidth*0.15,(windowHeight*0.05)+(j/splitTitle.length)*((mark3)-(mark3/splitName.length))*0.66);
+  }
+  sweepLineDrawMobile(windowWidth*0.2,0,windowWidth*0.2,mark3*0.7);
 }
 
 function buttonUpdate() {
@@ -1093,7 +1091,7 @@ function buttonUpdate() {
   }
 
   if (isSplash) {
-    splashButton.position((windowWidth*0.45),
+    splashButton.position((windowWidth-splashButton.width)*0.5,
         (windowHeight*0.80)+(sin(count)*windowHeight*0.02));
     splashButton.style('border-color', col3);
     splashButton.style('color', col3);
@@ -1117,21 +1115,21 @@ function buttonUpdate() {
     artButton.style('color', colBorderOff);
     artButton.style('border', '2px outset');
     artButton.style('border-color', colBorderOff);
-    if (isMobile) {
-      artButton.position(windowWidth*0.5,windowHeight*0.1);
-      artButton.size(windowHeight*0.1,windowHeight*0.05);
+    if (isMobile){
+      artButton.size(windowWidth*0.25,windowWidth*0.125);
+      artButton.position(windowWidth/3.5,windowHeight/20);
     } else {
-      artButton.position(windowWidth*0.1,windowHeight*0.1);
       artButton.size(windowWidth*0.1,windowWidth*0.05);
+      artButton.position(windowWidth*0.1,windowHeight/10);
     }
   }
   else {
     artButton.style('color',col3);
-    artButton.style('border', '5px outset');
+    artButton.style('border', '3px outset');
     artButton.style('border-color', col3);
-    if (isMobile) {
-      artButton.position(windowWidth*0.1,windowHeight*0.1);
-      artButton.size(windowWidth*0.1,windowWidth*0.05);
+    if (isMobile){
+      artButton.size(windowWidth*0.27,windowWidth*0.135);
+      artButton.position(windowWidth/3.5,windowHeight/20);
     } else {
       artButton.size(windowWidth*0.105,windowWidth*0.0525);
       artButton.position(windowWidth*0.1,windowHeight*0.1+(sin(count)*windowHeight*0.01));
@@ -1141,45 +1139,172 @@ function buttonUpdate() {
   if (!musicIsSelected) {
     musicButton.style('color', colBorderOff);
     musicButton.style('border', '2px outset');
-    musicButton.size(windowWidth*0.1,windowWidth*0.05);
     musicButton.style('border-color', colBorderOff);
-    musicButton.position(windowWidth*0.2+(windowWidth*0.025),windowHeight*0.1);
+    if (isMobile){
+      musicButton.size(windowWidth*0.25,windowWidth*0.125);
+      musicButton.position(windowWidth/1.55,windowHeight/20);
+    } else {
+      musicButton.size(windowWidth*0.1,windowWidth*0.05);
+      musicButton.position(windowWidth*0.225,windowHeight/10);
+    }
   }
   else {
-    musicButton.style('border', '5px outset');
+    musicButton.style('border', '3px outset');
     musicButton.style('border-color', col3);
     musicButton.style('color',col3);
-    musicButton.size(windowWidth*0.105,windowWidth*0.0525);
-    musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    if (isMobile){
+      musicButton.size(windowWidth*0.27,windowWidth*0.135);
+      musicButton.position(windowWidth/1.55 ,windowHeight/20);
+    } else {
+      musicButton.size(windowWidth*0.105,windowWidth*0.0525);
+      musicButton.position(windowWidth*0.225,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    }
   }
 
   if (!projIsSelected) {
     projButton.style('color', colBorderOff);
     projButton.style('border', '2px outset');
-    projButton.size(windowWidth*0.1,windowWidth*0.05);
     projButton.style('border-color', colBorderOff);
-    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1);
+    if (isMobile){
+      projButton.size(windowWidth*0.25,windowWidth*0.125);
+      projButton.position(windowWidth/3.5,windowHeight/20 + 20 + projButton.height);
+    } else {
+      projButton.size(windowWidth*0.1,windowWidth*0.05);
+      projButton.position(windowWidth*0.575+(projButton.width),windowHeight/10);
+    }
   }
   else {
-    projButton.style('border', '5px outset');
-    projButton.size(windowWidth*0.105,windowWidth*0.0525);
+    projButton.style('border', '3px outset');
     projButton.style('border-color', col3);
     projButton.style('color',col3);
-    projButton.position(windowWidth-((musicButton.x)+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    if (isMobile){
+      projButton.size(windowWidth*0.27,windowWidth*0.135);
+      projButton.position(windowWidth/3.5,windowHeight/20 + 20 + projButton.height);
+    } else {
+      projButton.size(windowWidth*0.105,windowWidth*0.0525);
+      projButton.position(windowWidth*0.575+(projButton.width),windowHeight/10,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    }
   }
 
   if (!contIsSelected) {
     contButton.style('color', colBorderOff);
     contButton.style('border', '2px outset');
-    contButton.size(windowWidth*0.1,windowWidth*0.05);
     contButton.style('border-color', colBorderOff);
-    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1);
+    if (isMobile){
+      contButton.size(windowWidth*0.25,windowWidth*0.125);
+      contButton.position(windowWidth/1.55,windowHeight/20 + 20 + contButton.height);
+    } else {
+      contButton.size(windowWidth*0.1,windowWidth*0.05);
+      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight/10,windowHeight*0.1);
+    }
   }
   else {
-    contButton.style('border', '5px outset');
-    contButton.size(windowWidth*0.105,windowWidth*0.0525);
+    contButton.style('border', '3px outset');
     contButton.style('border-color', col3);
     contButton.style('color',col3);
-    contButton.position(windowWidth-(artButton.x+windowWidth*0.1),windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    if (isMobile){
+      contButton.size(windowWidth*0.27,windowWidth*0.135);
+      contButton.position(windowWidth/1.55,windowHeight/20 + 20 + contButton.height);
+    } else {
+      contButton.size(windowWidth*0.105,windowWidth*0.0525);
+      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight/10,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+    }
   }
+}
+
+function updateSizePosLandscape() {
+  rectX = windowWidth*0.05;
+  rectWidth = windowWidth-(rectX*2);
+  rectY = windowHeight * 0.25;
+  rectHeight = windowHeight * 0.72;
+
+  rect2X = 0;
+  rect2Width = 0;
+  rect2Y = 0;
+  rect2Height = 0;
+
+  splashButton.size(windowWidth*0.1,windowWidth*0.05);
+  splashButton.style('font-size',windowWidth*0.02 + 'px');
+
+  op1Button.size(windowWidth*0.1,windowWidth*0.04);
+  op2Button.size(windowWidth*0.1,windowWidth*0.04);
+  op3Button.size(windowWidth*0.1,windowWidth*0.04);
+  op4Button.size(windowWidth*0.1,windowWidth*0.04);
+  op1Button.position(windowWidth*0.53,rectY+rectHeight-windowWidth*0.053);
+  op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
+  op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
+  op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
+  op1Button.style('font-size',windowWidth*0.02 + 'px');
+  op2Button.style('font-size',windowWidth*0.02 + 'px');
+  op3Button.style('font-size',windowWidth*0.02 + 'px');
+  op4Button.style('font-size',windowWidth*0.02 + 'px');
+
+  shhButton.size(windowWidth*0.05,windowWidth*0.02);
+  shhButton.style('font-size',windowWidth*0.01 + 'px');
+
+  artButton.style('font-size',windowWidth*0.02 + 'px');
+  musicButton.style('font-size',windowWidth*0.02 + 'px');
+  projButton.style('font-size',windowWidth*0.02 + 'px');
+  contButton.style('font-size',windowWidth*0.018 + 'px');
+
+
+}
+
+function updateSizePosMobile() {
+
+    mark1 = windowWidth*(1/5);
+    mark2 = windowHeight*0.75;
+    mark3 = mark2 + windowHeight*(0.05);
+
+  rectX = mark1+20;
+  rectWidth = windowWidth-20-rectX;
+  rectY = windowHeight * 0.25;
+  rectHeight = rectWidth;
+
+  rect2X = windowWidth*0.03;
+  rect2Width = windowWidth*0.89;
+  rect2Y = mark3;
+  rect2Height = windowHeight-(windowWidth*0.07)-mark3;
+
+
+  splashButton.size(windowHeight*0.15,windowHeight*0.075);
+  splashButton.style('font-size',windowHeight*0.02 + 'px');
+
+
+  op1Button.size(windowHeight*0.1,windowHeight*0.04);
+  op2Button.size(windowHeight*0.1,windowHeight*0.04);
+  op3Button.size(windowHeight*0.1,windowHeight*0.04);
+  op4Button.size(windowHeight*0.1,windowHeight*0.04);
+  op1Button.position(windowHeight*0.53,rectY+rectHeight-windowHeight*0.053);
+  op2Button.position(windowHeight*0.63,rectY+rectHeight-windowHeight*0.053);
+  op3Button.position(windowHeight*0.73,rectY+rectHeight-windowHeight*0.053);
+  op4Button.position(windowHeight*0.83,rectY+rectHeight-windowHeight*0.053);
+
+  shhButton.size(windowHeight*0.05,windowHeight*0.02);
+  shhButton.style('font-size',windowHeight*0.01 + 'px');
+
+  artButton.style('font-size',windowHeight*0.025 + 'px');
+  musicButton.style('font-size',windowHeight*0.025 + 'px');
+  projButton.style('font-size',windowHeight*0.025 + 'px');
+  contButton.style('font-size',windowHeight*0.023 + 'px');
+
+}
+
+function updateSizePosShort() {
+    splashButton.size(windowWidth*0.1,windowWidth*0.05);
+    op1Button.size(windowWidth*0.1,windowWidth*0.05);
+    op2Button.size(windowWidth*0.1,windowWidth*0.05);
+    op3Button.size(windowWidth*0.1,windowWidth*0.05);
+    op4Button.size(windowWidth*0.1,windowWidth*0.05);
+}
+
+function sweepLineDrawMobile(startX,startY,endX,endY) {
+  stroke(col2);
+  strokeWeight(2);
+    if (lineGrowth<=lineGrowthSpeed) {
+      line(startX,startY,endX,endY*(lineGrowth/lineGrowthSpeed));
+      lineGrowth++;
+    } else {
+      line(startX,startY,endX,endY);
+    }
 }
