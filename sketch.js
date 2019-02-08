@@ -1307,4 +1307,5 @@ function sweepLineDrawMobile(startX,startY,endX,endY) {
     } else {
       line(startX,startY,endX,endY);
     }
+    stroke(0);
 }
