@@ -651,13 +651,10 @@ function axisDraw() {
   }
 }
 
-function mousePressed() {
+function mouseMoved() {
   if (getAudioContext().state !== 'running') {
     getAudioContext().resume();
   }
-}
-
-function mouseMoved() {
   mPressed = true;
 }
 
