@@ -309,10 +309,9 @@ function draw() {
   }
   strokeWeight(9);
 
-
+  axisDraw();
+  sing();
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
-    axisDraw();
-    sing();
     rectDraw();
     touchRectCheck();
     if (isMobile) {
@@ -335,9 +334,6 @@ function draw() {
       sweepLineDraw(rectX+rectWidth-10,windowHeight*0.37,(rectX+rectWidth-10)
                   -(windowWidth*0.35),windowHeight*0.37);
     }
-  } else {
-    axisDraw();
-    sing();
   }
 
   if (splashButtonBool){
