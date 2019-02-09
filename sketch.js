@@ -30,7 +30,7 @@ var artCatArray = [];
 var projCatArray = [];
 var songPlaying = false;
 var splashButtonBool = true;
-var col1, col2, col3, col4, col5, col6, colText;
+var col1, col2, col3, col4, col5, col6, col7, col8, colText;
 var colBorderOff;
 var firstDraw = true;
 var wipeTime =0;
@@ -269,10 +269,15 @@ function draw() {
   col5 = color((colorPhase+240)%360,100,100);
   col6 = color((colorPhase+120)%360,100,100);
   col7 = color((colorPhase+120)%360,100,100,mouseY/windowHeight);
+  col8 = color(colorPhase,100,100*(mouseX/windowWidth));
   colText = color((colorPhase+240)%360,100,20);
   colBorderOff = color(colorPhase,40,100);
 
-
+  if(!isSplash) {
+    fill(0,0.1);
+    noStroke();
+    rect(0,0,windowWidth,windowHeight);
+  }
 
   if (wipeBool) {
      wipe();
@@ -395,26 +400,7 @@ function draw() {
     count = 0;
   }
 
-  if(!isSplash) {
-    fill(0,0.1);
-    rect(0,0,windowWidth,windowHeight);
-  }
 
-  // if (windowWidth/windowHeight < 1.6876) {
-  //   background(0,0.5);
-  //   textSize(windowHeight*0.07);
-  //   textAlign(CENTER);
-  //   fill(col3);
-  //   if (stretchFlip){
-  //     text("STRETCH", windowWidth*0.5,windowHeight*0.3);
-  //     text("YOUR", windowWidth*0.5,windowHeight*0.5);
-  //     text("WINDOW", windowWidth*0.5,windowHeight*0.7);
-  //   } else {
-  //     text("ROTATE", windowWidth*0.5,windowHeight*0.3);
-  //     text("YOUR", windowWidth*0.5,windowHeight*0.5);
-  //     text("SCREEN", windowWidth*0.5,windowHeight*0.7);
-  //   }
-  //  }
 }
 
 function updateSizePos() {
@@ -1207,7 +1193,7 @@ function buttonUpdate() {
       contButton.position(windowWidth/1.55,windowHeight/20 + 20 + contButton.height);
     } else {
       contButton.size(windowWidth*0.105,windowWidth*0.0525);
-      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight/10,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight/10,windowHeight*0.1+(sin(count)*windowHeight*0.1));
     }
   }
 }
@@ -1271,18 +1257,19 @@ function updateSizePosMobile() {
   splashButton.style('font-size',windowHeight*0.02 + 'px');
 
 
-  op1Button.size(windowHeight*0.1,windowHeight*0.04);
-  op2Button.size(windowHeight*0.1,windowHeight*0.04);
-  op3Button.size(windowHeight*0.1,windowHeight*0.04);
-  op4Button.size(windowHeight*0.1,windowHeight*0.04);
-  op1Button.position(windowHeight*0.53,rectY+rectHeight-windowHeight*0.053);
-  op2Button.position(windowHeight*0.63,rectY+rectHeight-windowHeight*0.053);
-  op3Button.position(windowHeight*0.73,rectY+rectHeight-windowHeight*0.053);
-  op4Button.position(windowHeight*0.83,rectY+rectHeight-windowHeight*0.053);
+  op1Button.size(rectWidth/4.2,windowHeight*0.04);
+  op2Button.size(rectWidth/4.2,windowHeight*0.04);
+  op3Button.size(rectWidth/4.2,windowHeight*0.04);
+  op4Button.size(rectWidth/4.2,windowHeight*0.04);
+  op1Button.position(rect2X+rect2Width-4*(rectWidth/4.2),rect2Y-windowHeight*0.034);
+  op2Button.position(rect2X+rect2Width-3*(rectWidth/4.2),rect2Y-windowHeight*0.034);
+  op3Button.position(rect2X+rect2Width-2*(rectWidth/4.2),rect2Y-windowHeight*0.034);
+  op4Button.position(rect2X+rect2Width-1*(rectWidth/4.2),rect2Y-windowHeight*0.034);
 
   shhButton.size(windowHeight*0.05,windowHeight*0.02);
   shhButton.style('font-size',windowHeight*0.01 + 'px');
 
+  textAlign(CENTER);
   artButton.style('font-size',windowHeight*0.025 + 'px');
   musicButton.style('font-size',windowHeight*0.025 + 'px');
   projButton.style('font-size',windowHeight*0.025 + 'px');
@@ -1299,7 +1286,7 @@ function updateSizePosShort() {
 }
 
 function sweepLineDrawMobile(startX,startY,endX,endY) {
-  stroke(col2);
+  stroke(col8);
   strokeWeight(2);
     if (lineGrowth<=lineGrowthSpeed) {
       line(startX,startY,endX,endY*(lineGrowth/lineGrowthSpeed));
