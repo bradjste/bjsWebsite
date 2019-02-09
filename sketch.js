@@ -37,7 +37,7 @@ var firstDraw = true;
 var wipeTime =0;
 var wipeCount= 0;
 var wipeBool = false;
-var wipeNum = 18;
+var wipeNum = 28;
 var currImgX = 0;
 var currImgY = 0;
 var currOp = 1;
@@ -349,8 +349,14 @@ function draw() {
         fill(col3);
         stroke(0);
         strokeWeight(8);
-        textSize(windowWidth*0.025);
-        text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
+        if (isMobile){
+         textSize(windowWidth*0.075);
+         textAlign(CENTER);
+         text("LOADING",windowWidth*0.45+random(windowWidth*0.1),windowHeight*0.88+random(windowWidth*0.1));
+        } else {
+         textSize(windowWidth*0.025);
+         text("LOADING",windowWidth*0.475+random(windowWidth*0.05),windowHeight*0.88+random(windowWidth*0.03));
+      }
      }
   }
 
@@ -604,7 +610,7 @@ function wipe() {
     if (isMobile) {
       cirSize = windowWidth*Math.sqrt(2);
     } else {
-      cirSize = windowWidth*Math.sqrt(2);
+      cirSize = windowHeight;
     }
     noStroke();
     fill(100*((wipeNum-wipeCount)*.01));
@@ -1298,6 +1304,7 @@ function updateSizePosMobile() {
   shhButton.style('transform', 'skewX(200deg)');
 
   textAlign(CENTER);
+  splashButton.style('font-size',windowHeight*0.025 + 'px');
   artButton.style('font-size',windowHeight*0.025 + 'px');
   musicButton.style('font-size',windowHeight*0.025 + 'px');
   projButton.style('font-size',windowHeight*0.025 + 'px');
