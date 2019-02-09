@@ -757,7 +757,9 @@ function stretchFlipFunc() {
 }
 
 function op1Select() {
-  catagoryOnMobile = true;
+  if (isMobile){
+    catagoryOnMobile = true;
+  }
   mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 1;
@@ -767,7 +769,9 @@ function op1Select() {
 }
 
 function op2Select() {
-  catagoryOnMobile = true;
+  if (isMobile){
+    catagoryOnMobile = true;
+  }
   mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 2;
@@ -777,7 +781,9 @@ function op2Select() {
 }
 
 function op3Select() {
-  catagoryOnMobile = true;
+  if (isMobile){
+    catagoryOnMobile = true;
+  }
   mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 3;
@@ -787,7 +793,9 @@ function op3Select() {
 }
 
 function op4Select() {
-  catagoryOnMobile = true;
+  if (isMobile){
+    catagoryOnMobile = true;
+  }
   mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 4;
