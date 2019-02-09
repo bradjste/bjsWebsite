@@ -1057,6 +1057,7 @@ function mobileName() {
   }
   fill(col4);
   strokeWeight(5);
+  textAlign(CENTER);
   textSize(windowHeight*0.015);
   for (var j = 1; j < splitTitle.length+1; j++) {
     text(splitTitle[j-1],windowWidth*0.15,(windowHeight*0.05)+(j/splitTitle.length)*((mark3)-(mark3/splitName.length))*0.66);
