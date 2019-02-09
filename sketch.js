@@ -263,14 +263,14 @@ function setup() {
 }
 
 function draw() {
-  col1 = color((colorPhase+120)%360,100*(mouseX/windowWidth),100);
-  col2 = color(colorPhase,100*(mouseX/windowWidth),100);
+  col1 = color((colorPhase+120)%360,100*(winMouseX/windowWidth),100);
+  col2 = color(colorPhase,100*(winMouseX/windowWidth),100);
   col3 = color(colorPhase,100,100);
-  col4 = color((colorPhase+240)%360,100*(mouseX/windowWidth),100);
+  col4 = color((colorPhase+240)%360,100*(winMouseX/windowWidth),100);
   col5 = color((colorPhase+240)%360,100,100);
   col6 = color((colorPhase+120)%360,100,100);
-  col7 = color((colorPhase+120)%360,100,100,mouseY/windowHeight);
-  col8 = color(colorPhase,100,100*(mouseX/windowWidth));
+  col7 = color((colorPhase+120)%360,100,100,winMouseY/windowHeight);
+  col8 = color(colorPhase,100,100*(winMouseX/windowWidth));
   colText = color((colorPhase+240)%360,100,20);
   colBorderOff = color(colorPhase,40,100);
 
@@ -296,8 +296,8 @@ function draw() {
   if ((mouseIsPressed && !isHovering && !onTB && !onTB2 && !isMuted)|| songPlaying) {
     beginShape();
     strokeWeight(3);
-    fill(colorPhase,100-(100*(mouseX/windowWidth)),100-(100*(mouseX/windowWidth)));
-    stroke(colorPhase,100,100*(mouseX/windowWidth));
+    fill(colorPhase,100-(100*(winMouseX/windowWidth)),100-(100*(winMouseX/windowWidth)));
+    stroke(colorPhase,100,100*(winMouseX/windowWidth));
     for (var i = 0; i < waveform.length; i++) {
       if (i % 2 == 0) {
         var x = map(i, 0, waveform.length, 0, windowWidth);
@@ -385,7 +385,7 @@ function draw() {
   buttonUpdate();
   mobileCatagoryDraw();
 
-  var freq = map(mouseX, 0, windowWidth, 40, 500);
+  var freq = map(winMouseX, 0, windowWidth, 40, 500);
   freq1 = freq*1;
   freq2 = freq*1.25;
   freq3 = freq*1.481;
@@ -396,7 +396,7 @@ function draw() {
   osc4.freq(freq4);
 
   if (isSplash){
-    count+= 0.05+((mouseX/windowWidth)*0.08);
+    count+= 0.05+((winMouseX/windowWidth)*0.08);
   } else {
     count+= 0.04;
   }
@@ -639,15 +639,15 @@ function axisDraw() {
   stroke(col1);
   fill(col2);
   if (mPressed) {
-    line(mouseX,0,mouseX,windowHeight);
-    line(0,mouseY,windowWidth,mouseY);
+    line(winMouseX,0,winMouseX,windowHeight);
+    line(0,winMouseY,windowWidth,winMouseY);
     stroke(0);
     strokeWeight(2);
-    line(mouseX,0,mouseX,windowHeight);
-    line(0,mouseY,windowWidth,mouseY);
-    ellipse(mouseX,mouseY,15,15);
+    line(winMouseX,0,winMouseX,windowHeight);
+    line(0,winMouseY,windowWidth,winMouseY);
+    ellipse(winMouseX,winMouseY,15,15);
     fill(0);
-    ellipse(mouseX,mouseY,5,5);
+    ellipse(winMouseX,winMouseY,5,5);
   }
 }
 
@@ -660,7 +660,7 @@ function mouseMoved() {
 
 function drawFrame() {
   let imgSize =  rectHeight-40;
-  currImgX = int((mouseX/windowWidth)*currImgArray.length);
+  currImgX = int((winMouseX/windowWidth)*currImgArray.length);
   if (currImgX < 0){
     currImgX = 0;
   } else if (currImgX > currImgArray.length - 1){
@@ -727,19 +727,19 @@ function titleNumInc() {
 
 function sing() {
    if (mouseIsPressed && !isHovering && !onTB && !onTB2 && (millis()>200) && !isMuted) {
-     fill(color(colorPhase,100*(mouseY/windowHeight),100*(mouseX/windowHeight)));
+     fill(color(colorPhase,100*(winMouseY/windowHeight),100*(winMouseX/windowHeight)));
      strokeWeight(3);
-     stroke(0,((mouseX/windowWidth)*100),100-(100*(mouseX/windowWidth)));
-     ellipse(mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20,windowWidth*0.2,windowWidth*0.2);
+     stroke(0,((winMouseX/windowWidth)*100),100-(100*(winMouseX/windowWidth)));
+     ellipse(winMouseX+(random(-20,20)*(winMouseX/windowWidth)),winMouseY+(random(-20,20)*(winMouseX/windowWidth)),windowWidth*0.2,windowWidth*0.2);
      fill(0);
      textSize(windowHeight*0.035)
      strokeWeight(2);
      textAlign(CENTER);
-     text(int(freq1)+' Hz',mouseX+random(40*(mouseX/windowWidth))-20,mouseY+random(40*(mouseX/windowWidth))-20);
+     text(int(freq1)+' Hz',winMouseX+random(40*(winMouseX/windowWidth))-20,winMouseY+random(40*(winMouseX/windowWidth))-20);
      osc1.amp(.15);
-     osc2.amp(.1*(mouseY/windowHeight));
-     osc3.amp(.1*(mouseY/windowHeight));
-     osc4.amp(.15*(mouseY/windowHeight));
+     osc2.amp(.1*(winMouseY/windowHeight));
+     osc3.amp(.1*(winMouseY/windowHeight));
+     osc4.amp(.15*(winMouseY/windowHeight));
    }
    else {
      osc1.amp(0);
@@ -829,10 +829,10 @@ function drawPicIndication(arraySize) {
       fft.analyze();
       octBands = fft.getOctaveBands();
       freqDomain = fft.logAverages(octBands);
-      translate( windowWidth*0.53+(i*span/arraySize)+(((mouseX/windowWidth)*-2*squareStart)+squareStart)
-                -2*squareStart+((mouseX/windowWidth)*4*squareStart)+((sqPadding*i)/arraySize),
+      translate( windowWidth*0.53+(i*span/arraySize)+(((winMouseX/windowWidth)*-2*squareStart)+squareStart)
+                -2*squareStart+((winMouseX/windowWidth)*4*squareStart)+((sqPadding*i)/arraySize),
                 rectY+rectHeight-windowWidth*0.053-2);
-      shearX(((mouseX/windowWidth)*2*PI/9)-(PI/9));
+      shearX(((winMouseX/windowWidth)*2*PI/9)-(PI/9));
       if (i == currImgX){
         fill((colorPhase+240)%360,100,100,0.7);
         rect(0,0,(span/arraySize)-sqPadding,-windowWidth*0.065*0.5);
@@ -878,8 +878,8 @@ function aspectCheck(){
 }
 
 function touchRectCheck() {
-  if (mouseX >= rectX && mouseX < rectX + rectWidth) {
-    if (mouseY >= rectY && mouseY < rectY + rectHeight){
+  if (winMouseX >= rectX && winMouseX < rectX + rectWidth) {
+    if (winMouseY >= rectY && winMouseY < rectY + rectHeight){
       onTB = true;
       axisDraw();
     } else {
@@ -891,8 +891,8 @@ function touchRectCheck() {
 }
 
 function touchRect2Check() {
-  if (mouseX >= rect2X && mouseX < rect2X + rect2Width) {
-    if (mouseY >= rect2Y && mouseY < rect2Y + rect2Height){
+  if (winMouseX >= rect2X && winMouseX < rect2X + rect2Width) {
+    if (winMouseY >= rect2Y && winMouseY < rect2Y + rect2Height){
       onTB2 = true;
       axisDraw();
     } else {
@@ -912,7 +912,7 @@ function rect2Draw() {
 
 function drawFrameMobile() {
   let imgSize =  rectHeight-40;
-  currImgY = int(currImgArray.length-((mouseY/windowHeight)*currImgArray.length));
+  currImgY = int(currImgArray.length-((winMouseY/windowHeight)*currImgArray.length));
   if (currImgY < 0){
     currImgY = 0;
   } else if (currImgY > currImgArray.length - 1){
@@ -1023,9 +1023,9 @@ function drawPicIndicationMobile(arraySize) {
     fft.analyze();
     octBands = fft.getOctaveBands();
     freqDomain = fft.logAverages(octBands);
-    translate(windowWidth*0.98,windowHeight*0.96+(-i*span/arraySize)-(((mouseY/windowHeight)*-2*squareStart)+squareStart)
-              -2*squareStart-((mouseY/windowHeight)*4*squareStart)-((sqPadding*i)/arraySize));
-    shearY(((mouseY/windowHeight)*2*PI/9)-(PI/9));
+    translate(windowWidth*0.98,windowHeight*0.96+(-i*span/arraySize)-(((winMouseY/windowHeight)*-2*squareStart)+squareStart)
+              -2*squareStart-((winMouseY/windowHeight)*4*squareStart)-((sqPadding*i)/arraySize));
+    shearY(((winMouseY/windowHeight)*2*PI/9)-(PI/9));
     if (i == currImgY){
       fill((colorPhase+240)%360,100,100,0.7);
       rect(0,0,-windowWidth*0.095*0.5,(span/arraySize)-sqPadding);
@@ -1074,10 +1074,10 @@ function buttonUpdate() {
     op3Button.style('transform', 'skewX(200deg)');
     op4Button.style('transform', 'skewX(200deg)');
   } else {
-    op1Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
-    op2Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
-    op3Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
-    op4Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+    op1Button.style('transform', 'skewX('+(200-(40*(winMouseX/windowWidth)))+'deg)');
+    op2Button.style('transform', 'skewX('+(200-(40*(winMouseX/windowWidth)))+'deg)');
+    op3Button.style('transform', 'skewX('+(200-(40*(winMouseX/windowWidth)))+'deg)');
+    op4Button.style('transform', 'skewX('+(200-(40*(winMouseX/windowWidth)))+'deg)');
   }
 
   switch (currOp) {
@@ -1123,7 +1123,7 @@ function buttonUpdate() {
   }
   if (!isMobile){
     shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(shhButton.height*
-          ((mouseY-windowHeight*0.5)/(windowHeight*0.5))))+2);
+          ((winMouseY-windowHeight*0.5)/(windowHeight*0.5))))+2);
   }
 
   if (!artIsSelected) {
