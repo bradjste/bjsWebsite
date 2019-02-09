@@ -301,8 +301,9 @@ function draw() {
     for (var i = 0; i < waveform.length; i++) {
       if (i % 2 == 0) {
         var x = map(i, 0, waveform.length, 0, windowWidth);
-        var y = map(waveform[i], -1, 1, windowHeight, 0);
-        curveVertex(x, y+windowHeight*0.1);
+        var y = map(waveform[i], -1, 1, windowHeight+ windowHeight*0.1*sin(count)*(winMouseY/windowHeight), 0);
+        var my = map(winMouseY,0,windowHeight,-windowHeight/2,windowHeight/2)
+        curveVertex(x, y+ my);
       }
     }
     endShape();
@@ -648,6 +649,7 @@ function axisDraw() {
     ellipse(winMouseX,winMouseY,15,15);
     fill(0);
     ellipse(winMouseX,winMouseY,5,5);
+    pop();
   }
 }
 
@@ -727,19 +729,20 @@ function titleNumInc() {
 
 function sing() {
    if (mouseIsPressed && !isHovering && !onTB && !onTB2 && (millis()>200) && !isMuted) {
-     fill(color(colorPhase,100*(winMouseY/windowHeight),100*(winMouseX/windowHeight)));
+     fill(color(colorPhase,100*(winMouseY/windowHeight),100*(winMouseX/windowWidth)));
      strokeWeight(3);
      stroke(0,((winMouseX/windowWidth)*100),100-(100*(winMouseX/windowWidth)));
-     ellipse(winMouseX+(random(-20,20)*(winMouseX/windowWidth)),winMouseY+(random(-20,20)*(winMouseX/windowWidth)),windowWidth*0.2,windowWidth*0.2);
-     fill(0);
-     textSize(windowHeight*0.035)
-     strokeWeight(2);
-     textAlign(CENTER);
-     text(int(freq1)+' Hz',winMouseX+random(40*(winMouseX/windowWidth))-20,winMouseY+random(40*(winMouseX/windowWidth))-20);
+     ellipse(winMouseX+(random(-20,20)*(winMouseX/windowWidth)),winMouseY+(random(-20,20)*(winMouseX/windowWidth)),windowWidth*0.1+(windowHeight*0.3*(winMouseX/windowWidth)*(winMouseY/windowHeight)),windowWidth*0.1+(windowHeight*0.3*(winMouseX/windowWidth)*(winMouseY/windowHeight)));
+     // fill(0);
+     // textSize(windowHeight*0.035)
+     // strokeWeight(2);
+     // textAlign(CENTER);
+     //text(int(freq1)+' Hz',winMouseX+random(40*(winMouseX/windowWidth))-20,winMouseY+random(40*(winMouseX/windowWidth))-20);
      osc1.amp(.15);
      osc2.amp(.1*(winMouseY/windowHeight));
      osc3.amp(.1*(winMouseY/windowHeight));
      osc4.amp(.15*(winMouseY/windowHeight));
+     // textAlign(RIGHT);
    }
    else {
      osc1.amp(0);
@@ -1309,7 +1312,7 @@ function updateSizePosMobile() {
   artButton.style('font-size',windowHeight*0.025 + 'px');
   musicButton.style('font-size',windowHeight*0.025 + 'px');
   projButton.style('font-size',windowHeight*0.025 + 'px');
-  contButton.style('font-size',windowHeight*0.023 + 'px');
+  contButton.style('font-size',windowHeight*0.021 + 'px');
 
 }
 
