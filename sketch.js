@@ -25,6 +25,7 @@ var rectX, rect2X;
 var rectY, rect2Y;
 var rectWidth, rect2Width;
 var rectHeight, rect2Height;
+var catagoryOnMobile = false;
 var titleArray = [];
 var artCatArray = [];
 var projCatArray = [];
@@ -126,21 +127,21 @@ function setup() {
   projImgArray[4] = loadImage('assets/projImg/synt4.jpg');
   projImgArray[5] = loadImage('assets/projImg/synt5.jpg');
 
-  titleArray[0] = "audio engineer";
-  titleArray[1] = "composer";
-  titleArray[2] = "creative coder";
-  titleArray[3] = "generative artist";
-  titleArray[4] = "interactive designer";
-  titleArray[5] = "recording engineer";
-  titleArray[6] = "UI designer";
-  titleArray[7] = "music producer";
-  titleArray[8] = "event manager";
-  titleArray[9] = "musical instrument prototyper";
-  titleArray[10] = "digital instrument designer";
-  titleArray[11] = "sound designer";
-  titleArray[12] = "image processor";
-  titleArray[13] = "new friend";
-  titleArray[14] = "puredata specialist";
+  titleArray[0] = "n" + "\n" + "audio engineer";
+  titleArray[1] = "\n" + "composer";
+  titleArray[2] = "\n" + "creative coder";
+  titleArray[3] = "\n" + "generative artist";
+  titleArray[4] = "n" + "\n" + "interactive designer";
+  titleArray[5] = "\n" + "recording engineer";
+  titleArray[6] = "n" + "\n" + "UI designer";
+  titleArray[7] = "\n" + "music producer";
+  titleArray[8] = "n" + "\n" + "event manager";
+  titleArray[9] = "\n" + "musical instrument prototyper";
+  titleArray[10] = "\n" + "digital instrument designer";
+  titleArray[11] = "\n" + "sound designer";
+  titleArray[12] = "n" + "\n" + "image processor";
+  titleArray[13] = "\n" + "new friend";
+  titleArray[14] = "\n" + "puredata specialist";
 
   setInterval(titleNumInc,1000);
   setInterval(stretchFlipFunc,2500);
@@ -158,7 +159,7 @@ function setup() {
   splashButton.style('transition', 'opacity 2s');
   splashButton.mousePressed(menuTrans);
 
-  shhButton = createButton('SOUND');
+  shhButton = createButton('| |-  S O U N D  -| |');
   shhButton.mouseOver(isHov);
   shhButton.mouseOut(isntHov);
   shhButton.style('cursor', 'cell');
@@ -380,6 +381,7 @@ function draw() {
   }
 
   buttonUpdate();
+  mobileCatagoryDraw();
 
   var freq = map(mouseX, 0, windowWidth, 40, 500);
   freq1 = freq*1;
@@ -598,6 +600,12 @@ function rectDraw() {
 }
 
 function wipe() {
+    let cirSize = 0;
+    if (isMobile) {
+      cirSize = windowWidth*Math.sqrt(2);
+    } else {
+      cirSize = windowWidth*Math.sqrt(2);
+    }
     noStroke();
     fill(100*((wipeNum-wipeCount)*.01));
     ellipse((windowWidth*0.5),
@@ -747,6 +755,8 @@ function stretchFlipFunc() {
 }
 
 function op1Select() {
+  catagoryOnMobile = true;
+  mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 1;
   } else if (projIsSelected){
@@ -755,6 +765,8 @@ function op1Select() {
 }
 
 function op2Select() {
+  catagoryOnMobile = true;
+  mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 2;
   } else if (projIsSelected){
@@ -763,6 +775,8 @@ function op2Select() {
 }
 
 function op3Select() {
+  catagoryOnMobile = true;
+  mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 3;
   } else if (projIsSelected){
@@ -771,6 +785,8 @@ function op3Select() {
 }
 
 function op4Select() {
+  catagoryOnMobile = true;
+  mobileCatagoryDraw();
   if(artIsSelected){
     artOp = 4;
   } else if (projIsSelected){
@@ -923,51 +939,53 @@ function drawFrameMobile() {
 function contentDrawMobile() {
   fill(0);
   strokeWeight(1);
-  textSize(windowWidth*(30/1536));
+  textSize(windowWidth*(50/1536));
   stroke(100);
   if (artIsSelected) {
-    showOptions();
-      canDrawFrame = true;
+     showOptions();
+     canDrawFrame = true;
+     textAlign(RIGHT);
      if (artOp == 1) {
-         currImgArray = artImgArray;
-         text(artString1,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-            rect2Width*0.5,rect2Height*0.5);
+       currImgArray = artImgArray;
+       text(artString1,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rectWidth*0.03,rect2Height);
      } else if (artOp == 2) {
        currImgArray = artImgArray;
-       text(artString2,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-          rect2Width*0.5,rect2Height*0.5);
+       text(artString2,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rectWidth*0.03,rect2Height);
      } else if (artOp == 3) {
        currImgArray = artImgArray;
-       text(artString3,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-          rect2Width*0.5,rect2Height*0.5);
+       text(artString3,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rectWidth*0.03,rect2Height);
      } else if (artOp == 4) {
        currImgArray = artImgArray;
-       text(artString4,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-          rect2Width*0.5,rect2Height*0.5);
+       text(artString4,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rectWidth*0.03,rect2Height);
      }
   }  else if (musicIsSelected) {
       canDrawFrame = false;
       text(musicString,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
          rect2Width*0.5,rect2Height*0.5);
   }  else if (projIsSelected) {
-      showOptions();
-      canDrawFrame = true;
+       showOptions();
+       canDrawFrame = true;
+       textAlign(RIGHT);
        if (projOp == 1) {
           currImgArray= projImgArray;
-          text(projString1,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-              rect2Width*0.5,rect2Height*0.5);
+          text(projString1,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+               rect2Width-rectWidth*0.03,rect2Height);
        } else if (projOp == 2) {
          currImgArray= projImgArray;
-         text(projString2,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-             rect2Width*0.5,rect2Height*0.5);
+         text(projString2,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+              rect2Width-rectWidth*0.03,rect2Height);
        } else if (projOp == 3) {
          currImgArray= projImgArray;
-         text(projString3,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-             rect2Width*0.5,rect2Height*0.5);
+         text(projString3,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+              rect2Width-rectWidth*0.03,rect2Height);
        } else if (projOp == 4) {
          currImgArray= projImgArray;
-         text(projString4,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-             rect2Width*0.5,rect2Height*0.5);
+         text(projString4,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
+              rect2Width-rectWidth*0.03,rect2Height);
        }
   }  else if (contIsSelected) {
       canDrawFrame = false;
@@ -1043,10 +1061,17 @@ function buttonUpdate() {
     currOp = projOp;
   }
 
-  op1Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
-  op2Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
-  op3Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
-  op4Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+  if (isMobile) {
+    op1Button.style('transform', 'skewX(200deg)');
+    op2Button.style('transform', 'skewX(200deg)');
+    op3Button.style('transform', 'skewX(200deg)');
+    op4Button.style('transform', 'skewX(200deg)');
+  } else {
+    op1Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+    op2Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+    op3Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+    op4Button.style('transform', 'skewX('+(200-(40*(mouseX/windowWidth)))+'deg)');
+  }
 
   switch (currOp) {
     case 1:
@@ -1089,12 +1114,9 @@ function buttonUpdate() {
   } else {
     shhButton.style('color', '#000');
   }
-  if (isMobile){
-    shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(windowHeight*0.035*
-          (mouseY/windowHeight)))+2);
-  } else {
-    shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(windowWidth*0.02*
-          (mouseY/windowHeight)))+2);
+  if (!isMobile){
+    shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(shhButton.height*
+          ((mouseY-windowHeight*0.5)/(windowHeight*0.5))))+2);
   }
 
   if (!artIsSelected) {
@@ -1168,7 +1190,7 @@ function buttonUpdate() {
       projButton.position(windowWidth/3.5,windowHeight/20 + 20 + projButton.height);
     } else {
       projButton.size(windowWidth*0.105,windowWidth*0.0525);
-      projButton.position(windowWidth*0.575+(projButton.width),windowHeight/10,windowHeight*0.1+(sin(count)*windowHeight*0.01));
+      projButton.position(windowWidth*0.575+(projButton.width),windowHeight*0.1+(sin(count)*windowHeight*0.01));
     }
   }
 
@@ -1181,7 +1203,7 @@ function buttonUpdate() {
       contButton.position(windowWidth/1.55,windowHeight/20 + 20 + contButton.height);
     } else {
       contButton.size(windowWidth*0.1,windowWidth*0.05);
-      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight/10,windowHeight*0.1);
+      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight*0.1);
     }
   }
   else {
@@ -1193,7 +1215,7 @@ function buttonUpdate() {
       contButton.position(windowWidth/1.55,windowHeight/20 + 20 + contButton.height);
     } else {
       contButton.size(windowWidth*0.105,windowWidth*0.0525);
-      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight/10,windowHeight*0.1+(sin(count)*windowHeight*0.1));
+      contButton.position(windowWidth-(artButton.x+contButton.width),windowHeight*0.1+(sin(count)*windowHeight*0.01));
     }
   }
 }
@@ -1220,13 +1242,14 @@ function updateSizePosLandscape() {
   op2Button.position(windowWidth*0.63,rectY+rectHeight-windowWidth*0.053);
   op3Button.position(windowWidth*0.73,rectY+rectHeight-windowWidth*0.053);
   op4Button.position(windowWidth*0.83,rectY+rectHeight-windowWidth*0.053);
-  op1Button.style('font-size',windowWidth*0.02 + 'px');
-  op2Button.style('font-size',windowWidth*0.02 + 'px');
-  op3Button.style('font-size',windowWidth*0.02 + 'px');
-  op4Button.style('font-size',windowWidth*0.02 + 'px');
+  op1Button.style('font-size',windowWidth*0.01 + 'px');
+  op2Button.style('font-size',windowWidth*0.01 + 'px');
+  op3Button.style('font-size',windowWidth*0.01 + 'px');
+  op4Button.style('font-size',windowWidth*0.01 + 'px');
 
-  shhButton.size(windowWidth*0.05,windowWidth*0.02);
-  shhButton.style('font-size',windowWidth*0.01 + 'px');
+  shhButton.size(windowWidth*0.2,windowHeight*0.05);
+  shhButton.style('font-size',windowWidth*0.014 + 'px');
+  shhButton.style('transform', 'skewX(0deg)');
 
   artButton.style('font-size',windowWidth*0.02 + 'px');
   musicButton.style('font-size',windowWidth*0.02 + 'px');
@@ -1238,9 +1261,9 @@ function updateSizePosLandscape() {
 
 function updateSizePosMobile() {
 
-    mark1 = windowWidth*(1/5);
-    mark2 = windowHeight*0.75;
-    mark3 = mark2 + windowHeight*(0.05);
+  mark1 = windowWidth*(1/5);
+  mark2 = windowHeight*0.75;
+  mark3 = mark2 + windowHeight*(0.05);
 
   rectX = mark1+20;
   rectWidth = windowWidth-20-rectX;
@@ -1250,24 +1273,29 @@ function updateSizePosMobile() {
   rect2X = windowWidth*0.03;
   rect2Width = windowWidth*0.89;
   rect2Y = mark3;
-  rect2Height = windowHeight-(windowWidth*0.07)-mark3;
+  rect2Height = windowHeight-(windowWidth*0.03)-mark3;
 
 
   splashButton.size(windowHeight*0.15,windowHeight*0.075);
   splashButton.style('font-size',windowHeight*0.02 + 'px');
 
-
+  op1Button.style('font-size',windowWidth*0.02 + 'px');
+  op2Button.style('font-size',windowWidth*0.02 + 'px');
+  op3Button.style('font-size',windowWidth*0.02 + 'px');
+  op4Button.style('font-size',windowWidth*0.02 + 'px');
   op1Button.size(rectWidth/4.2,windowHeight*0.04);
   op2Button.size(rectWidth/4.2,windowHeight*0.04);
   op3Button.size(rectWidth/4.2,windowHeight*0.04);
   op4Button.size(rectWidth/4.2,windowHeight*0.04);
-  op1Button.position(rect2X+rect2Width-4*(rectWidth/4.2),rect2Y-windowHeight*0.034);
-  op2Button.position(rect2X+rect2Width-3*(rectWidth/4.2),rect2Y-windowHeight*0.034);
-  op3Button.position(rect2X+rect2Width-2*(rectWidth/4.2),rect2Y-windowHeight*0.034);
-  op4Button.position(rect2X+rect2Width-1*(rectWidth/4.2),rect2Y-windowHeight*0.034);
+  op1Button.position(rect2X+rect2Width-4*(rectWidth/4.2)-(0.1*(windowHeight*0.04/(tan(PI/9)))),rect2Y-windowHeight*0.038);
+  op2Button.position(rect2X+rect2Width-3*(rectWidth/4.2)-(0.1*(windowHeight*0.04/(tan(PI/9)))),rect2Y-windowHeight*0.038);
+  op3Button.position(rect2X+rect2Width-2*(rectWidth/4.2)-(0.1*(windowHeight*0.04/(tan(PI/9)))),rect2Y-windowHeight*0.038);
+  op4Button.position(rect2X+rect2Width-1*(rectWidth/4.2)-(0.1*(windowHeight*0.04/(tan(PI/9)))),rect2Y-windowHeight*0.038);
 
-  shhButton.size(windowHeight*0.05,windowHeight*0.02);
-  shhButton.style('font-size',windowHeight*0.01 + 'px');
+  shhButton.size(windowWidth*0.45,windowHeight*0.034);
+  shhButton.style('font-size',windowHeight*0.02 + 'px');
+  shhButton.position(windowWidth*0.6,-4);
+  shhButton.style('transform', 'skewX(200deg)');
 
   textAlign(CENTER);
   artButton.style('font-size',windowHeight*0.025 + 'px');
@@ -1286,13 +1314,47 @@ function updateSizePosShort() {
 }
 
 function sweepLineDrawMobile(startX,startY,endX,endY) {
-  stroke(col8);
-  strokeWeight(2);
+
     if (lineGrowth<=lineGrowthSpeed) {
+      strokeWeight(3);
+      stroke(0);
+      line(startX,startY,endX,endY*(lineGrowth/lineGrowthSpeed));
+      stroke(col2);
+      strokeWeight(2);
       line(startX,startY,endX,endY*(lineGrowth/lineGrowthSpeed));
       lineGrowth++;
     } else {
-      line(startX,startY,endX,endY);
+      strokeWeight(3);
+      stroke(0);
+      line(startX,startY,endX,endY*(lineGrowth/lineGrowthSpeed));
+      stroke(col2);
+      strokeWeight(2);
+      line(startX,startY,endX,endY*(lineGrowth/lineGrowthSpeed));
     }
     stroke(0);
+}
+
+function mobileCatagoryDraw() {
+  if (catagoryOnMobile) {
+    setTimeout(eraseCatMobile,500);
+    let textEdge = rectX+(rectWidth*0.5);
+    fill(color((colorPhase+240)%360,100,100));
+    textSize(windowWidth*0.065);
+    textAlign(CENTER);
+    stroke(0);
+    strokeWeight(5);
+    if (artIsSelected){
+      text(artCatArray[artOp-1],textEdge,rectY+rectY*0.6);
+    } else if (musicIsSelected) {
+      text("HEXER QUIZ",textEdge,rectY+rectY*0.5);
+    } else if (projIsSelected){
+      text(projCatArray[projOp-1],textEdge,rectY+rectY*0.5);
+    } else {
+      text("LET'S TALK",textEdge,rectY+rectY*0.5);
+    }
+  }
+}
+
+function eraseCatMobile() {
+  catagoryOnMobile = false;
 }
