@@ -16,7 +16,7 @@ var projIsSelected = false;
 var contIsSelected = false;
 var shouldDrawWF = false;
 var isHovering, onTB, onTB2 = false;
-var isMuted = false;
+var isMuted = true;
 var currSong;
 var titleNum = 0;
 var lineGrowth = 0;
@@ -31,6 +31,7 @@ var artCatArray = [];
 var projCatArray = [];
 var songPlaying = false;
 var splashButtonBool = true;
+var clk4SndWasSeen = false;
 var col1, col2, col3, col4, col5, col6, col7, col8, colText;
 var colBorderOff;
 var firstDraw = true;
@@ -46,6 +47,7 @@ var projOp = 1;
 var artImgArray= [];
 var projImgArray = [];
 var contImgArray =[];
+var contStrings = [];
 var currImgArray;
 var stretchFlip = true;
 var canDrawFrame = false;
@@ -56,18 +58,25 @@ var artString2 = "LACDA";
 var artString3 = "UCSD";
 var artString4 = "DUDLZ";
 var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
-var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability. The patch works as a sound -> color-mapping algorithm utilizing the  HSV color space.";
+var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability.";
 var projString2 = "cutmod";
 var projString3 = "pd patches";
 var projString4 = "music videos";
 var contString = "email:"+"\n"+"instagram:"+"\n"+"bandcamp:"+"\n"+"twitter:";
 var contString2 = "bradjste@gmail.com"+"\n"+"bradjste"+"\n"+"Hexer Quiz"+"\n"+"@hexerquiz";
+var myFont;
+var catLife = 0;
+var catDead = true;
 
+function preload() {
+  myFont = loadFont('assets/Avenir.otf');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB, 360,100,100);
   background(0);
+  textFont(myFont);
   aspectCheck();
   currSong = loadSound('assets/music/drumgum5.wav');
   currSong.setVolume(0.5);
@@ -108,6 +117,15 @@ function setup() {
   projCatArray[2] = "ENGN_WAVE";
   projCatArray[3] = "MUSIC VIDEOS";
 
+  contStrings[0] = "email:";
+  contStrings[1] = "instagram:";
+  contStrings[2] = "bandcamp:";
+  contStrings[3] = "twitter:";
+  contStrings[4] = "bradjste@gmail.com";
+  contStrings[5] = "bradjste";
+  contStrings[6] = "Hexer Quiz";
+  contStrings[7] = "@hexerquiz";
+
   currImgArray = artImgArray;
 
   artImgArray[0] = loadImage('assets/artImg/art0.jpg');
@@ -127,21 +145,21 @@ function setup() {
   projImgArray[4] = loadImage('assets/projImg/synt4.jpg');
   projImgArray[5] = loadImage('assets/projImg/synt5.jpg');
 
-  titleArray[0] = "n" + "\n" + "audio engineer";
-  titleArray[1] = "\n" + "composer";
-  titleArray[2] = "\n" + "creative coder";
-  titleArray[3] = "\n" + "generative artist";
-  titleArray[4] = "n" + "\n" + "interactive designer";
-  titleArray[5] = "\n" + "recording engineer";
-  titleArray[6] = "n" + "\n" + "UI designer";
-  titleArray[7] = "\n" + "music producer";
-  titleArray[8] = "n" + "\n" + "event manager";
-  titleArray[9] = "\n" + "musical instrument prototyper";
-  titleArray[10] = "\n" + "digital instrument designer";
-  titleArray[11] = "\n" + "sound designer";
-  titleArray[12] = "n" + "\n" + "image processor";
-  titleArray[13] = "\n" + "new friend";
-  titleArray[14] = "\n" + "puredata specialist";
+  titleArray[0] = "an audio engineer";
+  titleArray[1] = "a composer";
+  titleArray[2] = "a creative coder";
+  titleArray[3] = "a generative artist";
+  titleArray[4] = "an interactive designer";
+  titleArray[5] = "a recording engineer";
+  titleArray[6] = "a UI designer";
+  titleArray[7] = "a music producer";
+  titleArray[8] = "an event manager";
+  titleArray[9] = "an instrument prototyper";
+  titleArray[10] = "a SAG actor";
+  titleArray[11] = "a sound designer";
+  titleArray[12] = "an image processor";
+  titleArray[13] = "a new friend";
+  titleArray[14] = "a puredata specialist";
 
   setInterval(titleNumInc,1000);
   setInterval(stretchFlipFunc,2500);
@@ -301,8 +319,13 @@ function draw() {
     for (var i = 0; i < waveform.length; i++) {
       if (i % 2 == 0) {
         var x = map(i, 0, waveform.length, 0, windowWidth);
-        var y = map(waveform[i], -1, 1, windowHeight+ windowHeight*0.1*sin(count)*(winMouseY/windowHeight), 0);
-        var my = map(winMouseY,0,windowHeight,-windowHeight/2,windowHeight/2)
+        if (isSplash) {
+          var y = map(waveform[i], -1, 1, windowHeight+ windowHeight*0.1*sin(count)*(winMouseY/windowHeight), 0);
+          var my = map(winMouseY,0,windowHeight,-windowHeight/2,windowHeight/2)
+        } else{
+          var y = map(waveform[i], -1, 1, windowHeight+ windowHeight*0.3, 0);
+          var my = 0;
+        }
         curveVertex(x, y+ my);
       }
     }
@@ -312,6 +335,11 @@ function draw() {
 
   axisDraw();
   sing();
+  if(isSplash && isMuted && isMobile){
+     clk4SndMobile();
+  } else if (isSplash && isMuted && !isMobile) {
+     clk4Snd();
+  }
   if (artIsSelected || musicIsSelected || projIsSelected || contIsSelected) {
     rectDraw();
     touchRectCheck();
@@ -321,9 +349,13 @@ function draw() {
       drawFrameMobile();
       contentDrawMobile();
       drawPicIndicationMobile(currImgArray.length);
+      if (!catDead) {
+        eraseCatMobile();
+      }
     // } else if (isShort) {
     // }
   } else {
+
       if (canDrawFrame) {
         drawFrame();
       }
@@ -430,6 +462,7 @@ function windowResized() {
 function menuTrans() {
   isSplash = false;
   wipeBool = true;
+  clk4SndWasSeen = true;
   splashButton.style('opacity', '0');
   artButton.show();
   musicButton.show();
@@ -570,16 +603,19 @@ function contentDraw() {
   }  else if (contIsSelected) {
       canDrawFrame = false;
       lookingFor();
+      sayHowdy();
       fill(0);
       strokeWeight(1);
       textSize(windowWidth*(40/1536));
       stroke(100);
-      textAlign(LEFT);
-      text(contString,rectX+rectWidth*0.62,rectY+rectHeight*0.2,
-         rectWidth*0.7,rectHeight*0.5);
-      textAlign(RIGHT);
-      text(contString2,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-         rectWidth*0.5,rectHeight*0.5);
+      for (var i = 0; i < 4; i++){
+        textAlign(LEFT);
+        text(contStrings[i],rectX + rectWidth*0.6,rectY+rectHeight*0.18+(((i%4)/4)*rectHeight/3.5),
+          rectWidth*0.5,rectHeight*0.6);
+        textAlign(RIGHT);
+        text(contStrings[i+4],rectX+rectWidth*0.5,rectY+rectHeight*0.18+(((i%4)/4)*rectHeight/3.5),
+         rectWidth*0.49,rectHeight*0.6);
+      }
   }
 }
 
@@ -607,7 +643,7 @@ function wipe() {
     if (isMobile) {
       cirSize = windowWidth*Math.sqrt(2);
     } else {
-      cirSize = windowHeight;
+      cirSize = windowHeight*Math.sqrt(2);
     }
     noStroke();
     fill(100*((wipeNum-wipeCount)*.01));
@@ -694,6 +730,7 @@ function drawFrame() {
 }
 
 function mute(){
+  clk4SndWasSeen = true;
   currSong.stop();
   if (isMuted) {
     shhButton.style('color', col3);
@@ -715,12 +752,23 @@ function sweepLineDraw(startX,startY,endX,endY) {
 
 function lookingFor(){
   textAlign(LEFT);
-  textSize(rectHeight*0.1);
-  text("I am a(n)",rectX+(rectWidth*0.025),rectY+(rectWidth*0.05));
+  textSize(rectHeight*0.08);
+  fill(0);
+  noStroke();
+  if (isMobile) {
+    text("I am ",rect2X+(rect2Width*0.025),rect2Y+(rect2Height*0.19));
+  } else {
+    text("I am ",rectX+(rectWidth*0.025),rectY+(rectHeight*0.1));
+  }
   fill(col3);
   stroke(0);
   strokeWeight(3);
-  text(titleArray[titleNum]+",",rectX+(rectWidth*0.025),rectY+(rectHeight*0.18),rectWidth*0.5,rectHeight);
+  textSize(rectHeight*0.07);
+  if (isMobile){
+    text(titleArray[titleNum]+",",rect2X+(rect2Width*0.025),rect2Y+(rect2Height*0.22),rect2Width*0.38,rect2Height*0.81);
+  } else {
+    text(titleArray[titleNum]+",",rectX+(rectWidth*0.025),rectY+(rectHeight*0.1),rectWidth*0.5,rectHeight);
+  }
 }
 
 function titleNumInc() {
@@ -758,7 +806,7 @@ function stretchFlipFunc() {
 
 function op1Select() {
   if (isMobile){
-    catagoryOnMobile = true;
+    catLife = 1000;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -770,7 +818,7 @@ function op1Select() {
 
 function op2Select() {
   if (isMobile){
-    catagoryOnMobile = true;
+    catLife = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -782,7 +830,7 @@ function op2Select() {
 
 function op3Select() {
   if (isMobile){
-    catagoryOnMobile = true;
+    catLife = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -794,7 +842,7 @@ function op3Select() {
 
 function op4Select() {
   if (isMobile){
-    catagoryOnMobile = true;
+    catLife = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -999,17 +1047,21 @@ function contentDrawMobile() {
        }
   }  else if (contIsSelected) {
       canDrawFrame = false;
+      sayHowdyMobile();
       lookingFor();
       fill(0);
       strokeWeight(1);
-      textSize(windowWidth*(40/1536));
+      textSize(windowWidth*(60/1536));
       stroke(100);
-      textAlign(LEFT);
-      text(contString,rect2X + rect2Width*0.5,rect2Y+rect2Height*0.05,
-         rect2Width*0.7,rect2Height*0.5);
-      textAlign(RIGHT);
-      text(contString2,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.05,
+      for (var i = 0; i < 4; i++){
+        textAlign(LEFT);
+        text(contStrings[i],rect2X + rect2Width*0.4,rect2Y+rect2Height*0.05+(((i%4)/4)*rect2Height/2),
+          rect2Width*0.7,rect2Height*0.5);
+        textAlign(RIGHT);
+        text(contStrings[i+4],rect2X+rect2Width*0.5,rect2Y+rect2Height*0.05+(((i%4)/4)*rect2Height/2),
          rect2Width*0.5,rect2Height*0.5);
+      }
+
   }
 }
 
@@ -1058,7 +1110,7 @@ function mobileName() {
   fill(col4);
   strokeWeight(5);
   textAlign(CENTER);
-  textSize(windowHeight*0.015);
+  textSize(windowHeight*0.02);
   for (var j = 1; j < splitTitle.length+1; j++) {
     text(splitTitle[j-1],windowWidth*0.15,(windowHeight*0.05)+(j/splitTitle.length)*((mark3)-(mark3/splitName.length))*0.66);
   }
@@ -1313,7 +1365,7 @@ function updateSizePosMobile() {
   artButton.style('font-size',windowHeight*0.025 + 'px');
   musicButton.style('font-size',windowHeight*0.025 + 'px');
   projButton.style('font-size',windowHeight*0.025 + 'px');
-  contButton.style('font-size',windowHeight*0.021 + 'px');
+  contButton.style('font-size',windowHeight*0.023 + 'px');
 
 }
 
@@ -1348,9 +1400,9 @@ function sweepLineDrawMobile(startX,startY,endX,endY) {
 
 function mobileCatagoryDraw() {
   if (catagoryOnMobile) {
-    setTimeout(eraseCatMobile,500);
+    catLife = 100;
     let textEdge = rectX+(rectWidth*0.5);
-    fill(color((colorPhase+240)%360,100,100));
+    fill(color((colorPhase+240)%360,100,100,catLife*0.01));
     textSize(windowWidth*0.065);
     textAlign(CENTER);
     stroke(0);
@@ -1368,5 +1420,55 @@ function mobileCatagoryDraw() {
 }
 
 function eraseCatMobile() {
-  catagoryOnMobile = false;
+  catLife--;
+  if (catLife <= 0 && !catDead) {
+    catDead = true;
+    catlife = 0;
+  }
+}
+
+function sayHowdy() {
+  let howdyArray = split("SAYHOWDY", '');
+  let centerX = rectX+rectWidth*0.8;
+  let centerY = rectY+rectHeight*0.8;
+  let radius = windowHeight * 0.1;
+  for (var i = 0; i < howdyArray.length; i++) {
+    stroke(360*(i/howdyArray.length),70,100);
+    text(howdyArray[i], centerX + cos(count+((2*PI)*(i/howdyArray.length)))*radius,
+        centerY + sin(count+((2*PI)*(i/howdyArray.length)))*radius);
+  }
+  textAlign(CENTER);
+  text("   ^^^",centerX,centerY+sin(count)*radius/3)
+}
+
+function sayHowdyMobile() {
+  let howdyArray = split("SAY HOWDY^^^", '');
+  let startX = rect2X+rect2Width*0.15;
+  let centerY = rect2Y+rect2Height*0.8;
+  for (var i = 0; i < howdyArray.length; i++) {
+    stroke(360*(i/howdyArray.length),70,100);
+    text(howdyArray[i], startX + (i/howdyArray.length)*rectWidth*0.9,
+        centerY + sin(count+((2*PI)*(i/howdyArray.length)))*rect2Height*0.1);
+  }
+}
+
+function clk4SndMobile() {
+  if (!clk4SndWasSeen){
+    fill(col2);
+    stroke(0);
+    strokeWeight(3);
+    textSize(14);
+    text("SOUND >>>",windowWidth*0.4+sin(count)*windowWidth*0.05,windowHeight*0.025);
+    text("(RECOMMENDED)",windowWidth*0.4+windowWidth*0.014,windowHeight*0.048);
+  }
+}
+
+function clk4Snd() {
+  if (!clk4SndWasSeen){
+    fill(col2);
+    stroke(0);
+    strokeWeight(3);
+    textSize(14);
+    text("SOUND (RECOMMENDED) >>>",windowWidth*0.3+sin(count)*windowWidth*0.05,windowHeight*0.98);
+  }
 }
