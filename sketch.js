@@ -594,27 +594,27 @@ function contentDraw() {
      }
   }  else if (musicIsSelected) {
       canDrawFrame = false;
-      text(musicString,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-         rectWidth*0.5,rectHeight*0.5);
+      text(musicString,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+         rectWidth*0.385,rectHeight*0.5);
   }  else if (projIsSelected) {
       showOptions();
       canDrawFrame = true;
        if (projOp == 1) {
           currImgArray= projImgArray;
-          text(projString1,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-              rectWidth*0.5,rectHeight*0.5);
+          text(projString1,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+              rectWidth*0.385,rectHeight*0.5);
        } else if (projOp == 2) {
          currImgArray= projImgArray;
-         text(projString2,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-             rectWidth*0.5,rectHeight*0.5);
+         text(projString2,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+             rectWidth*0.385,rectHeight*0.5);
        } else if (projOp == 3) {
          currImgArray= projImgArray;
-         text(projString3,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-             rectWidth*0.5,rectHeight*0.5);
+         text(projString3,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+             rectWidth*0.385,rectHeight*0.5);
        } else if (projOp == 4) {
          currImgArray= projImgArray;
-         text(projString4,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-             rectWidth*0.5,rectHeight*0.5);
+         text(projString4,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+             rectWidth*0.385,rectHeight*0.5);
        }
   }  else if (contIsSelected) {
       canDrawFrame = true;
