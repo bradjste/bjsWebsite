@@ -59,7 +59,7 @@ var artString3 = "UCSD";
 var artString4 = "DUDLZ";
 var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
 var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability.";
-var projString2 = "cutmod";
+var projString2 = "As an intern for CutMod Digital Media, I have worked on a couple of projection mapping events. Check out the map we did in Joshua Tree National Park for Vans here:"+"\n"+"\n"+"youtube.com/watch?v=Mi1jzYIzVt4";
 var projString3 = "pd patches";
 var projString4 = "music videos";
 var contString = "email:"+"\n"+"instagram:"+"\n"+"bandcamp:"+"\n"+"twitter:";
