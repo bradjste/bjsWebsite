@@ -45,21 +45,28 @@ var currOp = 1;
 var artOp = 1;
 var projOp = 1;
 var artImgArray= [];
+var artImgArray2 = [];
+var artImgArray3 = [];
+var artImgArray4 = [];
 var projImgArray = [];
+var projImgArray2 = [];
+var projImgArray3 = [];
+var projImgArray4 = [];
+var musicImgArray = [];
 var contImgArray =[];
 var contStrings = [];
-var currImgArray;
+var currImgArray = [];
 var stretchFlip = true;
 var canDrawFrame = false;
 var isMobile = false;
 var isShort = false;
 var artString1 = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
 var artString2 = "LACDA";
-var artString3 = "UCSD";
+var artString3 = "At UCSD, I had my first exhibition, 'RGB', in the Triton Art Gallery. It was a set of 25 prints, distributed equally across the space. The artwork was a collection of digital artifacts from generative processes I have developed over the years.";
 var artString4 = "DUDLZ";
 var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
 var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability.";
-var projString2 = "As an intern for CutMod Digital Media, I have worked on a couple of projection mapping events. Check out the map we did in Joshua Tree National Park for Vans here:"+"\n"+"\n"+"youtube.com/watch?v=Mi1jzYIzVt4";
+var projString2 = "As an intern for CutMod Digital Media, I have worked on a few projection mapping gigs. Check out the map we did in Joshua Tree National Park for Vans here:"+"\n"+"\n"+"youtube.com/watch?v=Mi1jzYIzVt4";
 var projString3 = "pd patches";
 var projString4 = "music videos";
 var contString = "email:"+"\n"+"instagram:"+"\n"+"bandcamp:"+"\n"+"twitter:";
@@ -138,12 +145,24 @@ function setup() {
   artImgArray[7] = loadImage('assets/artImg/art7.jpg');
   artImgArray[8] = loadImage('assets/artImg/art8.jpg');
 
+  artImgArray3[0] = loadImage('assets/artImg/ucsd1.jpg');
+  artImgArray3[1] = loadImage('assets/artImg/ucsd2.jpg');
+  artImgArray3[2] = loadImage('assets/artImg/ucsd3.jpg');
+  artImgArray3[3] = loadImage('assets/artImg/ucsd4.jpg');
+  artImgArray3[4] = loadImage('assets/artImg/ucsd5.jpg');
+  artImgArray3[5] = loadImage('assets/artImg/ucsd6.jpg');
+  artImgArray3[6] = loadImage('assets/artImg/ucsd7.jpg');
+
   projImgArray[0] = loadImage('assets/projImg/synt0.jpg');
   projImgArray[1] = loadImage('assets/projImg/synt1.jpg');
   projImgArray[2] = loadImage('assets/projImg/synt2.jpg');
   projImgArray[3] = loadImage('assets/projImg/synt3.jpg');
   projImgArray[4] = loadImage('assets/projImg/synt4.jpg');
   projImgArray[5] = loadImage('assets/projImg/synt5.jpg');
+
+  contImgArray[0] = loadImage('assets/contImg/cont1.jpg');
+  contImgArray[1] = loadImage('assets/contImg/cont2.jpg');
+  contImgArray[2] = loadImage('assets/contImg/cont3.jpg');
 
   titleArray[0] = "an audio engineer";
   titleArray[1] = "a composer";
@@ -354,12 +373,8 @@ function draw() {
       }
     // } else if (isShort) {
     // }
-  } else {
-
-      if (canDrawFrame) {
-        drawFrame();
-      }
-      if (artIsSelected || projIsSelected) {
+     } else {
+      if (artIsSelected || projIsSelected || contIsSelected) {
         drawPicIndication(currImgArray.length);
       }
       catagoryDraw();
@@ -490,7 +505,6 @@ function loadMenu() {
 
 function artTrans(){
   if (!artIsSelected){
-    currImgArray = artImgArray;
     artIsSelected = true;
     musicIsSelected = false;
     projIsSelected = false;
@@ -538,6 +552,7 @@ function projTrans(){
 
 function contTrans(){
   if (!contIsSelected){
+    canDrawFrame = true;
     hideOptions();
     contIsSelected = true;
     artIsSelected = false;
@@ -548,6 +563,7 @@ function contTrans(){
   } else {
     background(0);
     contIsSelected = false;
+    canDrawFrame = false;
   }
 }
 
@@ -561,20 +577,20 @@ function contentDraw() {
       canDrawFrame = true;
      if (artOp == 1) {
          currImgArray = artImgArray;
-         text(artString1,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-            rectWidth*0.5,rectHeight*0.5);
+         text(artString1,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+            rectWidth*0.385,rectHeight*0.5);
      } else if (artOp == 2) {
        currImgArray = artImgArray;
-       text(artString2,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-          rectWidth*0.5,rectHeight*0.5);
+       text(artString2,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+          rectWidth*0.385,rectHeight*0.5);
      } else if (artOp == 3) {
-       currImgArray = artImgArray;
-       text(artString3,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-          rectWidth*0.5,rectHeight*0.5);
+       currImgArray = artImgArray3;
+       text(artString3,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+          rectWidth*0.385,rectHeight*0.5);
      } else if (artOp == 4) {
        currImgArray = artImgArray;
-       text(artString4,rectX+rectWidth*0.5,rectY+rectHeight*0.2,
-          rectWidth*0.5,rectHeight*0.5);
+       text(artString4,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
+          rectWidth*0.385,rectHeight*0.5);
      }
   }  else if (musicIsSelected) {
       canDrawFrame = false;
@@ -601,7 +617,8 @@ function contentDraw() {
              rectWidth*0.5,rectHeight*0.5);
        }
   }  else if (contIsSelected) {
-      canDrawFrame = false;
+      canDrawFrame = true;
+      currImgArray = contImgArray;
       lookingFor();
       sayHowdy();
       fill(0);
@@ -616,6 +633,9 @@ function contentDraw() {
         text(contStrings[i+4],rectX+rectWidth*0.5,rectY+rectHeight*0.18+(((i%4)/4)*rectHeight/3.5),
          rectWidth*0.49,rectHeight*0.6);
       }
+  }
+  if (canDrawFrame) {
+    drawFrame();
   }
 }
 
@@ -710,19 +730,19 @@ function drawFrame() {
   noStroke();
   if (currImgX < currImgArray.length - 2) {
     image(currImgArray[currImgX + 2],rectX+100, rectY+30, imgSize, imgSize,
-          0,0,1200,1200);
+          0,0,currImgArray[currImgX + 2].width,currImgArray[currImgX + 2].width);
     fill(100,0.6);
     rect(rectX+100, rectY+30, imgSize, imgSize);
   }
   if (currImgX < currImgArray.length - 1) {
     image(currImgArray[currImgX + 1],rectX+60, rectY+25, imgSize, imgSize,
-          0,0,1200,1200);
+          0,0,currImgArray[currImgX + 1].width,currImgArray[currImgX + 1].width);
     fill(100,0.3);
     rect(rectX+60, rectY+25, imgSize, imgSize);
   }
   }
   image(currImgArray[currImgX],rectX+20, rectY+20, imgSize, imgSize,
-          0,0,1200,1200);
+          0,0,currImgArray[currImgX].width,currImgArray[currImgX].width);
   fill(0,0);
   stroke(0);
   strokeWeight(6);
@@ -756,9 +776,9 @@ function lookingFor(){
   fill(0);
   noStroke();
   if (isMobile) {
-    text("I am ",rect2X+(rect2Width*0.025),rect2Y+(rect2Height*0.19));
+    text("I am . . .",rect2X+(rect2Width*0.025),rect2Y+(rect2Height*0.19));
   } else {
-    text("I am ",rectX+(rectWidth*0.025),rectY+(rectHeight*0.1));
+    text("I am . . . .",rectX+(rectWidth*0.530),rectY+(rectHeight*0.955));
   }
   fill(col3);
   stroke(0);
@@ -767,7 +787,8 @@ function lookingFor(){
   if (isMobile){
     text(titleArray[titleNum]+",",rect2X+(rect2Width*0.025),rect2Y+(rect2Height*0.22),rect2Width*0.38,rect2Height*0.81);
   } else {
-    text(titleArray[titleNum]+",",rectX+(rectWidth*0.025),rectY+(rectHeight*0.1),rectWidth*0.5,rectHeight);
+    textAlign(RIGHT);
+    text(titleArray[titleNum]+",",rectX+(rectWidth*0.5),rectY+(rectHeight*0.88),rectWidth*0.485,rectHeight);
   }
 }
 
@@ -975,19 +996,19 @@ function drawFrameMobile() {
   noStroke();
   if (currImgY < currImgArray.length - 2) {
     image(currImgArray[currImgY + 2],rectX+100, rectY+30, imgSize, imgSize,
-          0,0,1200,1200);
+          0,0,currImgArray[currImgY + 2].width,currImgArray[currImgY + 2].width);
     fill(100,0.6);
     rect(rectX+100, rectY+30, imgSize, imgSize);
   }
   if (currImgY < currImgArray.length - 1) {
     image(currImgArray[currImgY + 1],rectX+60, rectY+25, imgSize, imgSize,
-          0,0,1200,1200);
+          0,0,currImgArray[currImgY + 1].width,currImgArray[currImgY + 1].width);
     fill(100,0.3);
     rect(rectX+60, rectY+25, imgSize, imgSize);
   }
   }
   image(currImgArray[currImgY],rectX+20, rectY+20, imgSize, imgSize,
-          0,0,1200,1200);
+          0,0,currImgArray[currImgY].width,currImgArray[currImgY].width);
   fill(0,0);
   stroke(0);
   strokeWeight(6);
@@ -1005,20 +1026,20 @@ function contentDrawMobile() {
      textAlign(RIGHT);
      if (artOp == 1) {
        currImgArray = artImgArray;
-       text(artString1,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-            rect2Width-rectWidth*0.03,rect2Height);
+       text(artString1,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rect2Width*0.06,rect2Height);
      } else if (artOp == 2) {
        currImgArray = artImgArray;
-       text(artString2,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-            rect2Width-rectWidth*0.03,rect2Height);
+       text(artString2,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rect2Width*0.06,rect2Height);
      } else if (artOp == 3) {
-       currImgArray = artImgArray;
-       text(artString3,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-            rect2Width-rectWidth*0.03,rect2Height);
+       currImgArray = artImgArray3;
+       text(artString3,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rect2Width*0.06,rect2Height);
      } else if (artOp == 4) {
        currImgArray = artImgArray;
-       text(artString4,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-            rect2Width-rectWidth*0.03,rect2Height);
+       text(artString4,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+            rect2Width-rect2Width*0.06,rect2Height);
      }
   }  else if (musicIsSelected) {
       canDrawFrame = false;
@@ -1030,23 +1051,24 @@ function contentDrawMobile() {
        textAlign(RIGHT);
        if (projOp == 1) {
           currImgArray= projImgArray;
-          text(projString1,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-               rect2Width-rectWidth*0.03,rect2Height);
+          text(projString1,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+               rect2Width-rect2Width*0.06,rect2Height);
        } else if (projOp == 2) {
          currImgArray= projImgArray;
-         text(projString2,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-              rect2Width-rectWidth*0.03,rect2Height);
+         text(projString2,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+              rect2Width-rect2Width*0.06,rect2Height);
        } else if (projOp == 3) {
          currImgArray= projImgArray;
-         text(projString3,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-              rect2Width-rectWidth*0.03,rect2Height);
+         text(projString3,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+              rect2Width-rect2Width*0.06,rect2Height);
        } else if (projOp == 4) {
          currImgArray= projImgArray;
-         text(projString4,rect2X + rectWidth*0.03,rect2Y+rect2Height*0.05,
-              rect2Width-rectWidth*0.03,rect2Height);
+         text(projString4,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+              rect2Width-rect2Width*0.06,rect2Height);
        }
   }  else if (contIsSelected) {
-      canDrawFrame = false;
+      canDrawFrame = true;
+      currImgArray = contImgArray;
       sayHowdyMobile();
       lookingFor();
       fill(0);
@@ -1428,17 +1450,18 @@ function eraseCatMobile() {
 }
 
 function sayHowdy() {
-  let howdyArray = split("SAYHOWDY", '');
+  let howdyArray = split("SAY*HOWDY*", '');
   let centerX = rectX+rectWidth*0.8;
-  let centerY = rectY+rectHeight*0.8;
+  let centerY = rectY+rectHeight*0.65;
   let radius = windowHeight * 0.1;
   for (var i = 0; i < howdyArray.length; i++) {
-    stroke(360*(i/howdyArray.length),70,100);
-    text(howdyArray[i], centerX + cos(count+((2*PI)*(i/howdyArray.length)))*radius,
-        centerY + sin(count+((2*PI)*(i/howdyArray.length)))*radius);
+    stroke(0);
+    fill(360*(i/howdyArray.length),70,100);
+    text(howdyArray[i], centerX + cos(count+((2*PI)*(i/howdyArray.length)))*3.4*radius,
+        centerY + sin(count+((2*PI)*(i/howdyArray.length)))*radius*0.7);
   }
   textAlign(CENTER);
-  text("   ^^^",centerX,centerY+sin(count)*radius/3)
+  text("^^^ ^^^",centerX,centerY+sin(count)*radius/3)
 }
 
 function sayHowdyMobile() {
