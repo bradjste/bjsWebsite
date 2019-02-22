@@ -7,7 +7,7 @@ var milTemp;
 var mPressed = false;
 var splashButton, artButton, musicButton, contButton;
 var op1Button,op2Button,op3Button,op4Button;
-var shhButton;
+var shhButton, playButton;
 var mark1,mark2,mark3;
 var isSplash = true;
 var artIsSelected = false;
@@ -34,6 +34,7 @@ var splashButtonBool = true;
 var clk4SndWasSeen = false;
 var col1, col2, col3, col4, col5, col6, col7, col8, colText;
 var colBorderOff;
+var mobCatFadeInc = 0;
 var firstDraw = true;
 var wipeTime =0;
 var wipeCount= 0;
@@ -61,14 +62,14 @@ var canDrawFrame = false;
 var isMobile = false;
 var isShort = false;
 var artString1 = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
-var artString2 = "LACDA";
+var artString2 = "I have had the pleasure to exhibit some electronic art at the Los Angeles Center for Digital Art recently. 'HANDS WHERE i CAN SEE THEM' and 'HANDS WHERE ii CAN SEE THEM' integrate tech and art to distribute a playful, raw perspective from the computer's point of view.";
 var artString3 = "At UCSD, I had my first exhibition, 'RGB', in the Triton Art Gallery. It was a set of 25 prints, distributed equally across the space. The artwork was a collection of digital artifacts from generative processes I have developed over the years.";
-var artString4 = "DUDLZ";
-var musicString = "Hexer Quiz - The Glow"+"\n"+"Out March 23rd";
+var artString4 = "A large cog in the machine that is my workflow is using camera or image input to guide new twists on familiar sights.";
+var musicString = "Under the moniker 'Hexer Quiz', I blend the weird, wild, slick and crunchy into jams that glow in the dark. My biggest influences are Tame Impala, The Strokes, DJ Dahi, My Bloody Valntine, Porter Robinson and Flying Lotus (among thousands of others). If that sounds up your alley check out 'The Drip' from my first album, out March 29th.";
 var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability.";
 var projString2 = "As an intern for CutMod Digital Media, I have worked on a few projection mapping gigs. Check out the map we did in Joshua Tree National Park for Vans here:"+"\n"+"\n"+"youtube.com/watch?v=Mi1jzYIzVt4";
-var projString3 = "pd patches";
-var projString4 = "music videos";
+var projString3 = "'ENGN_WAVE' is a digital musical instrument designed to mimic the revving of an engine. Each piston is variable, and the interface has real-time color response.";
+var projString4 = "I developed an Arduino-based audio spectrum analyzer, which moved plastic pistons with servos to indicate which frequencies were active at the moment. It was a fun challenge and a great exercise in product design/prototyping.";
 var contString = "email:"+"\n"+"instagram:"+"\n"+"bandcamp:"+"\n"+"twitter:";
 var contString2 = "bradjste@gmail.com"+"\n"+"bradjste"+"\n"+"Hexer Quiz"+"\n"+"@hexerquiz";
 var myFont;
@@ -85,9 +86,10 @@ function setup() {
   background(0);
   textFont(myFont);
   aspectCheck();
-  currSong = loadSound('assets/music/drumgum5.wav');
+  currSong = loadSound('assets/music/float7.mp3');
   currSong.setVolume(0.5);
   currSong.onended(songEnd);
+  currSong.playMode('restart');
 
   osc1 = new p5.SqrOsc(); // set frequency and type
   osc2 = new p5.SqrOsc(); // set frequency and type
@@ -117,12 +119,12 @@ function setup() {
   artCatArray[0] = "GENERATIVE ART";
   artCatArray[1] = "LACDA";
   artCatArray[2] = "UC SAN DIEGO";
-  artCatArray[3] = "ANIMATIONS";
+  artCatArray[3] = "IMAGE PROCESSING";
 
   projCatArray[0] = "SYNTEGER";
   projCatArray[1] = "PROJECTIONS";
   projCatArray[2] = "ENGN_WAVE";
-  projCatArray[3] = "MUSIC VIDEOS";
+  projCatArray[3] = "SPECTRUM ANALYZER";
 
   contStrings[0] = "email:";
   contStrings[1] = "instagram:";
@@ -160,6 +162,12 @@ function setup() {
   projImgArray[4] = loadImage('assets/projImg/synt4.jpg');
   projImgArray[5] = loadImage('assets/projImg/synt5.jpg');
 
+  projImgArray2[0] = loadImage('assets/projImg/synt0.jpg');
+
+  projImgArray3[0] = loadImage('assets/projImg/synt0.jpg');
+
+  projImgArray4[0] = loadImage('assets/projImg/synt0.jpg');
+
   contImgArray[0] = loadImage('assets/contImg/cont1.jpg');
   contImgArray[1] = loadImage('assets/contImg/cont2.jpg');
   contImgArray[2] = loadImage('assets/contImg/cont3.jpg');
@@ -182,6 +190,7 @@ function setup() {
 
   setInterval(titleNumInc,1000);
   setInterval(stretchFlipFunc,2500);
+  setInterval(mobileCatFade,10);
 
   splashButton = createButton('ENTER');
   splashButton.mouseOver(isHov);
@@ -204,11 +213,22 @@ function setup() {
   shhButton.style('outline', 'none');
   shhButton.mousePressed(mute);
 
+  playButton = createButton('>');
+  playButton.mouseOver(isHov);
+  playButton.mouseOut(isntHov);
+  playButton.hide();
+  playButton.style('color','#FF0000');
+  playButton.style('border-radius', '40%');
+  playButton.style('border-color','#FF0000');
+  playButton.style('background-color', '#000008');
+  playButton.style('outline', 'none');
+  playButton.style('cursor', 'cell');
+  playButton.mousePressed(playButtonPress);
+
   op1Button = createButton('|');
   op1Button.mouseOver(isHov);
   op1Button.mouseOut(isntHov);
   op1Button.hide();
-  op1Button.style('outline', 'none');
   op1Button.style('cursor', 'cell');
   op1Button.style('outline', 'none');
   op1Button.style('transform', 'skewX(160deg)');
@@ -218,7 +238,6 @@ function setup() {
   op2Button.mouseOver(isHov);
   op2Button.mouseOut(isntHov);
   op2Button.hide();
-  op2Button.style('outline', 'none');
   op2Button.style('cursor', 'cell');
   op2Button.style('outline', 'none');
   op2Button.style('transform', 'skewX(160deg)');
@@ -230,7 +249,6 @@ function setup() {
   op3Button.hide();
   op3Button.style('outline', 'none');
   op3Button.style('cursor', 'cell');
-  op3Button.style('outline', 'none');
   op3Button.style('transform', 'skewX(160deg)');
   op3Button.mousePressed(op3Select);
 
@@ -240,7 +258,6 @@ function setup() {
   op4Button.hide();
   op4Button.style('outline', 'none');
   op4Button.style('cursor', 'cell');
-  op4Button.style('outline', 'none');
   op4Button.style('transform', 'skewX(160deg)');
   op4Button.mousePressed(op4Select);
 
@@ -365,12 +382,12 @@ function draw() {
     if (isMobile) {
       rect2Draw();
       touchRect2Check();
-      drawFrameMobile();
+      if (!musicIsSelected){
+        drawFrameMobile();
+      }
       contentDrawMobile();
       drawPicIndicationMobile(currImgArray.length);
-      if (!catDead) {
-        eraseCatMobile();
-      }
+      mobileCatagoryDraw();
     // } else if (isShort) {
     // }
      } else {
@@ -491,6 +508,8 @@ function menuTrans() {
 function playSong(){
   if (!isMuted && !songPlaying) {
     currSong.play();
+    playButton.style('color','#00FF00');
+    playButton.style('border-color','#00FF00');
     songPlaying = true;
   }
 }
@@ -505,6 +524,7 @@ function loadMenu() {
 
 function artTrans(){
   if (!artIsSelected){
+    mobCatFadeInc = 100;
     artIsSelected = true;
     musicIsSelected = false;
     projIsSelected = false;
@@ -522,6 +542,7 @@ function artTrans(){
 function musicTrans(){
   if (!musicIsSelected){
     hideOptions();
+    mobCatFadeInc = 100;
     musicIsSelected = true;
     artIsSelected = false;
     contIsSelected = false;
@@ -536,6 +557,7 @@ function musicTrans(){
 
 function projTrans(){
   if (!projIsSelected){
+    mobCatFadeInc = 100;
     projIsSelected = true;
     artIsSelected = false;
     contIsSelected = false;
@@ -552,6 +574,7 @@ function projTrans(){
 
 function contTrans(){
   if (!contIsSelected){
+    mobCatFadeInc = 100;
     canDrawFrame = true;
     hideOptions();
     contIsSelected = true;
@@ -569,7 +592,7 @@ function contTrans(){
 
 function contentDraw() {
   fill(0);
-  strokeWeight(1);
+  strokeWeight(3);
   textSize(windowWidth*(30/1536));
   stroke(100);
   if (artIsSelected) {
@@ -594,8 +617,13 @@ function contentDraw() {
      }
   }  else if (musicIsSelected) {
       canDrawFrame = false;
+      drip();
+      fill(0);
+      strokeWeight(3);
+      textSize(windowWidth*(30/1536));
+      stroke(100);
       text(musicString,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
-         rectWidth*0.385,rectHeight*0.5);
+         rectWidth*0.385,rectHeight*0.8);
   }  else if (projIsSelected) {
       showOptions();
       canDrawFrame = true;
@@ -604,15 +632,15 @@ function contentDraw() {
           text(projString1,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
               rectWidth*0.385,rectHeight*0.5);
        } else if (projOp == 2) {
-         currImgArray= projImgArray;
+         currImgArray= projImgArray2;
          text(projString2,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
              rectWidth*0.385,rectHeight*0.5);
        } else if (projOp == 3) {
-         currImgArray= projImgArray;
+         currImgArray= projImgArray3;
          text(projString3,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
              rectWidth*0.385,rectHeight*0.5);
        } else if (projOp == 4) {
-         currImgArray= projImgArray;
+         currImgArray= projImgArray4;
          text(projString4,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
              rectWidth*0.385,rectHeight*0.5);
        }
@@ -649,6 +677,8 @@ function isntHov() {
 
 function songEnd(){
    songPlaying = false;
+   playButton.style('color','#FF0000');
+   playButton.style('border-color','#FF0000');
 }
 
 function rectDraw() {
@@ -801,7 +831,7 @@ function sing() {
      fill(color(colorPhase,100*(winMouseY/windowHeight),100*(winMouseX/windowWidth)));
      strokeWeight(3);
      stroke(0,((winMouseX/windowWidth)*100),100-(100*(winMouseX/windowWidth)));
-     ellipse(winMouseX+(random(-20,20)*(winMouseX/windowWidth)),winMouseY+(random(-20,20)*(winMouseX/windowWidth)),windowWidth*0.1+(windowHeight*0.3*(winMouseX/windowWidth)*(winMouseY/windowHeight)),windowWidth*0.1+(windowHeight*0.3*(winMouseX/windowWidth)*(winMouseY/windowHeight)));
+     ellipse(winMouseX+(random(-20,20)*(winMouseX/windowWidth)),winMouseY+(random(-20,20)*(winMouseX/windowWidth)),windowWidth*0.1+(windowHeight*0.3*(winMouseY/windowHeight)),windowWidth*0.1+(windowHeight*0.3*(winMouseY/windowHeight)));
      // fill(0);
      // textSize(windowHeight*0.035)
      // strokeWeight(2);
@@ -827,7 +857,7 @@ function stretchFlipFunc() {
 
 function op1Select() {
   if (isMobile){
-    catLife = 1000;
+    mobCatFadeInc = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -839,7 +869,7 @@ function op1Select() {
 
 function op2Select() {
   if (isMobile){
-    catLife = 100;
+    mobCatFadeInc = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -851,7 +881,7 @@ function op2Select() {
 
 function op3Select() {
   if (isMobile){
-    catLife = 100;
+    mobCatFadeInc = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -863,7 +893,7 @@ function op3Select() {
 
 function op4Select() {
   if (isMobile){
-    catLife = 100;
+    mobCatFadeInc = 100;
   }
   mobileCatagoryDraw();
   if(artIsSelected){
@@ -1043,8 +1073,14 @@ function contentDrawMobile() {
      }
   }  else if (musicIsSelected) {
       canDrawFrame = false;
-      text(musicString,rect2X+rect2Width*0.5,rect2Y+rect2Height*0.2,
-         rect2Width*0.5,rect2Height*0.5);
+      dripMobile();
+      fill(0);
+      strokeWeight(1);
+      textSize(windowWidth*(50/1536));
+      stroke(100);
+      textAlign(RIGHT);
+      text(musicString,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
+           rect2Width-rect2Width*0.06,rect2Height);
   }  else if (projIsSelected) {
        showOptions();
        canDrawFrame = true;
@@ -1054,15 +1090,15 @@ function contentDrawMobile() {
           text(projString1,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
                rect2Width-rect2Width*0.06,rect2Height);
        } else if (projOp == 2) {
-         currImgArray= projImgArray;
+         currImgArray= projImgArray2;
          text(projString2,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
               rect2Width-rect2Width*0.06,rect2Height);
        } else if (projOp == 3) {
-         currImgArray= projImgArray;
+         currImgArray= projImgArray3;
          text(projString3,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
               rect2Width-rect2Width*0.06,rect2Height);
        } else if (projOp == 4) {
-         currImgArray= projImgArray;
+         currImgArray= projImgArray4;
          text(projString4,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
               rect2Width-rect2Width*0.06,rect2Height);
        }
@@ -1146,6 +1182,13 @@ function buttonUpdate() {
     currOp = projOp;
   }
 
+  if (musicIsSelected) {
+    playButton.show();
+  }
+  else {
+    playButton.hide();
+  }
+
   if (isMobile) {
     op1Button.style('transform', 'skewX(200deg)');
     op2Button.style('transform', 'skewX(200deg)');
@@ -1200,8 +1243,7 @@ function buttonUpdate() {
     shhButton.style('color', '#000');
   }
   if (!isMobile){
-    shhButton.position((windowWidth-shhButton.width)*0.5,(windowHeight-(shhButton.height*
-          ((winMouseY-windowHeight*0.5)/(windowHeight*0.5))))+2);
+    shhButton.position((windowWidth-shhButton.width)*0.5,windowHeight-shhButton.height+2);
   }
 
   if (!artIsSelected) {
@@ -1332,6 +1374,10 @@ function updateSizePosLandscape() {
   op3Button.style('font-size',windowWidth*0.01 + 'px');
   op4Button.style('font-size',windowWidth*0.01 + 'px');
 
+  playButton.size(rectWidth*0.25,windowHeight*0.095);
+  playButton.position(rectX + 0.1*rectWidth,rectY+rectHeight*0.83);
+  playButton.style('font-size',windowHeight*0.035 + 'px');
+
   shhButton.size(windowWidth*0.2,windowHeight*0.05);
   shhButton.style('font-size',windowWidth*0.014 + 'px');
   shhButton.style('transform', 'skewX(0deg)');
@@ -1363,6 +1409,10 @@ function updateSizePosMobile() {
 
   splashButton.size(windowHeight*0.15,windowHeight*0.075);
   splashButton.style('font-size',windowHeight*0.02 + 'px');
+
+  playButton.size(rectWidth*0.55,windowHeight*0.075);
+  playButton.position(rectX + 0.2525*rectWidth,rectY+rectHeight*0.7);
+  playButton.style('font-size',windowHeight*0.035 + 'px');
 
   op1Button.style('font-size',windowWidth*0.02 + 'px');
   op2Button.style('font-size',windowWidth*0.02 + 'px');
@@ -1421,13 +1471,12 @@ function sweepLineDrawMobile(startX,startY,endX,endY) {
 }
 
 function mobileCatagoryDraw() {
-  if (catagoryOnMobile) {
-    catLife = 100;
+    if (isMobile) {
     let textEdge = rectX+(rectWidth*0.5);
-    fill(color((colorPhase+240)%360,100,100,catLife*0.01));
+    fill(color((colorPhase+240)%360,100,100,mobCatFadeInc*0.01));
     textSize(windowWidth*0.065);
     textAlign(CENTER);
-    stroke(0);
+    stroke(0,mobCatFadeInc*0.01);
     strokeWeight(5);
     if (artIsSelected){
       text(artCatArray[artOp-1],textEdge,rectY+rectY*0.6);
@@ -1435,33 +1484,25 @@ function mobileCatagoryDraw() {
       text("HEXER QUIZ",textEdge,rectY+rectY*0.5);
     } else if (projIsSelected){
       text(projCatArray[projOp-1],textEdge,rectY+rectY*0.5);
-    } else {
+    } else if (contIsSelected){
       text("LET'S TALK",textEdge,rectY+rectY*0.5);
     }
   }
 }
 
-function eraseCatMobile() {
-  catLife--;
-  if (catLife <= 0 && !catDead) {
-    catDead = true;
-    catlife = 0;
-  }
-}
-
 function sayHowdy() {
   let howdyArray = split("SAY*HOWDY*", '');
-  let centerX = rectX+rectWidth*0.8;
+  let centerX = rectX+rectWidth*0.78;
   let centerY = rectY+rectHeight*0.65;
   let radius = windowHeight * 0.1;
   for (var i = 0; i < howdyArray.length; i++) {
     stroke(0);
-    fill(360*(i/howdyArray.length),70,100);
-    text(howdyArray[i], centerX + cos(count+((2*PI)*(i/howdyArray.length)))*3.4*radius,
+    fill((180*sin(count+((2*PI)*(i/howdyArray.length))))%360,70,100,0.4 +0.6*sin(count+((2*PI)*(i/howdyArray.length))));
+    text(howdyArray[i], centerX - cos(count+((2*PI)*(i/howdyArray.length)))*3.4*radius,
         centerY + sin(count+((2*PI)*(i/howdyArray.length)))*radius*0.7);
   }
-  textAlign(CENTER);
-  text("^^^ ^^^",centerX,centerY+sin(count)*radius/3)
+//  textAlign(CENTER);
+  //text("^^^ ^^^",centerX,centerY+sin(count)*radius/3)
 }
 
 function sayHowdyMobile() {
@@ -1470,7 +1511,7 @@ function sayHowdyMobile() {
   let centerY = rect2Y+rect2Height*0.8;
   for (var i = 0; i < howdyArray.length; i++) {
     stroke(360*(i/howdyArray.length),70,100);
-    text(howdyArray[i], startX + (i/howdyArray.length)*rectWidth*0.9,
+    text(howdyArray[i], startX + (i/howdyArray.length)*rect2Width*0.9,
         centerY + sin(count+((2*PI)*(i/howdyArray.length)))*rect2Height*0.1);
   }
 }
@@ -1493,5 +1534,72 @@ function clk4Snd() {
     strokeWeight(3);
     textSize(14);
     text("SOUND (RECOMMENDED) >>>",windowWidth*0.3+sin(count)*windowWidth*0.05,windowHeight*0.98);
+  }
+}
+
+function mobileCatFade() {
+  if (mobCatFadeInc > 0) {
+    mobCatFadeInc= mobCatFadeInc-3;
+  } else {
+    mobCatFadeInc = 0;
+  }
+}
+
+function drip() {
+  let dripArray = split("THE//DRIP", '');
+  let startX = rectX+rectWidth*0.05;
+  let centerY = rectY+rectHeight*0.2;
+  stroke(0);
+  strokeWeight(4);
+  for (var i = 0; i < dripArray.length; i++) {
+    fill((360*(i/dripArray.length)+ colorPhase*2.5)%360,70,100);
+    textSize(windowWidth*(30/1536));
+    text(dripArray[i], startX + (i/dripArray.length)*rectWidth*0.4,
+        centerY + sin(count+((2*PI)*(i/dripArray.length)))*rectHeight*0.1);
+    for (var j = 7; j >= 0 ; j--) {
+      fill((360*(i/dripArray.length)+ colorPhase)%360,70,100,1-j/7);
+      stroke(0,1-j/7);
+      textSize(windowWidth*(30/1536)-(j/7)*10);
+      text(dripArray[i], startX + (i/dripArray.length)*rectWidth*0.4,
+          centerY + sin(count+((2*PI)*(i/dripArray.length)))*rectHeight*0.1 + (j*rectHeight*0.05));
+    }
+  }
+  fill(0);
+  noStroke();
+}
+
+function dripMobile() {
+  let dripArray = split("THE//DRIP", '');
+  let startX = rectX+rectWidth*0.068;
+  let centerY = rectY+rectHeight*0.2;
+  stroke(0);
+  for (var i = 0; i < dripArray.length; i++) {
+    fill((360*(i/dripArray.length)+ colorPhase*2.5)%360,70,100);
+    textSize(windowWidth*(50/1536));
+    text(dripArray[i], startX + (i/dripArray.length)*rectWidth*0.98,
+        centerY + sin(count+((2*PI)*(i/dripArray.length)))*rectHeight*0.1);
+    for (var j = 7; j >= 0 ; j--) {
+      fill((360*(i/dripArray.length)+ colorPhase)%360,70,100,1-j/7);
+      stroke(0,1-j/7);
+      textSize(windowWidth*(50/1536)-(j/7)*10);
+      text(dripArray[i], startX + (i/dripArray.length)*rectWidth*0.98,
+          centerY + sin(count+((2*PI)*(i/dripArray.length)))*rectHeight*0.1 + (j*rectHeight*0.05));
+    }
+  }
+  fill(0);
+  noStroke();
+}
+
+function playButtonPress() {
+  if (!songPlaying) {
+    if (isMuted){
+      mute();
+    }
+    playSong();
+  } else {
+    currSong.pause();
+    playButton.style('color','#FF0000');
+    playButton.style('border-color','#FF0000');
+    songPlaying = false;
   }
 }
