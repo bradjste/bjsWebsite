@@ -563,10 +563,8 @@ function mouseMoved() {
 //Determines which function to format with based on aspect ratio
 function updateSizePos() {
   aspectCheck();
-  if (isMobile && !isShort){
+  if (isMobile){
     updateSizePosMobile();
-  } else if (isShort && !isMobile) {
-    updateSizePosShort();
   } else {
     updateSizePosLandscape();
   }
