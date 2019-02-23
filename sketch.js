@@ -7,7 +7,7 @@ var milTemp;
 var mPressed = false;
 var splashButton, artButton, musicButton, contButton;
 var op1Button,op2Button,op3Button,op4Button;
-var shhButton, playButton;
+var shhButton, playButton, vansButton;
 var mark1,mark2,mark3;
 var isSplash = true;
 var artIsSelected = false;
@@ -64,12 +64,12 @@ var isShort = false;
 var artString1 = "I am a generative artist, or an artist that uses computer science, randomness, and musical instincts to guide abstract ideas and systems to produce unprecedented results.";
 var artString2 = "I have had the pleasure to exhibit some electronic art at the Los Angeles Center for Digital Art recently. 'HANDS WHERE i CAN SEE THEM' and 'HANDS WHERE ii CAN SEE THEM' integrate tech and art to distribute a playful, raw perspective from the computer's point of view.";
 var artString3 = "At UCSD, I had my first exhibition, 'RGB', in the Triton Art Gallery. It was a set of 25 prints, distributed equally across the space. The artwork was a collection of digital artifacts from generative processes I have developed over the years.";
-var artString4 = "A large cog in the machine that is my workflow is using camera or image input to guide new twists on familiar sights.";
-var musicString = "Under the moniker 'Hexer Quiz', I blend the weird, wild, slick and crunchy into jams that glow in the dark. My biggest influences are Tame Impala, The Strokes, DJ Dahi, My Bloody Valntine, Porter Robinson and Flying Lotus (among thousands of others). If that sounds up your alley check out 'The Drip' from my first album, out March 29th.";
+var artString4 = "A large cog in the machine of my workflow is using camera or image input to guide new twists on familiar sights.";
+var musicString = "Under the moniker 'Hexer Quiz', I blend the weird, wild, slick and crunchy into jams that glow in the dark. My biggest influences are Tame Impala, The Strokes, KAYTRANADA, My Bloody Valentine, Porter Robinson and Flying Lotus (among thousands of others). If that sounds up your alley, check out 'The Drip' from my first album, out March 29th.";
 var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability.";
-var projString2 = "As an intern for CutMod Digital Media, I have worked on a few projection mapping gigs. Check out the map we did in Joshua Tree National Park for Vans here:"+"\n"+"\n"+"youtube.com/watch?v=Mi1jzYIzVt4";
+var projString2 = "As an intern for CutMod Digital Media, I have worked on a few projection mapping events. One ofthe latest maps we did was in Joshua Tree National Park for Vans.";
 var projString3 = "'ENGN_WAVE' is a digital musical instrument designed to mimic the revving of an engine. Each piston is variable, and the interface has real-time color response.";
-var projString4 = "I developed an Arduino-based audio spectrum analyzer, which moved plastic pistons with servos to indicate which frequencies were active at the moment. It was a fun challenge and a great exercise in product design/prototyping.";
+var projString4 = "Myself and three others prototyped an Arduino-based audio spectrum analyzer, which moved plastic pistons with servos to indicate which frequencies were active at the moment. It was a fun challenge and a great exercise in product design/prototyping.";
 var contString = "email:"+"\n"+"instagram:"+"\n"+"bandcamp:"+"\n"+"twitter:";
 var contString2 = "bradjste@gmail.com"+"\n"+"bradjste"+"\n"+"Hexer Quiz"+"\n"+"@hexerquiz";
 var myFont;
@@ -147,6 +147,12 @@ function setup() {
   artImgArray[7] = loadImage('assets/artImg/art7.jpg');
   artImgArray[8] = loadImage('assets/artImg/art8.jpg');
 
+  artImgArray2[0] = loadImage('assets/artImg/lac0.png');
+  artImgArray2[1] = loadImage('assets/artImg/lac1.png');
+  artImgArray2[2] = loadImage('assets/artImg/lac2.png');
+  artImgArray2[3] = loadImage('assets/artImg/lac3.png');
+  artImgArray2[4] = loadImage('assets/artImg/lac4.png');
+
   artImgArray3[0] = loadImage('assets/artImg/ucsd1.jpg');
   artImgArray3[1] = loadImage('assets/artImg/ucsd2.jpg');
   artImgArray3[2] = loadImage('assets/artImg/ucsd3.jpg');
@@ -155,6 +161,12 @@ function setup() {
   artImgArray3[5] = loadImage('assets/artImg/ucsd6.jpg');
   artImgArray3[6] = loadImage('assets/artImg/ucsd7.jpg');
 
+  artImgArray4[0] = loadImage('assets/artImg/im0.png');
+  artImgArray4[1] = loadImage('assets/artImg/im1.png');
+  artImgArray4[2] = loadImage('assets/artImg/im2.png');
+  artImgArray4[3] = loadImage('assets/artImg/im3.png');
+  artImgArray4[4] = loadImage('assets/artImg/im4.png');
+
   projImgArray[0] = loadImage('assets/projImg/synt0.jpg');
   projImgArray[1] = loadImage('assets/projImg/synt1.jpg');
   projImgArray[2] = loadImage('assets/projImg/synt2.jpg');
@@ -162,11 +174,28 @@ function setup() {
   projImgArray[4] = loadImage('assets/projImg/synt4.jpg');
   projImgArray[5] = loadImage('assets/projImg/synt5.jpg');
 
-  projImgArray2[0] = loadImage('assets/projImg/synt0.jpg');
+  projImgArray2[0] = loadImage('assets/projImg/v0.png');
+  projImgArray2[1] = loadImage('assets/projImg/v1.png');
 
-  projImgArray3[0] = loadImage('assets/projImg/synt0.jpg');
+  projImgArray3[0] = loadImage('assets/projImg/en0.jpg');
+  projImgArray3[1] = loadImage('assets/projImg/en1.jpg');
+  projImgArray3[2] = loadImage('assets/projImg/en2.jpg');
+  projImgArray3[3] = loadImage('assets/projImg/en3.jpg');
 
-  projImgArray4[0] = loadImage('assets/projImg/synt0.jpg');
+  projImgArray4[0] = loadImage('assets/projImg/span0.jpg');
+  projImgArray4[1] = loadImage('assets/projImg/span1.jpg');
+  projImgArray4[2] = loadImage('assets/projImg/span2.jpg');
+  projImgArray4[3] = loadImage('assets/projImg/span3.jpg');
+  projImgArray4[4] = loadImage('assets/projImg/span4.jpg');
+  projImgArray4[5] = loadImage('assets/projImg/span5.jpg');
+  projImgArray4[6] = loadImage('assets/projImg/span6.jpg');
+  projImgArray4[7] = loadImage('assets/projImg/span7.jpg');
+  projImgArray4[8] = loadImage('assets/projImg/span8.jpg');
+  projImgArray4[9] = loadImage('assets/projImg/span9.jpg');
+  projImgArray4[10] = loadImage('assets/projImg/span10.jpg');
+  projImgArray4[11] = loadImage('assets/projImg/span11.jpg');
+
+
 
   contImgArray[0] = loadImage('assets/contImg/cont1.jpg');
   contImgArray[1] = loadImage('assets/contImg/cont2.jpg');
@@ -224,6 +253,18 @@ function setup() {
   playButton.style('outline', 'none');
   playButton.style('cursor', 'cell');
   playButton.mousePressed(playButtonPress);
+
+  vansButton = createButton('CHECK IT OUT HERE');
+  vansButton.mouseOver(isHov);
+  vansButton.mouseOut(isntHov);
+  vansButton.hide();
+  vansButton.style('color','#FF00FF');
+  vansButton.style('border-radius', '40%');
+  vansButton.style('border-color','#FF00FF');
+  vansButton.style('background-color', '#000008');
+  vansButton.style('outline', 'none');
+  vansButton.style('cursor', 'cell');
+  vansButton.mousePressed(vansButtonPress);
 
   op1Button = createButton('|');
   op1Button.mouseOver(isHov);
@@ -603,7 +644,7 @@ function contentDraw() {
          text(artString1,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
             rectWidth*0.385,rectHeight*0.5);
      } else if (artOp == 2) {
-       currImgArray = artImgArray;
+       currImgArray = artImgArray2;
        text(artString2,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
           rectWidth*0.385,rectHeight*0.5);
      } else if (artOp == 3) {
@@ -611,7 +652,7 @@ function contentDraw() {
        text(artString3,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
           rectWidth*0.385,rectHeight*0.5);
      } else if (artOp == 4) {
-       currImgArray = artImgArray;
+       currImgArray = artImgArray4;
        text(artString4,rectX+rectWidth*0.6,rectY+rectHeight*0.2,
           rectWidth*0.385,rectHeight*0.5);
      }
@@ -735,7 +776,6 @@ function axisDraw() {
     ellipse(winMouseX,winMouseY,15,15);
     fill(0);
     ellipse(winMouseX,winMouseY,5,5);
-    pop();
   }
 }
 
@@ -1059,7 +1099,7 @@ function contentDrawMobile() {
        text(artString1,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
             rect2Width-rect2Width*0.06,rect2Height);
      } else if (artOp == 2) {
-       currImgArray = artImgArray;
+       currImgArray = artImgArray2;
        text(artString2,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
             rect2Width-rect2Width*0.06,rect2Height);
      } else if (artOp == 3) {
@@ -1067,7 +1107,7 @@ function contentDrawMobile() {
        text(artString3,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
             rect2Width-rect2Width*0.06,rect2Height);
      } else if (artOp == 4) {
-       currImgArray = artImgArray;
+       currImgArray = artImgArray4;
        text(artString4,rect2X + rect2Width*0.03,rect2Y+rect2Height*0.05,
             rect2Width-rect2Width*0.06,rect2Height);
      }
@@ -1187,6 +1227,13 @@ function buttonUpdate() {
   }
   else {
     playButton.hide();
+  }
+
+  if (projIsSelected && projOp == 2) {
+    vansButton.show();
+  }
+  else {
+    vansButton.hide();
   }
 
   if (isMobile) {
@@ -1378,6 +1425,10 @@ function updateSizePosLandscape() {
   playButton.position(rectX + 0.1*rectWidth,rectY+rectHeight*0.83);
   playButton.style('font-size',windowHeight*0.035 + 'px');
 
+  vansButton.size(rectWidth*0.25,windowHeight*0.095);
+  vansButton.position(rectX + 0.7*rectWidth,rectY+rectHeight*0.53);
+  vansButton.style('font-size',windowHeight*0.035 + 'px');
+
   shhButton.size(windowWidth*0.2,windowHeight*0.05);
   shhButton.style('font-size',windowWidth*0.014 + 'px');
   shhButton.style('transform', 'skewX(0deg)');
@@ -1413,6 +1464,10 @@ function updateSizePosMobile() {
   playButton.size(rectWidth*0.55,windowHeight*0.075);
   playButton.position(rectX + 0.2525*rectWidth,rectY+rectHeight*0.7);
   playButton.style('font-size',windowHeight*0.035 + 'px');
+
+  vansButton.size(rect2Width*0.7,windowHeight*0.075);
+  vansButton.position(rect2X + 0.15*rect2Width,rect2Y+rect2Height*0.53);
+  vansButton.style('font-size',windowHeight*0.025 + 'px');
 
   op1Button.style('font-size',windowWidth*0.02 + 'px');
   op2Button.style('font-size',windowWidth*0.02 + 'px');
@@ -1497,7 +1552,7 @@ function sayHowdy() {
   let radius = windowHeight * 0.1;
   for (var i = 0; i < howdyArray.length; i++) {
     stroke(0);
-    fill((180*sin(count+((2*PI)*(i/howdyArray.length))))%360,70,100,0.4 +0.6*sin(count+((2*PI)*(i/howdyArray.length))));
+    fill((180*sin(count+((2*PI)*(i/howdyArray.length)))+colorPhase)%360,70,100,0.4 +0.6*sin(count+((2*PI)*(i/howdyArray.length))));
     text(howdyArray[i], centerX - cos(count+((2*PI)*(i/howdyArray.length)))*3.4*radius,
         centerY + sin(count+((2*PI)*(i/howdyArray.length)))*radius*0.7);
   }
@@ -1602,4 +1657,8 @@ function playButtonPress() {
     playButton.style('border-color','#FF0000');
     songPlaying = false;
   }
+}
+
+function vansButtonPress() {
+  window.open('https://www.youtube.com/watch?v=Mi1jzYIzVt4');
 }
