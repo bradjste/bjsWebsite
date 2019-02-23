@@ -192,10 +192,10 @@ function setup() {
   projImgArray2[0] = loadImage('assets/projImg/v0.png');
   projImgArray2[1] = loadImage('assets/projImg/v1.png');
 
-  projImgArray3[0] = loadImage('assets/projImg/en0.jpg');
-  projImgArray3[1] = loadImage('assets/projImg/en1.jpg');
-  projImgArray3[2] = loadImage('assets/projImg/en2.jpg');
-  projImgArray3[3] = loadImage('assets/projImg/en3.jpg');
+  projImgArray3[0] = loadImage('assets/projImg/en0.JPG');
+  projImgArray3[1] = loadImage('assets/projImg/en1.JPG');
+  projImgArray3[2] = loadImage('assets/projImg/en2.JPG');
+  projImgArray3[3] = loadImage('assets/projImg/en3.JPG');
 
   projImgArray4[0] = loadImage('assets/projImg/span0.jpg');
   projImgArray4[1] = loadImage('assets/projImg/span1.jpg');
@@ -206,8 +206,8 @@ function setup() {
   projImgArray4[6] = loadImage('assets/projImg/span6.jpg');
   projImgArray4[7] = loadImage('assets/projImg/span7.jpg');
   projImgArray4[8] = loadImage('assets/projImg/span8.jpg');
-  projImgArray4[9] = loadImage('assets/projImg/span9.jpg');
-  projImgArray4[10] = loadImage('assets/projImg/span10.jpg');
+  projImgArray4[9] = loadImage('assets/projImg/span9.JPG');
+  projImgArray4[10] = loadImage('assets/projImg/span10.JPG');
   projImgArray4[11] = loadImage('assets/projImg/span11.jpg');
 
   //Load CONTACT images
