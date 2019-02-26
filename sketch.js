@@ -560,6 +560,14 @@ function mouseMoved() {
   mPressed = true;
 }
 
+//Mouse move event listener
+function mousePressed() {
+  if (getAudioContext().state !== 'running') {
+    getAudioContext().resume();
+  }
+  mPressed = true;
+}
+
 //Determines which function to format with based on aspect ratio
 function updateSizePos() {
   aspectCheck();
@@ -896,7 +904,6 @@ function drawPicIndication(arraySize) {
     noStroke();
     for (var i = 0; i < arraySize; i++) {
       push();
-      fft.smooth();
       fft.analyze();
       octBands = fft.getOctaveBands();
       freqDomain = fft.logAverages(octBands);
@@ -1577,7 +1584,6 @@ function drawPicIndicationMobile(arraySize) {
   noStroke();
   for (var i = 0; i < arraySize; i++) {
     push();
-    fft.smooth();
     fft.analyze();
     octBands = fft.getOctaveBands();
     freqDomain = fft.logAverages(octBands);
