@@ -68,7 +68,7 @@ var artString1 = "I am a generative artist, or an artist that uses computer scie
 var artString2 = "I have had the pleasure to exhibit some electronic art at the Los Angeles Center for Digital Art recently. 'HANDS WHERE i CAN SEE THEM' and 'HANDS WHERE ii CAN SEE THEM' integrate tech and art to distribute a playful, raw perspective from the computer's point of view.";
 var artString3 = "At UCSD, I had my first exhibition, 'RGB', in the Triton Art Gallery. It was a set of 25 prints, distributed equally across the space. The artwork was a collection of digital artifacts from generative processes I have developed over the years.";
 var artString4 = "A large cog in the machine of my workflow is using camera or image input to guide new twists on familiar sights.";
-var musicString = "Under the moniker 'Hexer Quiz', I blend the weird, wild, slick and crunchy into jams that glow in the dark. My biggest influences are Tame Impala, The Strokes, KAYTRANADA, My Bloody Valentine, Porter Robinson and Flying Lotus (among thousands of others). If that sounds up your alley, check out 'The Drip' from my first album, out March 29th.";
+var musicString = "Under the moniker 'Hexer Quiz', I blend the weird, wild, slick and crunchy into jams that glow in the dark. My biggest influences are Tame Impala, The Strokes, KAYTRANADA, My Bloody Valentine, Porter Robinson and Flying Lotus (among thousands of others). If that sounds up your alley, check out 'The Drip' from my first album.";
 var projString1 = "For my senior project at UC San Diego, I designed and prototyped a puredata driven digital instrument with the capability to connect to an Arduino and LEDs via serial communication. I then loaded the patch onto a Raspberry Pi for portability.";
 var projString2 = "As an intern for CutMod Digital Media, I have worked on a few projection mapping events. One ofthe latest maps we did was in Joshua Tree National Park for Vans.";
 var projString3 = "'ENGN_WAVE' is a digital musical instrument designed to mimic the revving of an engine. Each piston is variable, and the interface has real-time color response.";
@@ -260,7 +260,7 @@ function setup() {
   shhButton.mousePressed(mute);
 
   //Initialize play button
-  playButton = createButton('>');
+  playButton = createButton('<PLAY>');
   playButton.mouseOver(isHov);
   playButton.mouseOut(isntHov);
   playButton.hide();
