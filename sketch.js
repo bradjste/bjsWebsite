@@ -2,7 +2,20 @@
    A personal website utilizing the p5.js JavaScript library.
    Brad Stevenson
    bradjste@gmail.com
-   2/22/2019
+   3/28/2019
+
+
+   Hi there! If you are reading this, you hacked my mainframe! (or
+   found my github...)
+
+   Congrats, and please excuse my excessive use of globals if you can :)
+
+   If you have any questions as to how this beast came to be, or want
+   to integrate interactive element to your web page's UI, feel free to reach
+   out. k bye!
+
+   -Brad "B-Boy the Funky Chum" Steveson
+
 */
 
 var osc1, osc2, osc3 ,osc4, fft;
@@ -260,7 +273,7 @@ function setup() {
   shhButton.mousePressed(mute);
 
   //Initialize play button
-  playButton = createButton('<PLAY>');
+  playButton = createButton('PLAY');
   playButton.mouseOver(isHov);
   playButton.mouseOut(isntHov);
   playButton.hide();
